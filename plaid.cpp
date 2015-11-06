@@ -50,11 +50,6 @@ boost::network::http::client::response plaid::get_(const std::string &method,
     return client_.get(request_);
 }
 
-std::string plaid::auth::test()
-{
-    //TODO make this more robust!
-    return delegate_->get_("auth.test").body();
-}
 
 
 } //namespace slack

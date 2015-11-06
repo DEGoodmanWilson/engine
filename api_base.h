@@ -1,11 +1,9 @@
 //
-// Created by D.E. Goodman-Wilson on 11/5/15.
+// Copyright © 2015 Slack Technologies, Inc. All rights reserved.
 //
 
 #pragma once
 
-#include "api_base.h"
-#include "auth.h"
 #include <boost/network/protocol/http/client.hpp>
 #include <optional/optional.hpp>
 #include <string>
@@ -14,22 +12,21 @@
 namespace slack
 {
 
-class plaid
+class plaid;
+
+class api_base
 {
 public:
-    plaid(std::string token);
+    api_base(plaid *delegate);
 
-    friend class api_base;
-    auth auth;
 
 protected:
     boost::network::http::client::response get_(const std::string &method,
                                                 const std::experimental::optional<std::multimap<std::string, std::string>> params = std::experimental::nullopt);
 
 private:
-    std::string token_;
-    boost::network::http::client client_;
-
+    plaid *delegate_;
 };
+
 
 } //namespace slack

@@ -52,7 +52,7 @@ include_directories(SYSTEM
 )
 
 
-set(PLAIDAPI_FILES plaid.cpp plaid.h)
+set(PLAIDAPI_FILES plaid.cpp plaid.h api_base.cpp api_base.h auth.cpp auth.h)
 add_library(plaidapi STATIC ${PLAIDAPI_FILES})
 
 target_link_libraries(plaidapi
