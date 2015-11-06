@@ -6,16 +6,8 @@
 
 #include <string>
 
-
 namespace slack
 {
-    class auth
-    {
-    public:
-        std::string test();
-    };
+    void set_token(std::string token);
+}
 
-//syntactic sugar:
-static auth auth;
-
-} //namespace slack

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "plaid.h"
+#include "slack.h"
 
 using namespace std;
 
@@ -13,11 +13,10 @@ int main(int argc, char **argv)
 
     std::string token = argv[1];
 
-    cout << "Hello, World!" << endl;
 
-    slack::plaid api{token};
+    slack::set_token(token);
 
-    std::cout << api.auth.test();
+    std::cout << slack::auth.test();
 
     return 0;
 }

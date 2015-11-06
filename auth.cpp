@@ -3,14 +3,26 @@
 //
 
 #include "auth.h"
+#include <string>
+#include <cpr.h>
+#include <iostream>
 
+namespace slack_config
+{
+    extern std::string token_;
+}
 namespace slack
 {
 
 std::string auth::test()
 {
-    //TODO make this more robust!
-    return get_("auth.test").body();
+    cpr::Parameters params = {
+            {"token", slack_config::token_}
+    };
+
+    auto result = cpr::Get(cpr::Url{"https://slack.com/api/auth.test"}, params);
+    //TODO something more robust!
+    return result.text;
 }
 
 } //namespace slack

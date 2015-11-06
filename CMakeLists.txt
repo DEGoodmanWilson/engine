@@ -5,14 +5,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 #lib
 
-add_definitions(-DBOOST_NETWORK_ENABLE_HTTPS)
+#add_definitions(-DBOOST_NETWORK_ENABLE_HTTPS)
 
 # Boost
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_COMPONENTS system regex filesystem thread)
-find_package(Boost 1.53 REQUIRED ${Boost_COMPONENTS})
-
+#set(Boost_USE_STATIC_LIBS ON)
+#set(Boost_USE_MULTITHREADED ON)
+#set(Boost_COMPONENTS system regex filesystem thread)
+#find_package(Boost 1.53 REQUIRED ${Boost_COMPONENTS})
 
 # OpenSSL
 #set(OPENSSL_ROOT_DIR /usr/local/Cellar/openssl/1.0.2d_1/)
@@ -24,10 +23,11 @@ set(OPENSSL_LIBRARIES ssl crypto)
 link_directories(${OPENSSL_LIB_DIR})
 
 
-# cpp-netlib. Boy wouldn't it be nice to be able to do this in a more system-independent way?
-set(CPP_NETLIB_INCLUDE_DIR /usr/local/Cellar/cpp-netlib/0.11.2/include)
-set(CPP_NETLIB_LIB_DIR /usr/local/Cellar/cpp-netlib/0.11.2/lib)
-link_directories(${CPP_NETLIB_LIB_DIR})
+#cpr
+set(USE_SYSTEM_CURL YES)
+add_subdirectory(cpr)
+include_directories(${CPR_INCLUDE_DIRS})
+
 
 #jsoncpp
 set(JSONCPP_INCLUDE_DIR jsoncpp)
@@ -52,15 +52,13 @@ include_directories(SYSTEM
 )
 
 
-set(PLAIDAPI_FILES plaid.cpp plaid.h api_base.cpp api_base.h auth.cpp auth.h)
+set(PLAIDAPI_FILES config.cpp config.h auth.cpp auth.h  slack.h)
 add_library(plaidapi STATIC ${PLAIDAPI_FILES})
 
 target_link_libraries(plaidapi
-        cppnetlib-client-connections
-        cppnetlib-uri
-        curl
         ${OPENSSL_LIBRARIES}
-        ${Boost_LIBRARIES}
+        ${CPR_LIBRARIES}
+        curl
 )
 
 #tests
