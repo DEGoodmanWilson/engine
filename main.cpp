@@ -1,5 +1,5 @@
 #include <iostream>
-#include "slack.h"
+#include <slack/slack.h>
 
 using namespace std;
 

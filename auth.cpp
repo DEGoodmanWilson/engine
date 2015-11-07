@@ -2,19 +2,16 @@
 // Copyright © 2015 Slack Technologies, Inc. All rights reserved.
 //
 
-#include "auth.h"
+#include "slack/auth.h"
+#include "private.h"
 #include <string>
 #include <cpr.h>
 #include <iostream>
 
-namespace slack_config
-{
-    extern std::string token_;
-}
 namespace slack
 {
 
-std::string auth::test()
+api_response auth::test() const
 {
     cpr::Parameters params = {
             {"token", slack_config::token_}

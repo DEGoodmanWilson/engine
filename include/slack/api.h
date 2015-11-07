@@ -4,18 +4,19 @@
 
 #pragma once
 
+#include "types.h"
 #include <string>
 
 
 namespace slack
 {
-    class auth
-    {
-    public:
-        std::string test();
-    };
+class api
+{
+public:
+    api_response test(const std::string &error = "", const std::string &foo = "") const;
+};
 
 //syntactic sugar:
-static auth auth;
+static api api;
 
 } //namespace slack

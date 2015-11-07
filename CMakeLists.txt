@@ -49,10 +49,11 @@ include_directories(SYSTEM
         ${SIMPLEWEB_INCLUDE_DIR}
 #        ${NOD_INCLUDE_DIR}
         ${OPTIONAL_INCLUDE_DIR}
+        include
 )
 
 
-set(PLAIDAPI_FILES config.cpp config.h auth.cpp auth.h  slack.h)
+set(PLAIDAPI_FILES config.cpp include/slack/config.h auth.cpp include/slack/auth.h include/slack/slack.h api.cpp include/slack/api.h private.h chat.cpp include/slack/chat.h include/slack/types.h types.cpp)
 add_library(plaidapi STATIC ${PLAIDAPI_FILES})
 
 target_link_libraries(plaidapi

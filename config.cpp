@@ -2,7 +2,7 @@
 // Copyright © 2015 Slack Technologies, Inc. All rights reserved.
 //
 
-#include "config.h"
+#include <slack/config.h>
 #include <string>
 
 namespace slack_config

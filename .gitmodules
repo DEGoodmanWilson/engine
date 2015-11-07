@@ -3,4 +3,4 @@
 	url = git@github.com:eidheim/Simple-WebSocket-Server.git
 [submodule "cpr"]
 	path = cpr
-	url = git@github.com:whoshuu/cpr.git
+	url = git@github.com:DEGoodmanWilson/cpr.git
