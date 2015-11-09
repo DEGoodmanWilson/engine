@@ -12,6 +12,11 @@
 namespace slack
 {
 
+
+namespace api
+{
+
+
 class error :
         public std::string
 {
@@ -89,9 +94,6 @@ public:
             : std::string(first, last)
     { }
 };
-
-namespace api
-{
 
 
 class test_wrapper

@@ -15,11 +15,11 @@ int main(int argc, char **argv)
     slack::set_token(token);
 
     std::cout << slack::api::test() << std::endl;
-    slack::error e{"error"};
-    slack::foo f{"bar"};
+    slack::api::error e{"error"};
+    slack::api::foo f{"bar"};
     std::cout << slack::api::test(e, f) << std::endl;
-    std::cout << slack::api::test(slack::error{"error"}, slack::foo{"bar"}) << std::endl;
-    std::cout << slack::api::test(e, slack::foo{"bar"}) << std::endl;
+    std::cout << slack::api::test(slack::api::error{"error"}, slack::api::foo{"bar"}) << std::endl;
+    std::cout << slack::api::test(e, slack::api::foo{"bar"}) << std::endl;
 
     return 0;
 }
