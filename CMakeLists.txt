@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.3)
-project(plaidapi)
+project(cpp-slack-client)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
@@ -53,10 +53,10 @@ include_directories(SYSTEM
 )
 
 
-set(PLAIDAPI_FILES config.cpp include/slack/config.h auth.cpp include/slack/auth.h include/slack/slack.h api.cpp include/slack/api.h private.h chat.cpp include/slack/chat.h include/slack/types.h types.cpp)
-add_library(plaidapi STATIC ${PLAIDAPI_FILES})
+set(SLACK_FILES config.cpp include/slack/config.h auth.cpp include/slack/auth.h include/slack/slack.h api.cpp include/slack/api.h private.h chat.cpp include/slack/chat.h include/slack/types.h types.cpp)
+add_library(slack STATIC ${SLACK_FILES})
 
-target_link_libraries(plaidapi
+target_link_libraries(slack
         ${OPENSSL_LIBRARIES}
         ${CPR_LIBRARIES}
         curl
@@ -65,8 +65,8 @@ target_link_libraries(plaidapi
 #tests
 
 set(SOURCE_FILES main.cpp)
-add_executable(plaidapi_tests ${SOURCE_FILES})
+add_executable(slack_tests ${SOURCE_FILES})
 
-target_link_libraries(plaidapi_tests
-        plaidapi
+target_link_libraries(slack_tests
+        slack
 )

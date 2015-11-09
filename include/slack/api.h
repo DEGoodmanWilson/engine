@@ -4,19 +4,165 @@
 
 #pragma once
 
-#include "types.h"
+#include <slack/types.h>
+#include <cpr.h>
 #include <string>
 
 
 namespace slack
 {
-class api
+
+namespace api
+{
+
+class test
 {
 public:
-    api_response test(const std::string &error = "", const std::string &foo = "") const;
+
+class error :
+        public std::string
+{
+public:
+    error() = default;
+
+    error(const error &rhs) = default;
+
+    error(error &&rhs) = default;
+
+    error &operator=(const error &rhs) = default;
+
+    error &operator=(error &&rhs) = default;
+
+    explicit error(const char *raw_string) : std::string(raw_string)
+    { }
+
+    explicit error(const char *raw_string, size_t length) : std::string(raw_string, length)
+    { }
+
+    explicit error(size_t to_fill, char character) : std::string(to_fill, character)
+    { }
+
+    explicit error(const std::string &std_string) : std::string(std_string)
+    { }
+
+    explicit error(const std::string &std_string, size_t position, size_t length = std::string::npos)
+            : std::string(std_string, position, length)
+    { }
+
+    explicit error(std::initializer_list<char> il) : std::string(il)
+    { }
+
+    template<class InputIterator>
+    explicit error(InputIterator first, InputIterator last)
+            : std::string(first, last)
+    { }
 };
 
-//syntactic sugar:
-static api api;
+class foo :
+        public std::string
+{
+public:
+    foo() = default;
 
+    foo(const foo &rhs) = default;
+
+    foo(foo &&rhs) = default;
+
+    foo &operator=(const foo &rhs) = default;
+
+    foo &operator=(foo &&rhs) = default;
+
+    explicit foo(const char *raw_string) : std::string(raw_string)
+    { }
+
+    explicit foo(const char *raw_string, size_t length) : std::string(raw_string, length)
+    { }
+
+    explicit foo(size_t to_fill, char character) : std::string(to_fill, character)
+    { }
+
+    explicit foo(const std::string &std_string) : std::string(std_string)
+    { }
+
+    explicit foo(const std::string &std_string, size_t position, size_t length = std::string::npos)
+            : std::string(std_string, position, length)
+    { }
+
+    explicit foo(std::initializer_list<char> il) : std::string(il)
+    { }
+
+    template<class InputIterator>
+    explicit foo(InputIterator first, InputIterator last)
+            : std::string(first, last)
+    { }
+};
+
+
+//class test_wrapper
+//{
+public:
+//    test_wrapper() = default;
+    test() = default;
+
+    api_response get_response()
+    {
+        cpr::Parameters params; //no need for a token here
+        if (!error_.empty())
+        {
+            params.AddParameter({"error", error_});
+        }
+        if (!foo_.empty())
+        {
+            params.AddParameter({"foo", foo_});
+        }
+//            auto result = cpr::Get(cpr::Url{slack_config::HOSTNAME + "api.test"}, params);
+        auto result = cpr::Get(cpr::Url{"https://slack.com/api/api.test"}, params);
+        return result.text;
+    }
+
+    void set_option(const error &error)
+    { error_ = error; }
+
+    void set_option(error &&error)
+    { error_ = std::move(error); }
+
+    void set_option(const foo &foo)
+    { foo_ = foo; }
+
+    void set_option(foo &&foo)
+    { foo_ = std::move(foo); }
+
+private:
+    error error_;
+    foo foo_;
+};
+
+
+template<typename T>
+void set_option(test &wrapper, T &&t)
+{
+    wrapper.set_option(CPR_FWD(t));
+}
+
+template<typename T, typename... Ts>
+void set_option(test &wrapper, T &&t, Ts &&... ts)
+{
+    set_option(wrapper, CPR_FWD(t));
+    set_option(wrapper, CPR_FWD(ts)...);
+}
+
+template<typename ...Ts>
+api_response test(Ts &&...ts)
+{
+    class test wrapper;
+    set_option(wrapper, std::forward<Ts>(ts)...);
+    return wrapper.get_response();
+}
+
+api_response test()
+{
+    class test wrapper;
+    return wrapper.get_response();
+}
+} //namespace api
 } //namespace slack

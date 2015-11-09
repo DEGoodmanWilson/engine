@@ -1,7 +1,6 @@
 #include <iostream>
 #include <slack/slack.h>
-
-using namespace std;
+#include <cpr.h>
 
 int main(int argc, char **argv)
 {
@@ -13,10 +12,14 @@ int main(int argc, char **argv)
 
     std::string token = argv[1];
 
-
     slack::set_token(token);
 
-    std::cout << slack::auth.test();
+    std::cout << slack::api::test() << std::endl;
+    slack::api::test::error e{"error"};
+    slack::api::test::foo f{"bar"};
+    std::cout << slack::api::test(e, f) << std::endl;
+    std::cout << slack::api::test(slack::api::test::error{"error"}, slack::api::test::foo{"bar"}) << std::endl;
+    std::cout << slack::api::test(e, slack::api::test::foo{"bar"}) << std::endl;
 
     return 0;
 }
