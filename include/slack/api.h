@@ -12,13 +12,6 @@
 namespace slack
 {
 
-namespace api
-{
-
-class test
-{
-public:
-
 class error :
         public std::string
 {
@@ -97,12 +90,14 @@ public:
     { }
 };
 
+namespace api
+{
 
-//class test_wrapper
-//{
+
+class test_wrapper
+{
 public:
-//    test_wrapper() = default;
-    test() = default;
+    test_wrapper() = default;
 
     api_response get_response()
     {
@@ -139,30 +134,32 @@ private:
 
 
 template<typename T>
-void set_option(test &wrapper, T &&t)
+void set_option(test_wrapper &wrapper, T &&t)
 {
     wrapper.set_option(CPR_FWD(t));
 }
 
 template<typename T, typename... Ts>
-void set_option(test &wrapper, T &&t, Ts &&... ts)
+void set_option(test_wrapper &wrapper, T &&t, Ts &&... ts)
 {
     set_option(wrapper, CPR_FWD(t));
     set_option(wrapper, CPR_FWD(ts)...);
 }
 
+
 template<typename ...Ts>
 api_response test(Ts &&...ts)
 {
-    class test wrapper;
+    class test_wrapper wrapper;
     set_option(wrapper, std::forward<Ts>(ts)...);
     return wrapper.get_response();
 }
 
 api_response test()
 {
-    class test wrapper;
+    class test_wrapper wrapper;
     return wrapper.get_response();
 }
+
 } //namespace api
 } //namespace slack
