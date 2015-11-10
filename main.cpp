@@ -17,9 +17,12 @@ int main(int argc, char **argv)
     std::cout << slack::api::test() << std::endl;
     slack::api::error e{"error"};
     slack::api::foo f{"bar"};
-    std::cout << slack::api::test(e, f) << std::endl;
+    std::cout << slack::api::test(e) << std::endl;
     std::cout << slack::api::test(slack::api::error{"error"}, slack::api::foo{"bar"}) << std::endl;
     std::cout << slack::api::test(e, slack::api::foo{"bar"}) << std::endl;
+
+
+    std::cout << slack::auth::test() << std::endl;
 
     return 0;
 }

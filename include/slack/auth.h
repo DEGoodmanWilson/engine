@@ -4,19 +4,30 @@
 
 #pragma once
 
-#include "types.h"
+#include <slack/types.h>
+#include <slack/macros.h>
 #include <string>
 
 
 namespace slack
 {
-    class auth
-    {
-    public:
-        api_response test() const;
-    };
 
-//syntactic sugar:
-static auth auth;
+namespace auth
+{
 
+class test_wrapper
+{
+public:
+    test_wrapper() = default;
+
+    api_response get_response();
+
+private:
+
+};
+
+api_response test();
+
+
+} //namespace auth
 } //namespace slack

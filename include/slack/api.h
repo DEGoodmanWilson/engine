@@ -5,7 +5,7 @@
 #pragma once
 
 #include <slack/types.h>
-#include <cpr.h>
+#include <slack/macros.h>
 #include <string>
 
 
@@ -101,21 +101,7 @@ class test_wrapper
 public:
     test_wrapper() = default;
 
-    api_response get_response()
-    {
-        cpr::Parameters params; //no need for a token here
-        if (!error_.empty())
-        {
-            params.AddParameter({"error", error_});
-        }
-        if (!foo_.empty())
-        {
-            params.AddParameter({"foo", foo_});
-        }
-//            auto result = cpr::Get(cpr::Url{slack_config::HOSTNAME + "api.test"}, params);
-        auto result = cpr::Get(cpr::Url{"https://slack.com/api/api.test"}, params);
-        return result.text;
-    }
+    api_response get_response();
 
     void set_option(const error &error)
     { error_ = error; }
@@ -138,16 +124,22 @@ private:
 template<typename T>
 void set_option(test_wrapper &wrapper, T &&t)
 {
-    wrapper.set_option(CPR_FWD(t));
+    wrapper.set_option(SLACK_FWD(t));
 }
 
 template<typename T, typename... Ts>
 void set_option(test_wrapper &wrapper, T &&t, Ts &&... ts)
 {
-    set_option(wrapper, CPR_FWD(t));
-    set_option(wrapper, CPR_FWD(ts)...);
+    set_option(wrapper, SLACK_FWD(t));
+    set_option(wrapper, SLACK_FWD(ts)...);
 }
 
+template<typename ...Ts>
+api_response test()
+{
+    class test_wrapper wrapper;
+    return wrapper.get_response();
+}
 
 template<typename ...Ts>
 api_response test(Ts &&...ts)
@@ -157,11 +149,7 @@ api_response test(Ts &&...ts)
     return wrapper.get_response();
 }
 
-api_response test()
-{
-    class test_wrapper wrapper;
-    return wrapper.get_response();
-}
+
 
 } //namespace api
 } //namespace slack

@@ -53,7 +53,7 @@ include_directories(SYSTEM
 )
 
 
-set(SLACK_FILES config.cpp include/slack/config.h auth.cpp include/slack/auth.h include/slack/slack.h api.cpp include/slack/api.h private.h chat.cpp include/slack/chat.h include/slack/types.h types.cpp)
+set(SLACK_FILES config.cpp include/slack/config.h auth.cpp include/slack/auth.h include/slack/slack.h api.cpp include/slack/api.h include/slack/macros.h chat.cpp include/slack/chat.h include/slack/types.h types.cpp)
 add_library(slack STATIC ${SLACK_FILES})
 
 target_link_libraries(slack
