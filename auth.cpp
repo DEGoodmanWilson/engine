@@ -26,7 +26,7 @@ response test_wrapper::get_response()
     if (result.status_code != 200)
     {
         //error path
-        return {}; //TODO
+        return {result.text}; //TODO
     }
     //happy path
     Json::Value result_ob;
@@ -34,10 +34,11 @@ response test_wrapper::get_response()
     bool parsedSuccess = reader.parse(result.text, result_ob, false);
     if (!parsedSuccess)
     {
-        return {}; //TODO
+        return {result.text}; //TODO
     }
 
-    return {result_ob["ok"].asBool(),
+    return {result.text,
+            result_ob["ok"].asBool(),
             result_ob["url"].asString(),
             result_ob["team"].asString(),
             result_ob["user"].asString(),

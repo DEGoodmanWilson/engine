@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     std::cout << slack::api::test(e, slack::api::foo{"bar"}) << std::endl;
 
 
-    std::cout << slack::auth::test().url << std::endl;
+    std::cout << slack::auth::test().raw_json << std::endl;
 
     return 0;
 }
