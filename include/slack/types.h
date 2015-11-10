@@ -12,5 +12,8 @@
 
 namespace slack
 {
-using api_response = std::string;
+
+using team_id = std::string; //for now
+using user_id = std::string; //for now
+
 }

@@ -2,8 +2,8 @@
 // Copyright © 2015 Slack Technologies, Inc. All rights reserved.
 //
 
-#include <slack/chat.h>
-#include <slack/macros.h>
+#include "slack/chat.h"
+#include "config.h"
 #include <string>
 #include <cpr.h>
 

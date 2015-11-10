@@ -4,8 +4,7 @@
 
 #pragma once
 
-#include <slack/types.h>
-#include <slack/macros.h>
+#include <slack/response/api.h>
 #include <string>
 
 
@@ -101,7 +100,7 @@ class test_wrapper
 public:
     test_wrapper() = default;
 
-    api_response get_response();
+    ::slack::response::api::test get_response();
 
     void set_option(const error &error)
     { error_ = error; }
@@ -135,14 +134,14 @@ void set_option(test_wrapper &wrapper, T &&t, Ts &&... ts)
 }
 
 template<typename ...Ts>
-api_response test()
+::slack::response::api::test test()
 {
     class test_wrapper wrapper;
     return wrapper.get_response();
 }
 
 template<typename ...Ts>
-api_response test(Ts &&...ts)
+::slack::response::api::test test(Ts &&...ts)
 {
     class test_wrapper wrapper;
     set_option(wrapper, std::forward<Ts>(ts)...);

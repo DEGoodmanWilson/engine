@@ -2,7 +2,8 @@
 // Copyright © 2015 Slack Technologies, Inc. All rights reserved.
 //
 
-#include <slack/auth.h>
+#include "slack/auth.h"
+#include "config.h"
 #include <cpr.h>
 #include <json/json.h>
 
@@ -17,7 +18,7 @@ namespace auth
 {
 
 
-response test_wrapper::get_response()
+::slack::response::auth::test test_wrapper::get_response()
 {
     cpr::Parameters params; //no need for a token here
     params.AddParameter({"token", slack_config::token_});
@@ -39,6 +40,7 @@ response test_wrapper::get_response()
 
     return {result.text,
             result_ob["ok"].asBool(),
+            std::experimental::nullopt,
             result_ob["url"].asString(),
             result_ob["team"].asString(),
             result_ob["user"].asString(),
@@ -47,7 +49,7 @@ response test_wrapper::get_response()
 
 }
 
-response test()
+::slack::response::auth::test test()
 {
     test_wrapper wrapper;
     return wrapper.get_response();
