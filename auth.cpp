@@ -4,9 +4,12 @@
 
 #include <slack/auth.h>
 #include <cpr.h>
+#include <json/json.h>
 
-extern std::string slack_config::token_;
-
+namespace slack_config
+{
+extern std::string token_;
+}
 namespace slack
 {
 
@@ -14,16 +17,36 @@ namespace auth
 {
 
 
-api_response test_wrapper::get_response()
+response test_wrapper::get_response()
 {
     cpr::Parameters params; //no need for a token here
     params.AddParameter({"token", slack_config::token_});
 
-    auto result = cpr::Get(cpr::Url{slack_config::HOSTNAME + "auth.test"}, params);
-    return result.text;
+    auto result = cpr::Post(cpr::Url{slack_config::HOSTNAME + "auth.test"}, params);
+    if (result.status_code != 200)
+    {
+        //error path
+        return {}; //TODO
+    }
+    //happy path
+    Json::Value result_ob;
+    Json::Reader reader;
+    bool parsedSuccess = reader.parse(result.text, result_ob, false);
+    if (!parsedSuccess)
+    {
+        return {}; //TODO
+    }
+
+    return {result_ob["ok"].asBool(),
+            result_ob["url"].asString(),
+            result_ob["team"].asString(),
+            result_ob["user"].asString(),
+            result_ob["team_id"].asString(),
+            result_ob["user_id"].asString()};
+
 }
 
-api_response test()
+response test()
 {
     test_wrapper wrapper;
     return wrapper.get_response();

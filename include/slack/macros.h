@@ -8,7 +8,5 @@
 
 namespace slack_config
 {
-extern std::string token_;
-
 const std::string HOSTNAME = "https://slack.com/api/";
 }
