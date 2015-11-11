@@ -27,12 +27,7 @@ private:
 
 };
 
-template<typename T1, typename T2>
-::slack::response::chat::delete_it delete_it(T1 t1, T2 t2)
-{
-    class delete_wrapper wrapper{t1, t2};
-    return wrapper.get_response();
-}
+::slack::response::chat::delete_it delete_it(ts ts, channel channel);
 
 class post_message_wrapper
 {

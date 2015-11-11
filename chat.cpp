@@ -58,5 +58,11 @@ namespace chat
     return ret;
 }
 
+::slack::response::chat::delete_it delete_it(ts ts, channel channel)
+{
+    class delete_wrapper wrapper{ts, channel};
+    return wrapper.get_response();
+}
+
 }
 } //namespace slack

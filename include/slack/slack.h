@@ -8,3 +8,4 @@
 #include <slack/types.h>
 #include <slack/api.h>
 #include <slack/auth.h>
+#include <slack/chat.h>

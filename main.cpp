@@ -1,6 +1,7 @@
 #include <iostream>
 #include <slack/slack.h>
 #include <cpr.h>
+#include <slack/parameter/chat.h>
 
 int main(int argc, char **argv)
 {
@@ -24,5 +25,6 @@ int main(int argc, char **argv)
 
     std::cout << slack::auth::test().raw_json << std::endl;
 
+    std::cout << slack::chat::delete_it(slack::chat::ts{"bar"}, slack::chat::channel{"foo"}).raw_json << std::endl;
     return 0;
 }
