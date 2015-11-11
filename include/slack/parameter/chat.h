@@ -12,11 +12,7 @@ namespace slack
 namespace chat
 {
 
-// TODO Neither of these should be strictly string-like.
 
-MAKE_STRING_LIKE(ts);
-
-MAKE_STRING_LIKE(channel);
 
 }
 }

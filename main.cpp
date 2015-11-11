@@ -25,6 +25,6 @@ int main(int argc, char **argv)
 
     std::cout << slack::auth::test().raw_json << std::endl;
 
-    std::cout << slack::chat::delete_it(slack::chat::ts{"bar"}, slack::chat::channel{"foo"}).raw_json << std::endl;
+    std::cout << slack::chat::delete_it("bar", "foo").raw_json << std::endl;
     return 0;
 }
