@@ -69,7 +69,7 @@ set(SLACK_FILES
         include/slack/response/auth.h
         include/slack/response/base.h
         include/slack/slack.h
-        include/slack/parameter/api.h include/slack/parameter/base.h include/slack/parameter/chat.h include/slack/response/chat.h)
+        include/slack/parameter/api.h include/slack/parameter/base.h include/slack/parameter/chat.h include/slack/response/chat.h channels.cpp include/slack/channels.h include/slack/parameter/channels.h include/slack/response/channels.h include/slack/response/channels.cpp)
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 
 target_link_libraries(slack

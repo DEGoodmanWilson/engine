@@ -18,16 +18,16 @@ namespace chat
 class delete_wrapper
 {
 public:
-    delete_wrapper(const ts &ts, const channel &channel) : ts_{ts}, channel_{channel} {}
+    delete_wrapper(const ts &ts, const channel_id &channel) : ts_{ts}, channel_{channel} {}
 
     ::slack::response::chat::delete_it get_response();
 private:
     ts ts_;
-    channel channel_;
+    channel_id channel_;
 
 };
 
-::slack::response::chat::delete_it delete_it(ts ts, channel channel);
+::slack::response::chat::delete_it delete_it(ts ts, channel_id channel);
 
 class post_message_wrapper
 {

@@ -5,6 +5,8 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <optional/optional.hpp>
 
 
 #define SLACK_FWD(...) ::std::forward<decltype(__VA_ARGS__)>(__VA_ARGS__)
@@ -35,8 +37,50 @@ namespace slack
 //TODO NONE of these things should be just strings.
 
 MAKE_STRING_LIKE(team_id);
+
 MAKE_STRING_LIKE(user_id);
+
 MAKE_STRING_LIKE(ts);
-MAKE_STRING_LIKE(channel);
+
+MAKE_STRING_LIKE(channel_id);
+
+
+struct channel
+{
+    channel() = default;
+    channel(const std::string &raw_json);
+    template<class json>
+    channel(const json &parsed_json);
+
+    struct topic
+    {
+        std::string value;
+        user_id creator;
+        int64_t last_set;
+    };
+
+    struct purpose
+    {
+        std::string value;
+        user_id creator;
+        int64_t last_set;
+    };
+
+    channel_id id;
+    std::string name;
+    bool is_channel;
+    int64_t created;
+    user_id creator;
+    bool is_archived;
+    bool is_general;
+    std::vector<user_id> members;
+    topic topic;
+    purpose purpose;
+    bool is_member;
+    ts last_read;
+    //message latest?
+    int64_t unread_count;
+    int64_t unread_display_count;
+};
 
 }

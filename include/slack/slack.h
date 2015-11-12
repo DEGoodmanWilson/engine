@@ -9,3 +9,4 @@
 #include <slack/api.h>
 #include <slack/auth.h>
 #include <slack/chat.h>
+#include <slack/channels.h>

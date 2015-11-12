@@ -56,6 +56,7 @@ namespace api
         {
             args.emplace(arg, result_ob["args"][arg].asString());
         }
+        ret.args = args;
     }
 
     return ret;

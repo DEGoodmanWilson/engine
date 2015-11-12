@@ -2,7 +2,7 @@
 // Copyright © 2015 Slack Technologies, Inc. All rights reserved.
 //
 
-#include "slack/chat.h"
+#include "slack/channels.h"
 #include "config.h"
 #include <cpr.h>
 #include <json/json.h>
@@ -16,17 +16,18 @@ extern std::string token_;
 namespace slack
 {
 
-namespace chat
+namespace channels
 {
 
-::slack::response::chat::delete_it chat::delete_wrapper::get_response()
+::slack::response::channels::list channels::list_wrapper::get_response()
 {
-    cpr::Parameters params{{"token",   ::slack_config::token_},
-                           {"channel", channel_},
-                           {"ts",      ts_}
-    };
+    cpr::Parameters params{{"token",   ::slack_config::token_}};
+    if(exclude_archived_)
+    {
+        params.AddParameter({"exclude_archived", exclude_archived_});
+    }
 
-    auto result = cpr::Get(cpr::Url{slack_config::HOSTNAME + "chat.delete"}, params);
+    auto result = cpr::Get(cpr::Url{slack_config::HOSTNAME + "channels.list"}, params);
     if (result.status_code != 200)
     {
         //error path
@@ -41,7 +42,7 @@ namespace chat
         return {result.text}; //TODO
     }
 
-    ::slack::response::chat::delete_it ret{result.text};
+    ::slack::response::channels::list ret{result.text};
 
     ret.ok = result_ob["ok"].asBool();
 
@@ -51,17 +52,10 @@ namespace chat
     }
     else
     {
-        ret.channel = result_ob["channel"].asString();
-        ret.ts = result_ob["it"].asString();
+//append channels to results!
     }
 
     return ret;
-}
-
-::slack::response::chat::delete_it delete_it(ts ts, channel_id channel)
-{
-    class delete_wrapper wrapper{ts, channel};
-    return wrapper.get_response();
 }
 
 }

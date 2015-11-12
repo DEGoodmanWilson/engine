@@ -25,6 +25,11 @@ int main(int argc, char **argv)
 
     std::cout << slack::auth::test().raw_json << std::endl;
 
+//    auto mesg = slack::chat::post_message("#donbot-messages", "Welcome your new overlords")
+
+    auto channels = slack::channels::list();
+    std::cout << channels.raw_json << std::endl;
+
     std::cout << slack::chat::delete_it("bar", "foo").raw_json << std::endl;
     return 0;
 }
