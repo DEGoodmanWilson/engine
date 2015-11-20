@@ -15,21 +15,35 @@
 { \
 public: \
     x() = default; \
-        x(const x &rhs) = default; \
-        x(x &&rhs) = default; \
-        x &operator=(const x &rhs) = default; \
-        x &operator=(x &&rhs) = default; \
-        x(const char *raw_string) : std::string(raw_string) {} \
-        x(const char *raw_string, size_t length) : std::string(raw_string, length) {} \
-        explicit x(size_t to_fill, char character) : std::string(to_fill, character) {} \
-        x(const std::string &std_string) : std::string(std_string) {} \
-        x(const std::string &std_string, size_t position, size_t length = std::string::npos) \
-            : std::string(std_string, position, length) {} \
-        explicit x(std::initializer_list<char> il) : std::string(il) {} \
-        template<class InputIterator> \
+    x(const x &rhs) = default; \
+    x(x &&rhs) = default; \
+    x &operator=(const x &rhs) = default; \
+    x &operator=(x &&rhs) = default; \
+    x(const char *raw_string) : std::string(raw_string) {} \
+    x(const char *raw_string, size_t length) : std::string(raw_string, length) {} \
+    explicit x(size_t to_fill, char character) : std::string(to_fill, character) {} \
+    x(const std::string &std_string) : std::string(std_string) {} \
+    x(const std::string &std_string, size_t position, size_t length = std::string::npos) \
+        : std::string(std_string, position, length) {} \
+    explicit x(std::initializer_list<char> il) : std::string(il) {} \
+    template<class InputIterator> \
     explicit x(InputIterator first, InputIterator last) \
-            : std::string(first, last) {} \
-};
+        : std::string(first, last) {} \
+}
+
+#define MAKE_BOOL_LIKE(x) class x \
+{ \
+public: \
+    x(const x &rhs) = default; \
+    x(x &&rhs) = default; \
+    x &operator=(const x &rhs) = default; \
+    x &operator=(x &&rhs) = default; \
+    x(bool new_val) : value{new_val} {} \
+    x & operator=(bool && new_value) {value = new_value;} \
+    explicit operator bool() {return value;} \
+private: \
+    bool value; \
+}
 
 namespace slack
 {
@@ -48,7 +62,9 @@ MAKE_STRING_LIKE(channel_id);
 struct channel
 {
     channel() = default;
+
     channel(const std::string &raw_json);
+
     template<class json>
     channel(const json &parsed_json);
 

@@ -31,5 +31,9 @@ int main(int argc, char **argv)
     std::cout << channels.raw_json << std::endl;
 
     std::cout << slack::chat::delete_it("bar", "foo").raw_json << std::endl;
+
+    auto mesg = slack::chat::post_message("ugh", "hello there", slack::chat::link_names{true});
+    std::cout << mesg.raw_json << std::endl;
+
     return 0;
 }
