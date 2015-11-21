@@ -1,7 +1,6 @@
 #include <iostream>
 #include <slack/slack.h>
 #include <cpr.h>
-#include <slack/parameter/chat.h>
 
 int main(int argc, char **argv)
 {
