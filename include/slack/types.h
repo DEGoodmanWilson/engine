@@ -99,4 +99,17 @@ struct channel
     int64_t unread_display_count;
 };
 
+struct message
+{
+    message() = default;
+    template<class json>
+    message(const json &parsed_json);
+
+    std::string text;
+    std::string username;
+    std::string type; //TODO!
+    std::experimental::optional<std::string> subtype; //TODO
+    ts ts;
+};
+
 }

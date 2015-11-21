@@ -79,7 +79,7 @@ struct post_message // : public ::slack::response::base
                  const std::experimental::optional<error> &error,
                  const ts &ts,
                  const channel_id &channel,
-                 const std::string &message) :
+                 const message &message) :
             raw_json{raw_json},
             ok{ok},
             error{error},
@@ -98,7 +98,7 @@ struct post_message // : public ::slack::response::base
     std::experimental::optional<error> error;
     ts ts;
     channel_id channel;
-    std::string message; //todo better type needed
+    message message;
 };
 
 }

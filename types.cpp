@@ -40,4 +40,21 @@ channel::channel(const Json::Value &parsed_json) :
 
 }
 
+template<>
+message::message(const Json::Value &parsed_json)
+{
+    text = parsed_json["text"].asString();
+
+    //TODO this needs more nuance.
+    ts = parsed_json["ts"].asString();
+
+    //TODO these are going to be optional probably
+    username = parsed_json["username"].asString();
+    type = parsed_json["type"].asString();
+    if (!parsed_json["subtype"].isNull())
+    {
+        subtype = parsed_json["subtype"].asString();
+    }
+}
+
 }
