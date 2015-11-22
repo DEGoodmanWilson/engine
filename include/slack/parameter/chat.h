@@ -15,7 +15,7 @@ namespace chat
 using ts = ::slack::ts;
 MAKE_STRING_LIKE(text);
 MAKE_STRING_LIKE(username);
-MAKE_STRING_LIKE(as_user);
+MAKE_BOOL_LIKE(as_user);
 enum class parse
 {
     none = 0,

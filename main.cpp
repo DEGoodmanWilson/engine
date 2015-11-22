@@ -27,12 +27,26 @@ int main(int argc, char **argv)
 //    auto mesg = slack::chat::post_message("#donbot-messages", "Welcome your new overlords")
 
     auto channels = slack::channels::list();
+    ::slack::channel_id chan;
+    for(const auto c : channels.channels)
+    {
+        if(c.is_general)
+        {
+            chan = c.id;
+            break;
+        }
+    }
+
     std::cout << channels.raw_json << std::endl;
 
-    std::cout << slack::chat::delete_it("bar", "foo").raw_json << std::endl;
 
-    auto mesg = slack::chat::post_message("FOO", "I LIVE!", slack::chat::link_names{true});
-    std::cout << mesg.raw_json << std::endl;
+    auto mesg = slack::chat::post_message(chan, "I LIVE!", slack::chat::username{"donbot"}, slack::chat::link_names{true});
+    std::cout << mesg.message.text << std::endl;
+
+    auto ts = mesg.ts;
+
+    auto delete_it = slack::chat::delete_it(ts, chan);
+    std::cout << delete_it.raw_json << std::endl;
 
     return 0;
 }

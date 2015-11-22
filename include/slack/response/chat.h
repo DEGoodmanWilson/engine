@@ -65,8 +65,7 @@ struct post_message // : public ::slack::response::base
         account_inactive,
     };
 
-    post_message(const std::string &raw_json) : raw_json{raw_json}, ok{false}, error{error::unknown}
-    { }
+    post_message(const std::string &raw_json);
 
     post_message(const std::string &raw_json,
                  bool ok,

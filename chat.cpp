@@ -52,7 +52,7 @@ namespace chat
     else
     {
         ret.channel = result_ob["channel"].asString();
-        ret.ts = result_ob["it"].asString();
+        ret.ts = result_ob["ts"].asString();
     }
 
     return ret;
@@ -68,56 +68,58 @@ namespace chat
 {
     cpr::Parameters params{{"token",   ::slack_config::token_},
                            {"channel", channel_},
-                           {"text",      text_}
+                           {"text",    text_}
     };
 
     //optional parameters
-    if(ts_)
+    if (ts_)
     {
         params.AddParameter({"ts", *ts_});
     }
-    if(username_)
+    if (username_)
     {
         params.AddParameter({"username", *username_});
     }
-    if(as_user_)
+    if (as_user_)
     {
-        params.AddParameter({"as_user", *as_user_});
+        std::string val{"false"};
+        if (static_cast<bool>(*as_user_)) val = "true";
+        params.AddParameter({"as_user", val});
     }
-    if(parse_)
+    if (parse_)
     {
         std::string parse_val{"none"};
-        if(*parse_ == parse::full)
+        if (*parse_ == parse::full)
             parse_val = "full";
         params.AddParameter({"parse", parse_val});
     }
-    if(link_names_)
+    if (link_names_)
     {
         std::string val{"false"};
-        if(static_cast<bool>(*link_names_)) val = "true";
+        if (static_cast<bool>(*link_names_)) val = "true";
         params.AddParameter({"link_names", val});
     }
-    if(attachments_)
+    if (attachments_)
     {
         params.AddParameter({"attachments", *attachments_});
     }
-    if(unfurl_links_)
+    if (unfurl_links_)
     {
         std::string val{"false"};
-        if(static_cast<bool>(*unfurl_links_)) val = "true";
+        if (static_cast<bool>(*unfurl_links_)) val = "true";
         params.AddParameter({"unfurl_links", val});
     }
-    if(unfurl_media_)
+    if (unfurl_media_)
     {
         std::string val{"false"};
-        if(static_cast<bool>(*unfurl_media_)) val = "true";
+        if (static_cast<bool>(*unfurl_media_)) val = "true";
         params.AddParameter({"unfurl_media", val});
     }
-    if(icon_url_)
+    if (icon_url_)
     {
         params.AddParameter({"icon_url", *icon_url_});
     }
-    if(icon_emoji_)
+    if (icon_emoji_)
     {
         params.AddParameter({"icon_emoji", *icon_emoji_});
     }
@@ -126,42 +128,11 @@ namespace chat
     if (result.status_code != 200)
     {
         //error path
-        return {result.text}; //TODO
-    }
-    //happy path
-    Json::Value result_ob;
-    Json::Reader reader;
-    bool parsedSuccess = reader.parse(result.text, result_ob, false);
-    if (!parsedSuccess)
-    {
-        return {result.text}; //TODO
+        return {result.text}; //TODO we need a different constructor for error conditions
     }
 
-    ::slack::response::chat::post_message ret{result.text};
+    return {result.text};
 
-    ret.ok = result_ob["ok"].asBool();
-
-    if (!ret)
-    {
-        auto err_msg = result_ob["error"].asString();
-
-        if(err_msg == "channel_not_found") ret.error = ::slack::response::chat::post_message::error::channel_not_found;
-        else if(err_msg == "not_in_channel") ret.error = ::slack::response::chat::post_message::error::not_in_channel;
-        else if(err_msg == "is_archived") ret.error = ::slack::response::chat::post_message::error::is_archived;
-        else if(err_msg == "msg_too_long") ret.error = ::slack::response::chat::post_message::error::msg_too_long;
-        else if(err_msg == "no_text") ret.error = ::slack::response::chat::post_message::error::no_text;
-        else if(err_msg == "rate_limited") ret.error = ::slack::response::chat::post_message::error::rate_limited;
-        else if(err_msg == "not_authed") ret.error = ::slack::response::chat::post_message::error::not_authed;
-        else if(err_msg == "invalid_auth") ret.error = ::slack::response::chat::post_message::error::invalid_auth;
-        else if(err_msg == "account_inactive") ret.error = ::slack::response::chat::post_message::error::account_inactive;
-    }
-    else
-    {
-        ret.channel = result_ob["channel"].asString();
-        ret.ts = result_ob["it"].asString();
-    }
-
-    return ret;
 }
 
 
@@ -170,5 +141,51 @@ namespace chat
     class post_message_wrapper wrapper{channel, text};
     return wrapper.get_response();
 }
+}
+
+response::chat::post_message::post_message(const std::string &raw_json) : raw_json{raw_json}
+{
+    //happy path
+    Json::Value result_ob;
+    Json::Reader reader;
+    bool parsedSuccess = reader.parse(raw_json, result_ob, false);
+    if (!parsedSuccess)
+    {
+        error = error::unknown; //TODO need more nuance here
+        return;
+    }
+
+    //TODO need to do more rigorous checking here.
+    ok = result_ob["ok"].isBool() ? result_ob["ok"].asBool() : false;
+
+    if (!ok)
+    {
+        if (!result_ob["error"].isString())
+        {
+            error = error::unknown; //TOOD more nuance!!
+            return;
+        }
+
+        auto err_msg = result_ob["error"].asString();
+
+        if (err_msg == "channel_not_found") error = error::channel_not_found;
+        else if (err_msg == "not_in_channel") error = error::not_in_channel;
+        else if (err_msg == "is_archived") error = error::is_archived;
+        else if (err_msg == "msg_too_long") error = error::msg_too_long;
+        else if (err_msg == "no_text") error = error::no_text;
+        else if (err_msg == "rate_limited") error = error::rate_limited;
+        else if (err_msg == "not_authed") error = error::not_authed;
+        else if (err_msg == "invalid_auth") error = error::invalid_auth;
+        else if (err_msg == "account_inactive") error = error::account_inactive;
+    }
+    else
+    {
+        //TODO MORE RIGOROUS CHECKS!
+        channel = result_ob["channel"].asString();
+        ts = result_ob["ts"].asString();
+        message = ::slack::message{result_ob["message"]};
+    }
+
+    return;
 }
 } //namespace slack

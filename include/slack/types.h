@@ -58,6 +58,18 @@ MAKE_STRING_LIKE(ts);
 
 MAKE_STRING_LIKE(channel_id);
 
+struct message
+{
+    message() = default;
+    template<class json>
+    message(const json &parsed_json);
+
+    std::string text;
+    std::string username;
+    std::string type; //TODO!
+    std::experimental::optional<std::string> subtype; //TODO
+    ts ts;
+};
 
 struct channel
 {
@@ -94,22 +106,9 @@ struct channel
     purpose purpose;
     bool is_member;
     ts last_read;
-    //message latest?
+    message latest;
     int64_t unread_count;
     int64_t unread_display_count;
-};
-
-struct message
-{
-    message() = default;
-    template<class json>
-    message(const json &parsed_json);
-
-    std::string text;
-    std::string username;
-    std::string type; //TODO!
-    std::experimental::optional<std::string> subtype; //TODO
-    ts ts;
 };
 
 }

@@ -39,6 +39,12 @@ public:
             channel_(channel), text_(text)
     { }
 
+    void set_option(const username &username)
+    { username_ = username; }
+
+    void set_option(username &&username)
+    { username_ = std::move(username); }
+
     void set_option(const as_user &as_user)
     { as_user_ = as_user; }
 
