@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     ::slack::channel_id chan;
     for(const auto c : channels.channels)
     {
-        if(c.is_general)
+        if(c.name == "donbot-messages")
         {
             chan = c.id;
             break;
