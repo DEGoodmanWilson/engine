@@ -19,7 +19,7 @@ namespace slack
 namespace chat
 {
 
-::slack::response::chat::delete_it chat::delete_wrapper::get_response()
+::slack::chat::responses::delete_it chat::delete_wrapper::get_response()
 {
     cpr::Parameters params{{"token",   ::slack_config::token_},
                            {"channel", channel_},
@@ -41,7 +41,7 @@ namespace chat
         return {result.text}; //TODO
     }
 
-    ::slack::response::chat::delete_it ret{result.text};
+    ::slack::chat::responses::delete_it ret{result.text};
 
     ret.ok = result_ob["ok"].asBool();
 
@@ -58,13 +58,13 @@ namespace chat
     return ret;
 }
 
-::slack::response::chat::delete_it delete_it(ts ts, channel_id channel)
+::slack::chat::responses::delete_it delete_it(ts ts, channel_id channel)
 {
     class delete_wrapper wrapper{ts, channel};
     return wrapper.get_response();
 }
 
-::slack::response::chat::post_message chat::post_message_wrapper::get_response()
+::slack::chat::responses::post_message chat::post_message_wrapper::get_response()
 {
     cpr::Parameters params{{"token",   ::slack_config::token_},
                            {"channel", channel_},
@@ -136,14 +136,18 @@ namespace chat
 }
 
 
-::slack::response::chat::post_message post_message(channel_id channel, text text)
+::slack::chat::responses::post_message post_message(channel_id channel, text text)
 {
     class post_message_wrapper wrapper{channel, text};
     return wrapper.get_response();
 }
-}
 
-response::chat::post_message::post_message(const std::string &raw_json) : raw_json{raw_json}
+namespace responses
+{
+
+/********* post_message response ***********/
+
+::slack::chat::responses::post_message::post_message(const std::string &raw_json) : raw_json{raw_json}
 {
     //happy path
     Json::Value result_ob;
@@ -188,4 +192,6 @@ response::chat::post_message::post_message(const std::string &raw_json) : raw_js
 
     return;
 }
+} //namespace responses
+} //nanespace chat
 } //namespace slack

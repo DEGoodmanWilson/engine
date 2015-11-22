@@ -11,9 +11,9 @@
 
 namespace slack
 {
-namespace response
-{
 namespace channels
+{
+namespace responses
 {
 
 struct list // : public ::slack::response::base

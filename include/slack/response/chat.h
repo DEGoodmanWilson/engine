@@ -9,9 +9,11 @@
 
 namespace slack
 {
-namespace response
-{
+
 namespace chat
+{
+
+namespace responses
 {
 
 struct delete_it // : public ::slack::response::base

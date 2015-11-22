@@ -21,7 +21,7 @@ class list_wrapper
 public:
     list_wrapper() : exclude_archived_{false} {};
 
-    ::slack::response::channels::list get_response();
+    responses::list get_response();
 
     void set_option(exclude_archived exclude_archived)
     { exclude_archived_ = exclude_archived; }
@@ -45,14 +45,14 @@ void set_option(list_wrapper &wrapper, T &&t, Ts &&... ts)
 }
 
 template<typename ...Ts>
-::slack::response::channels::list list()
+responses::list list()
 {
     class list_wrapper wrapper;
     return wrapper.get_response();
 }
 
 template<typename ...Ts>
-::slack::response::channels::list list(Ts &&...ts)
+responses::list list(Ts &&...ts)
 {
     class list_wrapper wrapper;
     set_option(wrapper, std::forward<Ts>(ts)...);
