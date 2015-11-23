@@ -22,8 +22,10 @@ int main(int argc, char **argv)
     std::cout << slack::api::test(e, slack::api::parameter::test::foo{"bar"}).raw_json << std::endl;
 
 
-//    std::cout << slack::auth::test().raw_json << std::endl;
-//
+    auto auth_test = slack::auth::test();
+    std::cout << auth_test.raw_json << std::endl;
+    std::cout << auth_test.team_id.value() << std::endl;
+
 ////    auto mesg = slack::chat::post_message("#donbot-messages", "Welcome your new overlords")
 //
 //    auto channels = slack::channels::list();

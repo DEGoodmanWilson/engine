@@ -14,7 +14,7 @@ namespace api
 namespace impl
 {
 
-::slack::api::response::test test::get_response()
+response::test test::get_response()
 {
     cpr::Parameters params; //no need for a token here
     if (!error_.empty())
@@ -31,33 +31,8 @@ namespace impl
         //error path
         return {result.text}; //TODO
     }
-    //happy path
-    Json::Value result_ob;
-    Json::Reader reader;
-    bool parsedSuccess = reader.parse(result.text, result_ob, false);
-    if (!parsedSuccess)
-    {
-        return {result.text}; //TODO
-    }
 
     response::test ret{result.text};
-
-    ret.ok = result_ob["ok"].asBool();
-
-    if (!ret)
-    {
-        ret.error_str = result_ob["error"].asString();
-    }
-
-    if (!result_ob["args"].isNull() && result_ob["args"].isObject())
-    {
-        std::multimap<std::string, std::string> args;
-        for (const auto arg: result_ob["args"].getMemberNames())
-        {
-            args.emplace(arg, result_ob["args"][arg].asString());
-        }
-        ret.args = args;
-    }
 
     return ret;
 }
