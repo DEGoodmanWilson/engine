@@ -4,16 +4,15 @@
 
 #pragma once
 
-#include <string>
 #include <slack/types.h>
+#include <string>
 #include <optional/optional.hpp>
 
 namespace slack
 {
-namespace response
+namespace base
 {
 
 
 }
 }
-

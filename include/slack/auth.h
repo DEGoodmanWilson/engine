@@ -4,4 +4,4 @@
 
 #pragma once
 
-#include <slack/types.h>
+#include <slack/auth/test.h>
