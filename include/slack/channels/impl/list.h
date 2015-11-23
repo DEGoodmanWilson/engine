@@ -21,11 +21,13 @@ public:
 
     response::list get_response();
 
-    void set_option(parameter::exclude_archived exclude_archived)
-    { *exclude_archived_ = exclude_archived; }
+    void set_option(const parameter::list::exclude_archived& exclude_archived)
+    { exclude_archived_ = exclude_archived; }
+    void set_option(parameter::list::exclude_archived&& exclude_archived)
+    { exclude_archived_ = exclude_archived; }
 
 private:
-    std::experimental::optional<parameter::exclude_archived> exclude_archived_;
+    std::experimental::optional<parameter::list::exclude_archived> exclude_archived_;
 };
 
 } //namespace impl

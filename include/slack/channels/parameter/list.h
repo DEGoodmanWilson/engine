@@ -13,9 +13,12 @@ namespace channels
 {
 namespace parameter
 {
+namespace list
+{
 
 MAKE_BOOL_LIKE(exclude_archived);
 
+} //namespace list
 } //namespace parameter
 } //namespace channels
 } //namespace slack

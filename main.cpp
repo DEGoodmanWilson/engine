@@ -43,13 +43,13 @@ int main(int argc, char **argv)
         std::cout << chan.name << std::endl;
     }
 
-//    auto mesg = slack::chat::post_message(chan, "I LIVE!", slack::chat::username{"donbot"}, slack::chat::link_names{true});
-//    std::cout << mesg.message.text << std::endl;
-//
-//    auto ts = mesg.ts;
-//
-//    auto delete_it = slack::chat::delete_it(ts, chan);
-//    std::cout << delete_it.raw_json << std::endl;
+    auto mesg = slack::chat::post_message(chan, "I LIVE!", slack::chat::parameter::post_message::username{"donbot"}, slack::chat::parameter::post_message::link_names{true});
+    std::cout << mesg.message.text << std::endl;
+
+    auto ts = mesg.ts;
+
+    auto delete_it = slack::chat::delete_it(ts, chan);
+    std::cout << delete_it.raw_json << std::endl;
 
     return 0;
 }
