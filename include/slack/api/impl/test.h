@@ -33,8 +33,8 @@ public:
     { foo_ = std::move(foo); }
 
 private:
-    parameter::test::error error_;
-    parameter::test::foo foo_;
+    std::experimental::optional<parameter::test::error> error_;
+    std::experimental::optional<parameter::test::foo> foo_;
 };
 
 } //namespace impl

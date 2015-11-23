@@ -17,13 +17,13 @@ namespace impl
 response::test test::get_response()
 {
     cpr::Parameters params; //no need for a token here
-    if (!error_.empty())
+    if (error_)
     {
-        params.AddParameter({"error", error_});
+        params.AddParameter({"error", *error_});
     }
-    if (!foo_.empty())
+    if (foo_)
     {
-        params.AddParameter({"foo", foo_});
+        params.AddParameter({"foo", *foo_});
     }
     auto result = cpr::Get(cpr::Url{slack_config::HOSTNAME + "api.test"}, params);
     if (result.status_code != 200)

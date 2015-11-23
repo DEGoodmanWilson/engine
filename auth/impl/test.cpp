@@ -24,7 +24,7 @@ response::test test::get_response()
     cpr::Parameters params; //no need for a token here
     params.AddParameter({"token", slack_config::token_});
 
-    auto result = cpr::Post(cpr::Url{slack_config::HOSTNAME + "auth.test"}, params);
+    auto result = cpr::Get(cpr::Url{slack_config::HOSTNAME + "auth.test"}, params);
     if (result.status_code != 200)
     {
         //error path

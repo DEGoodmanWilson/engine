@@ -26,22 +26,23 @@ int main(int argc, char **argv)
     std::cout << auth_test.raw_json << std::endl;
     std::cout << auth_test.team_id.value() << std::endl;
 
-////    auto mesg = slack::chat::post_message("#donbot-messages", "Welcome your new overlords")
-//
-//    auto channels = slack::channels::list();
-//    ::slack::channel_id chan;
-//    for(const auto c : channels.channels)
-//    {
-//        if(c.name == "donbot-messages")
-//        {
-//            chan = c.id;
-//            break;
-//        }
-//    }
-//
-//    std::cout << channels.raw_json << std::endl;
-//
-//
+    auto channels = slack::channels::list();
+    ::slack::channel_id chan;
+    for(const auto c : channels.channels)
+    {
+        if(c.name == "donbot-messages")
+        {
+            chan = c.id;
+            break;
+        }
+    }
+
+    std::cout << channels.raw_json << std::endl;
+    for(const auto chan : channels.channels)
+    {
+        std::cout << chan.name << std::endl;
+    }
+
 //    auto mesg = slack::chat::post_message(chan, "I LIVE!", slack::chat::username{"donbot"}, slack::chat::link_names{true});
 //    std::cout << mesg.message.text << std::endl;
 //
