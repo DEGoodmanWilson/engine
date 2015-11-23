@@ -47,36 +47,67 @@ include_directories(SYSTEM
         ${OPENSSL_INCLUDE_DIR}
         ${JSONCPP_INCLUDE_DIR}
         ${SIMPLEWEB_INCLUDE_DIR}
-#        ${NOD_INCLUDE_DIR}
+        #        ${NOD_INCLUDE_DIR}
         ${OPTIONAL_INCLUDE_DIR}
         include
-)
+        )
 
 
 set(SLACK_FILES
+        include/slack/slack.h
         config.cpp
         config.h
         include/slack/config.h
-        auth.cpp
-        include/slack/auth.h
-        api.cpp
-        include/slack/api.h
-        chat.cpp
-        include/slack/chat.h
-        include/slack/types.h
         types.cpp
-        include/slack/response/api.h
-        include/slack/response/auth.h
+        include/slack/types.h
         include/slack/response/base.h
-        include/slack/slack.h
-        include/slack/parameter/api.h include/slack/parameter/base.h include/slack/parameter/chat.h include/slack/response/chat.h channels.cpp include/slack/channels.h include/slack/parameter/channels.h include/slack/response/channels.h)
+        include/slack/api/impl/test.h
+        include/slack/api/parameter/test.h
+        include/slack/api/response/test.h
+        include/slack/api/test.h
+        include/slack/auth/impl/test.h
+        include/slack/auth/parameter/test.h
+        include/slack/auth/response/test.h
+        include/slack/auth/test.h
+        include/slack/channels/delete.h
+        include/slack/channels/impl/delete.h
+        include/slack/channels/impl/post_message.h
+        include/slack/channels/impl/update.h
+        include/slack/channels/parameter/delete.h
+        channels/parameter/list.cpp
+        include/slack/channels/parameter/post_message.h
+        include/slack/channels/parameter/update.h
+        include/slack/channels/post_message.h
+        include/slack/channels/response/delete.h
+        channels/response/list.cpp
+        include/slack/channels/response/post_message.h
+        include/slack/channels/response/update.h
+        include/slack/channels/update.h
+        chat/delete.cpp
+        chat/impl/delete.cpp
+        include/slack/chat/impl/list.h
+        chat/impl/post_message.cpp
+        chat/impl/update.cpp
+        include/slack/chat/list.h
+        chat/parameter/delete.cpp
+        include/slack/chat/parameter/list.h
+        chat/parameter/post_message.cpp
+        chat/parameter/update.cpp
+        chat/post_message.cpp
+        chat/response/delete.cpp
+        include/slack/chat/response/list.h
+        chat/response/post_message.cpp
+        chat/response/update.cpp
+        chat/update.cpp
+        main.cpp
+        )
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 
 target_link_libraries(slack
         ${OPENSSL_LIBRARIES}
         ${CPR_LIBRARIES}
         curl
-)
+        )
 
 #tests
 
@@ -85,4 +116,4 @@ add_executable(slack_tests ${SOURCE_FILES})
 
 target_link_libraries(slack_tests
         slack
-)
+        )
