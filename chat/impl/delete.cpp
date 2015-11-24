@@ -21,8 +21,11 @@ namespace impl
 
 response::delete_it delete_it::get_response()
 {
-    cpr::Parameters params;
-    params.AddParameter({"token", slack_config::token_});
+    cpr::Parameters params{
+            {"token",   slack_config::token_},
+            {"ts",      ts_},
+            {"channel", channel_}
+    };
 
     auto result = cpr::Get(cpr::Url{slack_config::HOSTNAME + "chat.delete"}, params);
     if (result.status_code != 200)

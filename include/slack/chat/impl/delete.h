@@ -17,15 +17,15 @@ namespace impl
 class delete_it
 {
 public:
-    delete_it(const ts &ts, const channel_id channel_id) :
-            ts_{ts}, channel_id_{channel_id}
+    delete_it(const ts &ts, const channel_id channel) :
+            ts_{ts}, channel_{channel}
     { }
 
     response::delete_it get_response();
 
 private:
     ts ts_;
-    channel_id channel_id_;
+    channel_id channel_;
 
 };
 

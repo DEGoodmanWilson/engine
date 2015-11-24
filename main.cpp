@@ -30,18 +30,16 @@ int main(int argc, char **argv)
     ::slack::channel_id chan;
     for(const auto c : channels.channels)
     {
+        std::cout << c.name << " " << c.id << std::endl;
         if(c.name == "donbot-messages")
         {
             chan = c.id;
             break;
         }
     }
-
     std::cout << channels.raw_json << std::endl;
-    for(const auto chan : channels.channels)
-    {
-        std::cout << chan.name << std::endl;
-    }
+
+
 
     auto mesg = slack::chat::post_message(chan, "I LIVE!", slack::chat::parameter::post_message::username{"donbot"}, slack::chat::parameter::post_message::link_names{true});
     std::cout << mesg.message.text << std::endl;

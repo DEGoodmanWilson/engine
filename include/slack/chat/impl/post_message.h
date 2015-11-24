@@ -18,8 +18,8 @@ class post_message
 {
 public:
 
-    post_message(const parameter::post_message::channel_id &channel_id, const parameter::post_message::text &text) :
-            channel_id_(channel_id), text_(text)
+    post_message(const parameter::post_message::channel_id &channel, const parameter::post_message::text &text) :
+            channel_(channel), text_(text)
     { }
 
     response::post_message get_response();
@@ -80,7 +80,7 @@ public:
 
 
 private:
-    parameter::post_message::channel_id channel_id_;
+    parameter::post_message::channel_id channel_;
     parameter::post_message::text text_;
     std::experimental::optional<parameter::post_message::username> username_;
     std::experimental::optional<parameter::post_message::as_user> as_user_;

@@ -127,9 +127,11 @@ target_link_libraries(slack
 
 #tests
 
-set(SOURCE_FILES main.cpp)
-add_executable(slack_tests ${SOURCE_FILES})
+add_subdirectory(tests)
 
-target_link_libraries(slack_tests
+set(SOURCE_FILES main.cpp)
+add_executable(slack_simple ${SOURCE_FILES})
+
+target_link_libraries(slack_simple
         slack
         )

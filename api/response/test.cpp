@@ -13,7 +13,7 @@ namespace response
 {
 
 test::test(const std::string &raw_json) :
-        raw_json{raw_json}, ok{false}, error{error::unknown}, error_str{"unknown"}
+        raw_json{raw_json}, ok{false}
 {
     Json::Value result_ob;
     Json::Reader reader;
