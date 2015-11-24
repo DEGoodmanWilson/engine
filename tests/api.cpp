@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 #include <slack/slack.h>
-#include <optional/optional.hpp>
 
 
 TEST(api, api_test_basic)

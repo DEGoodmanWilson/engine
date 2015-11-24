@@ -46,7 +46,7 @@ add_dependencies(GTest GTestMain)
 
 add_executable(slack_tests
         main.cpp
-        api.cpp)
+        api.cpp auth.cpp)
 
 add_dependencies(slack_tests GTestExternal slack)
 
