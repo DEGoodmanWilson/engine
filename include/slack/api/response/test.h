@@ -19,7 +19,6 @@ namespace error
 const auto UNKNOWN = std::string{"unknown"};
 const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
 const auto INVALID_RESPONSE = std::string{"invalid_response"};
-const auto USER_SPECIFIED = std::string{"user_specified"};
 }
 
 struct test :
