@@ -14,30 +14,24 @@ namespace api
 namespace response
 {
 
-struct test
+namespace error
 {
-    test(const std::string &raw_json);
+const auto UNKNOWN = std::string{"unknown"};
+const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
+const auto INVALID_RESPONSE = std::string{"invalid_response"};
+const auto USER_SPECIFIED = std::string{"user_specified"};
+}
 
-    explicit operator bool()
-    {
-        return ok;
-    }
+struct test :
+        public slack::response::base
+{
+    test(const std::string &raw_json) :
+            slack::response::base{raw_json}
+    { parse(false); }
 
-    enum class error
-    {
-        unknown,
-        json_parse_failure,
-        invalid_response,
-        user_specified,
-    };
 
-    //common stuff
-    std::string raw_json;
-    bool ok;
-    std::experimental::optional<error> error;
-    std::experimental::optional<std::string> error_str;
+    void finish_parse(slack::response::json_impl* json) override final;
 
-    //specific stuff
     std::experimental::optional<std::map<std::string, std::string>> args;
 };
 

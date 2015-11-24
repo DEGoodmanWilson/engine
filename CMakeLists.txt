@@ -63,6 +63,7 @@ set(SLACK_FILES
         config.h
         include/slack/parameter/base.h
         include/slack/response/base.h
+        response/base.cpp
         include/slack/api.h
         api/impl/test.cpp
         include/slack/api/impl/test.h

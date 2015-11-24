@@ -4,9 +4,22 @@
 
 #pragma once
 
-#include<string>
+#include <string>
+#include <json/json.h>
 
 namespace slack_config
 {
 const std::string HOSTNAME = "https://slack.com/api/";
+}
+
+namespace slack
+{
+namespace response
+{
+struct json_impl
+{
+    Json::Value json;
+};
+
+}
 }
