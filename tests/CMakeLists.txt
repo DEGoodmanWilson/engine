@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.3)
 
 include(ExternalProject)
 
-set(GTEST_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/gtest")
+set(GTEST_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/tests/gtest")
 ExternalProject_Add(GTestExternal
         #        SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk
         #        SVN_REVISION -r746

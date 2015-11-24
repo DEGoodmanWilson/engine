@@ -38,7 +38,7 @@ struct test
     std::experimental::optional<std::string> error_str;
 
     //specific stuff
-    std::experimental::optional<std::multimap<std::string, std::string>> args;
+    std::experimental::optional<std::map<std::string, std::string>> args;
 };
 
 } //namespace response

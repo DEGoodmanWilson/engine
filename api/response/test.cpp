@@ -45,7 +45,7 @@ test::test(const std::string &raw_json) :
 
     if (!result_ob["args"].isNull() && result_ob["args"].isObject())
     {
-        args = std::multimap<std::string, std::string>{};
+        args = std::map<std::string, std::string>{};
 
         for (auto arg: result_ob["args"].getMemberNames())
         {

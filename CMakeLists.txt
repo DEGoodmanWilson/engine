@@ -115,7 +115,6 @@ set(SLACK_FILES
         include/slack/chat/response/update.h
         chat/update.cpp
         include/slack/chat/update.h
-        main.cpp
         )
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 
@@ -126,12 +125,5 @@ target_link_libraries(slack
         )
 
 #tests
-
+#TODO make this an option.
 add_subdirectory(tests)
-
-set(SOURCE_FILES main.cpp)
-add_executable(slack_simple ${SOURCE_FILES})
-
-target_link_libraries(slack_simple
-        slack
-        )
