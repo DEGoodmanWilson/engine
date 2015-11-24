@@ -16,8 +16,8 @@ void base::parse(bool do_return)
 {
     Json::Value result_ob;
     Json::Reader reader;
-    bool parsedSuccess = reader.parse(raw_json, result_ob, false);
-    if (!parsedSuccess)
+    bool parsed_success = reader.parse(raw_json, result_ob, false);
+    if (!parsed_success)
     {
         error = std::string{"json_parse_failure"};
         return;

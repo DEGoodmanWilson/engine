@@ -19,7 +19,7 @@ void post_message::finish_parse(slack::response::json_impl* json)
 
     if (result_ob["channel"].isString()) channel = result_ob["channel"].asString();
     if (result_ob["ts"].isString()) ts = result_ob["ts"].asString();
-    if (result_ob["message"].isString()) message = {result_ob["message"]};
+    if (result_ob["message"].isObject()) message = slack::message(result_ob["message"]);
 }
 
 } //namespace response

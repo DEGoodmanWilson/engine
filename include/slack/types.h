@@ -74,9 +74,6 @@ struct message
 struct channel
 {
     channel() = default;
-
-    channel(const std::string &raw_json);
-
     template<class json>
     channel(const json &parsed_json);
 
