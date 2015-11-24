@@ -6,6 +6,8 @@
 
 #include <slack/response/base.h>
 #include <slack/types.h>
+#include <string>
+#include <optional/optional.hpp>
 
 namespace slack
 {
@@ -14,37 +16,31 @@ namespace chat
 namespace response
 {
 
-struct delete_it
+namespace error
 {
-    delete_it(const std::string &raw_json);
+namespace delete_it
+{
+const auto UNKNOWN = std::string{"unknown"};
+const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
+const auto INVALID_RESPONSE = std::string{"invalid_response"};
+const auto MESSAGE_NOT_FOUND = std::string{"message_not_found"};
+const auto CHANNEL_NOT_FOUND = std::string{"channel_not_found"};
+const auto CANT_DELETE_MESSAGE = std::string{"cant_delete_message"};
+const auto COMPLIANCE_EXPORTS_PREVENT_DELETION = std::string{"compliance_exports_prevent_deletion"};
+const auto NOT_AUTHED = std::string{"not_authed"};
+const auto INVALID_AUTH = std::string{"invalid_auth"};
+const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
+}
+}
 
-    explicit operator bool()
-    {
-        return ok;
-    }
+struct delete_it :
+        public slack::response::base
+{
+    delete_it(const std::string &raw_json) : base{raw_json}
+    { parse(); };
 
-    enum class error
-    {
-        unknown,
-        json_parse_failure,
-        invalid_response,
-        message_not_found,
-        channel_not_found,
-        cant_delete_message,
-        compliance_exports_prevent_deletion,
-        not_authed,
-        invalid_auth,
-        account_inactive,
-    };
+    void finish_parse(slack::response::json_impl *json) override final;
 
-    //common stuff
-    static const std::map<std::string, error> error_str_map;
-    std::string raw_json;
-    bool ok;
-    std::experimental::optional<error> error;
-    std::experimental::optional<std::string> error_str;
-
-    //specific stuff
     channel_id channel;
     ts ts;
 };

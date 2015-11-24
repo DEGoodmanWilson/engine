@@ -6,6 +6,8 @@
 
 #include <slack/response/base.h>
 #include <slack/types.h>
+#include <string>
+#include <optional/optional.hpp>
 
 namespace slack
 {
@@ -14,38 +16,31 @@ namespace chat
 namespace response
 {
 
-struct update
+namespace error
 {
-    update(const std::string &raw_json);
+namespace update
+{
+const auto UNKNOWN = std::string{"unknown"};
+const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
+const auto INVALID_RESPONSE = std::string{"invalid_response"};
+const auto MESSAGE_NOT_FOUND = std::string{"message_not_found"};
+const auto CHANNEL_NOT_FOUND = std::string{"channel_not_found"};
+const auto CANT_DELETE_MESSAGE = std::string{"cant_delete_message"};
+const auto COMPLIANCE_EXPORTS_PREVENT_DELETION = std::string{"compliance_exports_prevent_deletion"};
+const auto NOT_AUTHED = std::string{"not_authed"};
+const auto INVALID_AUTH = std::string{"invalid_auth"};
+const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
+}
+}
 
-    explicit operator bool()
-    {
-        return ok;
-    }
+struct update :
+        public slack::response::base
+{
+    update(const std::string &raw_json) : base{raw_json}
+    { parse(); };
 
-    enum class error
-    {
-        unknown,
-        json_parse_failure,
-        invalid_response,
-        user_specified,
-        channel_not_found,
-        edit_window_closed,
-        msg_too_long,
-        no_text,
-        not_authed,
-        invalid_auth,
-        account_inactive,
-    };
-
-    //common stuff
-    static const std::map<std::string, error> error_str_map;
-    std::string raw_json;
-    bool ok;
-    std::experimental::optional<error> error;
-    std::experimental::optional<std::string> error_str;
-
-    //specific stuff
+    void finish_parse(slack::response::json_impl *json) override final;
+    
     ts ts;
     channel_id channel;
     std::string text;
