@@ -26,7 +26,7 @@ struct base
 
     operator bool()
     {
-        return static_cast<bool>(error);
+        return !static_cast<bool>(error); //if error contains a value, return false
     }
 
     virtual void finish_parse(json_impl* json) = 0;

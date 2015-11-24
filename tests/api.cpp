@@ -9,7 +9,7 @@
 TEST(api, api_test_basic)
 {
     auto result = slack::api::test();
-    ASSERT_TRUE(static_cast<bool>(result));
+    ASSERT_TRUE(result);
     ASSERT_EQ(result.args, std::experimental::nullopt);
     ASSERT_EQ(result.error, std::experimental::nullopt);
 }
