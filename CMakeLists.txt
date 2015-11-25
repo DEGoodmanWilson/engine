@@ -125,10 +125,14 @@ set(SLACK_FILES
         include/slack/channels/archive.h
         include/slack/channels/parameter/archive.h
         include/slack/channels/impl/archive.h
-        channels/create.cpp
         channels/archive.cpp
         channels/impl/archive.cpp
-        channels/response/archive.cpp)
+        channels/response/archive.cpp
+        include/slack/rtm/start.h
+        include/slack/rtm/response/start.h
+        include/slack/rtm/parameter/start.h
+        include/slack/rtm/impl/start.h
+        )
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 
 target_link_libraries(slack
