@@ -11,8 +11,8 @@ public:
     chat_env()
     {
         //we need a channel. I have a test channel in my team called "donbot-messages". YMMV.
-        auto channels = slack::channels::list();
-        for(const auto c : channels.channels)
+        auto result = slack::channels::list();
+        for(const auto c : result.channels.value())
         {
             if(c.name == "donbot-messages")
             {

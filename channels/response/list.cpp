@@ -17,9 +17,13 @@ void list::finish_parse(slack::response::json_impl* json)
 {
     Json::Value result_ob = json->json;
 
-    for (const auto channel_obj : result_ob["channels"])
+    if (!result_ob["channels"].isNull() && result_ob["channels"].isArray())
     {
-        channels.emplace_back(channel_obj);
+        channels = std::vector<::slack::channel>{};
+        for (const auto channel_obj : result_ob["channels"])
+        {
+            channels->emplace_back(channel_obj);
+        }
     }
 }
 

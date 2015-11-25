@@ -38,7 +38,7 @@ struct list : public slack::response::base
 
     void finish_parse(slack::response::json_impl *json) override final;
 
-    std::vector<::slack::channel> channels;
+    std::experimental::optional<std::vector<::slack::channel>> channels;
 };
 
 } //namespace response
