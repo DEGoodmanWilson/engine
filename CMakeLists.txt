@@ -114,7 +114,21 @@ set(SLACK_FILES
         include/slack/chat/response/update.h
         chat/update.cpp
         include/slack/chat/update.h
-        include/slack/channels/create.h include/slack/channels/impl/create.h include/slack/channels/parameter/create.h include/slack/channels/response/create.h include/slack/channels/response/archive.h channels/response/create.cpp channels/impl/create.cpp include/slack/channels/archive.h include/slack/channels/parameter/archive.h include/slack/channels/impl/archive.h channels/create.cpp channels/archive.cpp channels/impl/archive.cpp)
+        include/slack/channels/create.h
+        include/slack/channels/impl/create.h
+        include/slack/channels/parameter/create.h
+        include/slack/channels/response/create.h
+        include/slack/channels/response/archive.h
+        channels/create.cpp
+        channels/response/create.cpp
+        channels/impl/create.cpp
+        include/slack/channels/archive.h
+        include/slack/channels/parameter/archive.h
+        include/slack/channels/impl/archive.h
+        channels/create.cpp
+        channels/archive.cpp
+        channels/impl/archive.cpp
+        )
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 
 target_link_libraries(slack

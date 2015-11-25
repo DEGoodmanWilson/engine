@@ -17,10 +17,11 @@ TEST(channels, channels_list_basic)
 TEST(channels, channels_create_basic)
 {
     std::string name = "donbot-test-channel";
-    auto result = slack::channels::create(slack::channels::parameter::create::name{name});
+    auto result = slack::channels::create(name);
     ASSERT_TRUE(result);
-    slack::channel chan = result.channel;
-    //TODO store the ID so we can delete it
+    ASSERT_TRUE(static_cast<bool>(result.channel));
+    slack::channel chan{*result.channel};
+    //TODO store the ID so we can delete its
     id = chan.id;
     ASSERT_EQ(chan.name, name);
 }
