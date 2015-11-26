@@ -39,9 +39,9 @@ public:
     { mpim_aware_ = std::move(mpim_aware); }
 
 private:
-    parameter::start::simple_latest simple_latest_;
-    parameter::start::no_unreads no_unreads_;
-    parameter::start::mpim_aware mpim_aware_;
+    std::experimental::optional<parameter::start::simple_latest> simple_latest_;
+    std::experimental::optional<parameter::start::no_unreads> no_unreads_;
+    std::experimental::optional<parameter::start::mpim_aware> mpim_aware_;
 };
 
 } //namespace impl

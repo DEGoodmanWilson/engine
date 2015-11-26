@@ -10,3 +10,4 @@
 #include <slack/auth.h>
 #include <slack/chat.h>
 #include <slack/channels.h>
+#include <slack/rtm.h>

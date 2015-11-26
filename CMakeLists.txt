@@ -132,6 +132,11 @@ set(SLACK_FILES
         include/slack/rtm/response/start.h
         include/slack/rtm/parameter/start.h
         include/slack/rtm/impl/start.h
+        rtm/start.cpp
+        rtm/impl/start.cpp
+        rtm/parameter/start.cpp
+        rtm/response/start.cpp
+        include/slack/rtm.h
         )
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 

@@ -40,14 +40,14 @@ struct start :
     void finish_parse(slack::response::json_impl *json) override final;
 
     std::experimental::optional<std::string> url;
-    std::experimental::optional<user> self;
-    std::experimental::optional<team> team;
-    std::experimental::optional<std::vector<user>> users;
+//    std::experimental::optional<user> self;
+//    std::experimental::optional<team> team;
+//    std::experimental::optional<std::vector<user>> users;
     std::experimental::optional<std::vector<channel>> channels;
-    std::experimental::optional<std::vector<group>> groups;
-    std::experimental::optional<std::vector<mpim>> mpims;
-    std::experimental::optional<std::vector<im>> ims;
-    std::experimental::optional<std::vector<bot>> bots;
+//    std::experimental::optional<std::vector<group>> groups;
+//    std::experimental::optional<std::vector<mpim>> mpims;
+//    std::experimental::optional<std::vector<im>> ims;
+//    std::experimental::optional<std::vector<bot>> bots;
 };
 
 } //namespace response

@@ -34,6 +34,7 @@ public: \
 #define MAKE_BOOL_LIKE(x) class x \
 { \
 public: \
+    x() = default; \
     x(const x &rhs) = default; \
     x(x &&rhs) = default; \
     x &operator=(const x &rhs) = default; \
