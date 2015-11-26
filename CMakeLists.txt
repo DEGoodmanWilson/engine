@@ -128,7 +128,7 @@ set(SLACK_FILES
         channels/create.cpp
         channels/archive.cpp
         channels/impl/archive.cpp
-        )
+        channels/response/archive.cpp)
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 
 target_link_libraries(slack
