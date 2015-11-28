@@ -1,6 +1,3 @@
 [submodule "cpr"]
 	path = cpr
 	url = git@github.com:DEGoodmanWilson/cpr.git
-[submodule "tests/googletest"]
-	path = tests/googletest
-	url = git@github.com:google/googletest.git
