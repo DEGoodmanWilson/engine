@@ -6,7 +6,7 @@
 
 #include <slack/config.h>
 #include <slack/types.h>
-#include <slack/api.h>
+#include <slack/api.test.h>
 //#include <slack/auth.h>
 //#include <slack/chat.h>
 //#include <slack/channels.h>

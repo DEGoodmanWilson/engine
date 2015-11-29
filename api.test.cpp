@@ -2,7 +2,7 @@
 // Copyright © 2015 Slack Technologies, Inc. All rights reserved.
 //
 
-#include "slack/api.h"
+#include "slack/api.test.h"
 #include "config.h"
 #include "private.h"
 #include <cpr.h>
@@ -37,7 +37,7 @@ test::test(const std::string &raw_json)
 namespace impl
 {
 
-response::test test::get_response()
+response::test api::get_response()
 {
     cpr::Parameters params; //no need for a token here
     if (error_)

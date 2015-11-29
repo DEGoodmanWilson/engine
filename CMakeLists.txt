@@ -64,18 +64,17 @@ set(SLACK_FILES
         base/response.cpp
         include/slack/base/response.h
         include/slack/base/impl.h
-        include/slack/api.h
-        api/test.cpp
-        include/slack/api/test.h
+        api.test.cpp
+        include/slack/api.test.h
 #        include/slack/auth.h
-#        auth/impl/test.cpp
-#        include/slack/auth/impl/test.h
-#        auth/parameter/test.cpp
-#        include/slack/auth/parameter/test.h
-#        auth/response/test.cpp
-#        include/slack/auth/response/test.h
-#        auth/test.cpp
-#        include/slack/auth/test.h
+#        auth/impl/api.test.cpp
+#        include/slack/auth/impl/api.test.h
+#        auth/parameter/api.test.cpp
+#        include/slack/auth/parameter/api.test.h
+#        auth/response/api.test.cpp
+#        include/slack/auth/response/api.test.h
+#        auth/api.test.cpp
+#        include/slack/auth/api.test.h
 #        include/slack/channels.h
 #        channels/impl/list.cpp
 #        include/slack/channels/impl/list.h

@@ -47,7 +47,7 @@ namespace impl
 
 
 
-class test :
+class api :
         public slack::base::impl<slack::api::response::test>
 {
 public:
@@ -75,13 +75,13 @@ private:
 } //namespace impl
 
 template<typename T>
-void set_option(impl::test &impl, T &&t)
+void set_option(impl::api &impl, T &&t)
 {
     impl.set_option(SLACK_FWD(t));
 }
 
 template<typename T, typename... Ts>
-void set_option(impl::test &impl, T &&t, Ts &&... ts)
+void set_option(impl::api &impl, T &&t, Ts &&... ts)
 {
     set_option(impl, SLACK_FWD(t));
     set_option(impl, SLACK_FWD(ts)...);
@@ -90,14 +90,14 @@ void set_option(impl::test &impl, T &&t, Ts &&... ts)
 template<typename ...Ts>
 ::slack::api::response::test test()
 {
-    class impl::test impl;
+    class impl::api impl;
     return impl.get_response();
 }
 
 template<typename ...Ts>
 ::slack::api::response::test test(Ts &&...ts)
 {
-    class impl::test impl;
+    class impl::api impl;
     set_option(impl, std::forward<Ts>(ts)...);
     return impl.get_response();
 }
