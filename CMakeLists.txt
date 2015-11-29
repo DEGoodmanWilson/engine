@@ -23,10 +23,6 @@ set(OPENSSL_LIBRARIES ssl crypto)
 link_directories(${OPENSSL_LIB_DIR})
 
 
-#cpr
-set(USE_SYSTEM_CURL YES)
-add_subdirectory(cpr)
-include_directories(${CPR_INCLUDE_DIRS})
 
 
 #jsoncpp
@@ -132,12 +128,6 @@ set(SLACK_FILES
 #        include/slack/rtm.h
         private.h include/slack/http.h http.cpp)
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
-
-target_link_libraries(slack
-        ${OPENSSL_LIBRARIES}
-        ${CPR_LIBRARIES}
-        curl
-        )
 
 #tests
 #TODO make this an option.

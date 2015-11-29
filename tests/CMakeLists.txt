@@ -42,7 +42,10 @@ set_target_properties(GTestMain PROPERTIES
 add_dependencies(GTest GTestMain)
 
 
-
+#cpr
+set(USE_SYSTEM_CURL YES)
+add_subdirectory(cpr)
+include_directories(${CPR_INCLUDE_DIRS})
 
 add_executable(slack_tests
         main.cpp
@@ -60,4 +63,10 @@ target_include_directories(slack_tests SYSTEM
         PUBLIC ${GTEST_INCLUDES}
         )
 
-target_link_libraries(slack_tests slack GTestMain)
+target_link_libraries(slack_tests
+        GTestMain
+        ${CPR_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+        curl
+        slack
+        )
