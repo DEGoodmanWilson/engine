@@ -5,8 +5,6 @@
 #pragma once
 
 #include <string>
-#include <cpr.h>
-#include <json/json.h>
 
 namespace slack_config
 {

@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 #include <slack/slack.h>
-static_cast<uint32_t>(response.status_code)
+#include <cpr.h>
 
 class Environment :
         public ::testing::Environment
