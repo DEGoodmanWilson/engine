@@ -5,7 +5,9 @@
 #pragma once
 
 #include <slack/types.h>
-#include <memory>
+#include <slack/http.h>
+#include <string>
+#include <map>
 
 namespace slack
 {
@@ -16,15 +18,16 @@ template<class T>
 class impl
 {
 protected:
-    T handle_response(uint32_t response_code, const std::string& response_body)
+    T get(std::string url, http::params params)
     {
-        if (response_code != 200)
+        auto response = http::get(url, params);
+        if(response.status_code != 200)
         {
-            //error path
-            return {response_body};
+            //TODO do something!
+            return {response.body};
         }
 
-        return {response_body};
+        return {response.body};
     }
 };
 

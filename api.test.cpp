@@ -3,9 +3,9 @@
 //
 
 #include "slack/api.test.h"
+#include "slack/http.h"
 #include "config.h"
 #include "private.h"
-#include <cpr.h>
 #include <json/json.h>
 
 namespace slack
@@ -39,19 +39,20 @@ namespace impl
 
 response::test api::get_response()
 {
-    cpr::Parameters params; //no need for a token here
+    http::params params;
+
     if (error_)
     {
-        params.AddParameter({"error", *error_});
+        params.emplace("error", *error_);
     }
     if (foo_)
     {
-        params.AddParameter({"foo", *foo_});
+        params.emplace("foo", *foo_);
     }
 
-    auto result = cpr::Get(cpr::Url{slack_config::HOSTNAME + "api.test"}, params);
+//    auto result = cpr::Get(cpr::Url{slack_config::HOSTNAME + "api.test"}, params);
 
-    return handle_response(result.status_code, result.text);
+    return get(slack_config::HOSTNAME + "api.test", params);
 }
 
 } //namespace impl
