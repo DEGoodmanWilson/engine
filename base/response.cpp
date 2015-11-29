@@ -3,7 +3,7 @@
 //
 
 #include "slack/base/response.h"
-#include "config.h"
+#include "private.h"
 #include <json/json.h>
 
 namespace slack
@@ -35,7 +35,7 @@ response::response(const std::string &raw_json)
         error = result_ob["error"].asString();
     }
 
-    json_ = new json_impl(result_ob);
+    json_ = new slack_private::json_impl(result_ob);
 }
 
 response::~response()

@@ -4,6 +4,7 @@
 
 #include "slack/api.h"
 #include "config.h"
+#include "private.h"
 #include <cpr.h>
 #include <json/json.h>
 

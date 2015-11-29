@@ -18,7 +18,6 @@ class impl
 protected:
     T handle_response(uint32_t response_code, const std::string& response_body)
     {
-        //TODO can we roll the call to GET in here too!?
         if (response_code != 200)
         {
             //error path

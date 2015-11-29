@@ -131,7 +131,7 @@ set(SLACK_FILES
 #        rtm/parameter/start.cpp
 #        rtm/response/start.cpp
 #        include/slack/rtm.h
-)
+        private.h)
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 
 target_link_libraries(slack

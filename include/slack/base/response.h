@@ -10,12 +10,15 @@
 #include <map>
 #include <memory>
 
+namespace slack_private
+{
+struct json_impl;
+}
+
 namespace slack
 {
 namespace base
 {
-
-struct json_impl;
 
 struct response
 {
@@ -31,7 +34,7 @@ struct response
     }
 
 protected:
-    json_impl* json_;
+    slack_private::json_impl* json_;
 };
 
 } //namespace base
