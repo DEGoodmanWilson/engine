@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <slack/response/base.h>
+#include <slack/base/resposne.h>
 #include <slack/types.h>
 #include <string>
 #include <optional/optional.hpp>

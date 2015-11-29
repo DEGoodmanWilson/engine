@@ -2,17 +2,16 @@
 // Copyright © 2015 Slack Technologies, Inc. All rights reserved.
 //
 
-#include "slack/response/base.h"
+#include "slack/base/response.h"
 #include "config.h"
 #include <json/json.h>
-#include <string>
 
 namespace slack
 {
-namespace response
+namespace base
 {
 
-void base::parse(bool do_return)
+response::response(const std::string &raw_json)
 {
     Json::Value result_ob;
     Json::Reader reader;
@@ -34,12 +33,16 @@ void base::parse(bool do_return)
     if (!ok)
     {
         error = result_ob["error"].asString();
-        if(do_return) return;
     }
-    json_impl json{result_ob};
-    finish_parse(&json); //this is safe because the caller isn't hanging on to it.
+
+    json_ = new json_impl(result_ob);
+}
+
+response::~response()
+{
+    delete json_;
 }
 
 
-} //namespace response
+} //namespace base
 } //namespace slack

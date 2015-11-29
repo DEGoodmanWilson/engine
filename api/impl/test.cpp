@@ -25,16 +25,10 @@ response::test test::get_response()
     {
         params.AddParameter({"foo", *foo_});
     }
+
     auto result = cpr::Get(cpr::Url{slack_config::HOSTNAME + "api.test"}, params);
-    if (result.status_code != 200)
-    {
-        //error path
-        return {result.text}; //TODO
-    }
 
-    response::test ret{result.text};
-
-    return ret;
+    return handle_response(result.status_code, result.text);
 }
 
 } //namespace impl

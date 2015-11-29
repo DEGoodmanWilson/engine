@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include <cpr.h>
 #include <json/json.h>
 
 namespace slack_config
@@ -12,12 +13,15 @@ namespace slack_config
 const std::string HOSTNAME = "https://slack.com/api/";
 }
 
+
+//TODO move this into a different header. This is silly
 namespace slack
 {
-namespace response
+namespace base
 {
 struct json_impl
 {
+    json_impl(const Json::Value& json) : json{json} {}
     Json::Value json;
 };
 

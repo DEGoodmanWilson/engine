@@ -13,9 +13,10 @@ namespace api
 namespace response
 {
 
-void test::finish_parse(slack::response::json_impl* json)
+test::test(const std::string &raw_json)
+        : slack::base::response{raw_json}
 {
-    Json::Value result_ob = json->json;
+    Json::Value result_ob = json_->json;
 
     if (!result_ob["args"].isNull() && result_ob["args"].isObject())
     {
@@ -27,6 +28,7 @@ void test::finish_parse(slack::response::json_impl* json)
         }
     }
 }
+
 
 } //namespace response
 } //namespace api

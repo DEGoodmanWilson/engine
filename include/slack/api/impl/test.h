@@ -5,6 +5,7 @@
 #pragma once
 
 #include <slack/api/test.h>
+#include <slack/base/impl.h>
 
 namespace slack
 {
@@ -13,13 +14,16 @@ namespace api
 namespace impl
 {
 
-class test
+
+
+class test :
+        public slack::base::impl<slack::api::response::test>
 {
 public:
-    test() = default;
-
+    //TODO can these be moved into the base class?
     response::test get_response();
 
+    //TODO can we make a generic template?
     void set_option(const parameter::test::error &error)
     { error_ = error; }
 

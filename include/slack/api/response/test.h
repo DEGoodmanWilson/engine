@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <slack/response/base.h>
+#include <slack/base/response.h>
 #include <map>
 
 namespace slack
@@ -25,12 +25,9 @@ const auto INVALID_RESPONSE = std::string{"invalid_response"};
 }
 
 struct test :
-        public slack::response::base
+        public slack::base::response
 {
-    test(const std::string &raw_json) : slack::response::base{raw_json}
-    { parse(false); }
-
-    void finish_parse(slack::response::json_impl *json) override final;
+    test(const std::string &raw_json);
 
     std::experimental::optional<std::map<std::string, std::string>> args;
 };

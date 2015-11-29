@@ -8,18 +8,19 @@
 #include <string>
 #include <optional/optional.hpp>
 #include <map>
+#include <memory>
 
 namespace slack
 {
-namespace response
+namespace base
 {
 
 struct json_impl;
 
-struct base
+struct response
 {
-    base(const std::string &raw_json) : raw_json{raw_json} {}
-    void parse(bool do_return = true);
+    response(const std::string &raw_json);
+    ~response();
 
     std::string raw_json;
     std::experimental::optional<std::string> error;
@@ -29,8 +30,9 @@ struct base
         return !static_cast<bool>(error); //if error contains a value, return false
     }
 
-    virtual void finish_parse(json_impl* json) = 0;
+protected:
+    json_impl* json_;
 };
 
-}
-}
+} //namespace base
+} //namespace slack
