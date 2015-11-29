@@ -9,12 +9,6 @@
 
 namespace slack
 {
-
-namespace priv
-{
-struct param_impl;
-}
-
 namespace base
 {
 
