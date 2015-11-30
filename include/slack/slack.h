@@ -8,7 +8,7 @@
 #include <slack/types.h>
 #include <slack/http.h>
 #include <slack/api.test.h>
-//#include <slack/auth.h>
+#include <slack/auth.test.h>
 //#include <slack/chat.h>
 //#include <slack/channels.h>
 //#include <slack/rtm.h>

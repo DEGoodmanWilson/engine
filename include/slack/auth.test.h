@@ -11,7 +11,7 @@
 
 namespace slack
 {
-namespace api
+namespace auth
 {
 
 /*************************************************************/
@@ -22,8 +22,7 @@ namespace parameter
 namespace test
 {
 
-MAKE_STRING_LIKE(error);
-MAKE_STRING_LIKE(foo);
+//no optional parameters
 
 } //namespace test
 } //namespace parameter
@@ -41,6 +40,9 @@ namespace test
 const auto UNKNOWN = std::string{"unknown"};
 const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
 const auto INVALID_RESPONSE = std::string{"invalid_response"};
+const auto NOT_AUTHED = std::string{"not_authed"};
+const auto INVALID_AUTH = std::string{"invalid_auth"};
+const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
 } //namesapce test
 } //namespace error
@@ -58,7 +60,11 @@ struct test :
 {
     test(const std::string &raw_json);
 
-    std::experimental::optional<std::map<std::string, std::string>> args;
+    std::experimental::optional<std::string> url;
+    std::experimental::optional<std::string> teamname;
+    std::experimental::optional<std::string> username;
+    std::experimental::optional<team_id> team_id;
+    std::experimental::optional<user_id> user_id;
 };
 
 } //namespace response
@@ -71,28 +77,13 @@ namespace impl
 {
 
 class test :
-        public slack::base::impl<slack::api::response::test>
+        public slack::base::impl<slack::auth::response::test>
 {
 public:
-    //TODO can these be moved into the base class?
     response::test get_response();
 
-    //TODO can we make a generic template?
-    void set_option(const parameter::test::error &error)
-    { error_ = error; }
-
-    void set_option(parameter::test::error &&error)
-    { error_ = std::move(error); }
-
-    void set_option(const parameter::test::foo &foo)
-    { foo_ = foo; }
-
-    void set_option(parameter::test::foo &&foo)
-    { foo_ = std::move(foo); }
-
 private:
-    std::experimental::optional<parameter::test::error> error_;
-    std::experimental::optional<parameter::test::foo> foo_;
+
 };
 
 } //namespace impl
@@ -102,20 +93,7 @@ private:
 // MARK: - Public Interface
 
 
-template<typename ...Ts>
-::slack::api::response::test test()
-{
-    class impl::test impl;
-    return impl.get_response();
-}
-
-template<typename ...Ts>
-::slack::api::response::test test(Ts &&...ts)
-{
-    class impl::test impl;
-    set_option<decltype(impl)>(impl, std::forward<Ts>(ts)...);
-    return impl.get_response();
-}
+::slack::auth::response::test test();
 
 }
 } //namespace slack

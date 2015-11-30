@@ -4,7 +4,6 @@
 
 #include "slack/api.test.h"
 #include "slack/http.h"
-#include "config.h"
 #include "private.h"
 #include <json/json.h>
 
@@ -12,6 +11,10 @@ namespace slack
 {
 namespace api
 {
+
+
+/*************************************************************/
+// MARK: - Response
 
 namespace response
 {
@@ -34,6 +37,10 @@ test::test(const std::string &raw_json)
 
 } //namespace response
 
+
+/*************************************************************/
+// MARK: - Impl
+
 namespace impl
 {
 
@@ -50,12 +57,9 @@ response::test test::get_response()
         params.emplace("foo", *foo_);
     }
 
-//    auto result = cpr::Get(cpr::Url{slack_config::HOSTNAME + "api.test"}, params);
-
-    return get(slack_config::HOSTNAME + "api.test", params);
+    return get("api.test", params);
 }
 
 } //namespace impl
-
 } //namespace api
 } //namespace slack

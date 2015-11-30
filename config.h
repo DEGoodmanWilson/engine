@@ -8,5 +8,4 @@
 
 namespace slack_config
 {
-const std::string HOSTNAME = "https://slack.com/api/";
 } //namespace slack_config
