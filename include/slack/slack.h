@@ -10,6 +10,4 @@
 #include <slack/api.test.h>
 #include <slack/auth.test.h>
 #include <slack/channels.list.h>
-//#include <slack/chat.h>
-//#include <slack/channels.h>
-//#include <slack/rtm.h>
+#include <slack/channels.create.h>

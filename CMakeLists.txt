@@ -64,12 +64,14 @@ set(SLACK_FILES
         include/slack/http.h
         http.cpp
         include/slack/set_option.h
-        api.test.cpp
         include/slack/api.test.h
-        auth.test.cpp
+        api.test.cpp
         include/slack/auth.test.h
-        channels.list.cpp
+        auth.test.cpp
         include/slack/channels.list.h
+        channels.list.cpp
+        include/slack/channels.create.h
+        channels.create.cpp
         )
 
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
