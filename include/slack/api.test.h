@@ -69,7 +69,7 @@ struct test :
 namespace impl
 {
 
-class api :
+class test :
         public slack::base::impl<slack::api::response::test>
 {
 public:
@@ -104,14 +104,14 @@ private:
 template<typename ...Ts>
 ::slack::api::response::test test()
 {
-    class impl::api impl;
+    class impl::test impl;
     return impl.get_response();
 }
 
 template<typename ...Ts>
 ::slack::api::response::test test(Ts &&...ts)
 {
-    class impl::api impl;
+    class impl::test impl;
     set_option<decltype(impl)>(impl, std::forward<Ts>(ts)...);
     return impl.get_response();
 }
