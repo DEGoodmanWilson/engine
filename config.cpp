@@ -3,17 +3,24 @@
 //
 
 #include "slack/config.h"
-#include <string>
 
 namespace slack_config
 {
-    std::string token_ = "";
-}
+std::string token_ = "";
+} //namespace slack_config
 
 namespace slack
 {
-    void set_token(std::string token)
-    {
-        ::slack_config::token_ = token;
-    }
+
+void set_token(std::string token)
+{
+    ::slack_config::token_ = token;
 }
+
+
+std::string get_token()
+{
+    return ::slack_config::token_;
+}
+
+} //namespace slack

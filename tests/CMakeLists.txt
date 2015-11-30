@@ -52,7 +52,7 @@ add_executable(slack_tests
         types.cpp
         api.cpp
         auth.cpp
-#        channels.cpp
+        channels.cpp
 #        chat.cpp
 #        rtm.cpp
         )

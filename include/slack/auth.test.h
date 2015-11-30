@@ -8,6 +8,8 @@
 #include <slack/set_option.h>
 #include <slack/base/response.h>
 #include <slack/base/impl.h>
+#include <string>
+#include <optional/optional.hpp>
 
 namespace slack
 {
@@ -44,7 +46,7 @@ const auto NOT_AUTHED = std::string{"not_authed"};
 const auto INVALID_AUTH = std::string{"invalid_auth"};
 const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
-} //namesapce test
+} //namespace test
 } //namespace error
 } //namespace response
 
@@ -77,7 +79,7 @@ namespace impl
 {
 
 class test :
-        public slack::base::impl<slack::auth::response::test>
+        public slack::base::impl<response::test>
 {
 public:
     response::test get_response();
@@ -93,7 +95,7 @@ private:
 // MARK: - Public Interface
 
 
-::slack::auth::response::test test();
+response::test test();
 
-}
+} //namespace auth
 } //namespace slack

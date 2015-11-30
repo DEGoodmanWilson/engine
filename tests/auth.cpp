@@ -18,7 +18,7 @@ TEST(auth, auth_test_fail)
     slack::set_token("BADTOKEN");
     auto result = slack::auth::test();
     ASSERT_FALSE(result);
-    ASSERT_EQ(result.error, slack::auth::response::error::test::INVALID_AUTH);
+    ASSERT_EQ(slack::auth::response::error::test::INVALID_AUTH, result.error);
     //need to reset token. Should do this RIAA style /shrug
     slack::set_token(token);
 }

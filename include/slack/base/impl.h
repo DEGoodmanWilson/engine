@@ -24,8 +24,12 @@ template<class T>
 class impl
 {
 protected:
-    T get(std::string endpoint, http::params params)
+    T get(std::string endpoint, http::params params, bool auth=true)
     {
+        if(auth)
+        {
+            params["token"] = ::slack::get_token();
+        }
         auto response = http::get(config::HOSTNAME+endpoint, params);
         if(response.status_code != 200)
         {
@@ -35,6 +39,8 @@ protected:
 
         return {response.body};
     }
+private:
+    std::string get_token();
 };
 
 } //namespace base

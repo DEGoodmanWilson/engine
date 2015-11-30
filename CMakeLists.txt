@@ -54,9 +54,9 @@ set(SLACK_FILES
         include/slack/slack.h
         types.cpp
         include/slack/types.h
-        config.cpp
         include/slack/config.h
         config.h
+        config.cpp
         base/response.cpp
         include/slack/base/response.h
         include/slack/base/impl.h
@@ -68,7 +68,10 @@ set(SLACK_FILES
         include/slack/api.test.h
         auth.test.cpp
         include/slack/auth.test.h
+        channels.list.cpp
+        include/slack/channels.list.h
         )
+
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 
 #tests

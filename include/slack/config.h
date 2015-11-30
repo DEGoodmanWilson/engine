@@ -9,5 +9,6 @@
 namespace slack
 {
     void set_token(std::string token);
+    std::string get_token();
 }
 

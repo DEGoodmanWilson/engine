@@ -10,8 +10,8 @@ TEST(api, api_test_basic)
 {
     auto result = slack::api::test();
     ASSERT_TRUE(result);
-    ASSERT_EQ(result.args, std::experimental::nullopt);
-    ASSERT_EQ(result.error, std::experimental::nullopt);
+    ASSERT_EQ(std::experimental::nullopt, result.args);
+    ASSERT_EQ(std::experimental::nullopt, result.error);
 }
 
 TEST(api, api_with_lvalue_parameters)
@@ -21,14 +21,14 @@ TEST(api, api_with_lvalue_parameters)
 
     auto result = slack::api::test(e, f);
     ASSERT_FALSE(static_cast<bool>(result));
-    ASSERT_EQ(result.args.value()["foo"], "bar");
-    ASSERT_EQ(result.error.value(), "error");
+    ASSERT_EQ("bar", result.args.value()["foo"]);
+    ASSERT_EQ("error", result.error.value());
 }
 
 TEST(api, api_with_rvalue_parameters)
 {
     auto result = slack::api::test(slack::api::parameter::test::foo{"bar"}, slack::api::parameter::test::error{"error"});
     ASSERT_FALSE(static_cast<bool>(result));
-    ASSERT_EQ(result.args.value()["foo"], "bar");
-    ASSERT_EQ(result.error.value(), "error");
+    ASSERT_EQ("bar", result.args.value()["foo"]);
+    ASSERT_EQ("error", result.error.value());
 }

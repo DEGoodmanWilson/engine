@@ -8,13 +8,13 @@
 #include <slack/set_option.h>
 #include <slack/base/response.h>
 #include <slack/base/impl.h>
-#include <map>
 #include <string>
+#include <vector>
 #include <optional/optional.hpp>
 
 namespace slack
 {
-namespace api
+namespace channels
 {
 
 /*************************************************************/
@@ -22,14 +22,12 @@ namespace api
 
 namespace parameter
 {
-namespace test
+namespace list
 {
 
-MAKE_STRING_LIKE(error);
+MAKE_BOOL_LIKE(exclude_archived);
 
-MAKE_STRING_LIKE(foo);
-
-} //namespace test
+} //namespace list
 } //namespace parameter
 
 /*************************************************************/
@@ -39,14 +37,17 @@ namespace response
 {
 namespace error
 {
-namespace test
+namespace list
 {
 
 const auto UNKNOWN = std::string{"unknown"};
 const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
 const auto INVALID_RESPONSE = std::string{"invalid_response"};
+const auto NOT_AUTHED = std::string{"not_authed"};
+const auto INVALID_AUTH = std::string{"invalid_auth"};
+const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
-} //namespace test
+} //namespace list
 } //namespace error
 } //namespace response
 
@@ -57,12 +58,12 @@ const auto INVALID_RESPONSE = std::string{"invalid_response"};
 namespace response
 {
 
-struct test :
+struct list :
         public slack::base::response
 {
-    test(const std::string &raw_json);
+    list(const std::string &raw_json);
 
-    std::experimental::optional<std::map<std::string, std::string>> args;
+    std::experimental::optional<std::vector<::slack::channel>> channels;
 };
 
 } //namespace response
@@ -74,29 +75,21 @@ struct test :
 namespace impl
 {
 
-class test :
-        public slack::base::impl<response::test>
+class list :
+        public slack::base::impl<response::list>
 {
 public:
     //TODO can these be moved into the base class?
-    response::test get_response();
+    response::list get_response();
 
-    //TODO can we make a generic template?
-    void set_option(const parameter::test::error &error)
-    { error_ = error; }
+    void set_option(const parameter::list::exclude_archived &exclude_archived)
+    { exclude_archived_ = exclude_archived; }
 
-    void set_option(parameter::test::error &&error)
-    { error_ = std::move(error); }
-
-    void set_option(const parameter::test::foo &foo)
-    { foo_ = foo; }
-
-    void set_option(parameter::test::foo &&foo)
-    { foo_ = std::move(foo); }
+    void set_option(parameter::list::exclude_archived &&exclude_archived)
+    { exclude_archived_ = exclude_archived; }
 
 private:
-    std::experimental::optional<parameter::test::error> error_;
-    std::experimental::optional<parameter::test::foo> foo_;
+    std::experimental::optional<parameter::list::exclude_archived> exclude_archived_;
 };
 
 } //namespace impl
@@ -107,19 +100,20 @@ private:
 
 
 template<typename ...Ts>
-response::test test()
+response::list list()
 {
-    class impl::test impl;
+    class impl::list impl;
     return impl.get_response();
 }
 
 template<typename ...Ts>
-response::test test(Ts &&...ts)
+response::list list(Ts &&...ts)
 {
-    class impl::test impl;
+    class impl::list impl;
     set_option<decltype(impl)>(impl, std::forward<Ts>(ts)...);
     return impl.get_response();
 }
 
-} //namespace api
+
+} //namespace channel
 } //namespace slack

@@ -42,9 +42,7 @@ namespace impl
 
 response::test test::get_response()
 {
-    http::params params;
-
-    return get("auth.test", params);
+    return get("auth.test", {});
 }
 
 } //namespace impl
