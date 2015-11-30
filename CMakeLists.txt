@@ -72,7 +72,15 @@ set(SLACK_FILES
         channels.list.cpp
         include/slack/channels.create.h
         channels.create.cpp
-        include/slack/channels.archive.h channels.archive.cpp)
+        include/slack/channels.archive.h
+        channels.archive.cpp
+        include/slack/chat.delete.h
+        chat.delete.cpp
+        include/slack/chat.post_message.h
+        chat.post_message.cpp
+        include/slack/chat.update.h
+        chat.update.cpp
+        )
 
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 

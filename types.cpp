@@ -37,7 +37,6 @@ channel::channel(const Json::Value &parsed_json) :
             parsed_json["purpose"]["creator"].asString(),
             parsed_json["purpose"]["last_set"].asInt()
     };
-
 }
 
 template<>

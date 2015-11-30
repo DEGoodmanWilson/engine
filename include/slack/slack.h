@@ -12,3 +12,4 @@
 #include <slack/channels.list.h>
 #include <slack/channels.create.h>
 #include <slack/channels.archive.h>
+#include <slack/chat.delete.h>

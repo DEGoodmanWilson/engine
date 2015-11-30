@@ -22,7 +22,10 @@ create::create(const std::string &raw_json)
 {
     Json::Value result_ob = json_->json;
 
+//    The inability to say the following vexes me:
+//    if (result_ob["channel"].isObject()) channel = slack::channel{result_ob["channel"]};
     if (result_ob["channel"].isObject()) channel = slack::channel(result_ob["channel"]);
+
 }
 
 } //namespace response
