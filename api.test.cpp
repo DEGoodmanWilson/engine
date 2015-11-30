@@ -37,7 +37,7 @@ test::test(const std::string &raw_json)
 namespace impl
 {
 
-response::test api::get_response()
+response::test test::get_response()
 {
     http::params params;
 
