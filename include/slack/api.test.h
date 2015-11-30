@@ -5,6 +5,7 @@
 #pragma once
 
 #include <slack/types.h>
+#include <slack/set_option.h>
 #include <slack/base/response.h>
 #include <slack/base/impl.h>
 
@@ -13,24 +14,44 @@ namespace slack
 namespace api
 {
 
-//parameters
-namespace parameter { namespace test {
+/*************************************************************/
+//#pramga mark - Parameters
+
+namespace parameter
+{
+namespace test
+{
+
 MAKE_STRING_LIKE(error);
 MAKE_STRING_LIKE(foo);
-} }
 
-//response
+} //namespace test
+} //namespace parameter
+
+/*************************************************************/
+//#pramga mark - Response Errors
+
 namespace response
 {
 namespace error
 {
 namespace test
 {
+
 const auto UNKNOWN = std::string{"unknown"};
 const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
 const auto INVALID_RESPONSE = std::string{"invalid_response"};
-}
-}
+
+} //namesapce test
+} //namespace error
+} //namespace response
+
+
+/*************************************************************/
+//#pramga mark - Response
+
+namespace response
+{
 
 struct test :
         public slack::base::response
@@ -41,11 +62,12 @@ struct test :
 };
 } //namespace response
 
-//impl
+
+/*************************************************************/
+//#pramga mark - Impl
+
 namespace impl
 {
-
-
 
 class api :
         public slack::base::impl<slack::api::response::test>
@@ -74,18 +96,10 @@ private:
 
 } //namespace impl
 
-template<typename T>
-void set_option(impl::api &impl, T &&t)
-{
-    impl.set_option(SLACK_FWD(t));
-}
 
-template<typename T, typename... Ts>
-void set_option(impl::api &impl, T &&t, Ts &&... ts)
-{
-    set_option(impl, SLACK_FWD(t));
-    set_option(impl, SLACK_FWD(ts)...);
-}
+/*************************************************************/
+//#pramga mark - Public Interface
+
 
 template<typename ...Ts>
 ::slack::api::response::test test()
@@ -98,7 +112,7 @@ template<typename ...Ts>
 ::slack::api::response::test test(Ts &&...ts)
 {
     class impl::api impl;
-    set_option(impl, std::forward<Ts>(ts)...);
+    set_option<decltype(impl)>(impl, std::forward<Ts>(ts)...);
     return impl.get_response();
 }
 

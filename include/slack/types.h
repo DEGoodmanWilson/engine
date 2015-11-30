@@ -8,7 +8,6 @@
 #include <vector>
 #include <optional/optional.hpp>
 
-
 #define SLACK_FWD(...) ::std::forward<decltype(__VA_ARGS__)>(__VA_ARGS__)
 
 #define MAKE_STRING_LIKE(x) class x : public std::string \

@@ -126,7 +126,7 @@ set(SLACK_FILES
 #        rtm/parameter/start.cpp
 #        rtm/response/start.cpp
 #        include/slack/rtm.h
-        private.h include/slack/http.h http.cpp)
+        private.h include/slack/http.h http.cpp include/slack/set_option.h)
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 
 #tests
