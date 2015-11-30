@@ -26,9 +26,9 @@ TEST(channels, channels_create_basic)
     ASSERT_EQ(chan.name, name);
 }
 
-//TEST(channels, channels_archive_basic)
-//{
-//    auto result = slack::channels::archive(id);
-//    ASSERT_TRUE(result);
-//    //really not much else we can check here.
-//}
+TEST(channels, channels_archive_basic)
+{
+    auto result = slack::channels::archive(id);
+    ASSERT_TRUE(result);
+    //really not much else we can check here.
+}

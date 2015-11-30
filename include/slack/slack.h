@@ -11,3 +11,4 @@
 #include <slack/auth.test.h>
 #include <slack/channels.list.h>
 #include <slack/channels.create.h>
+#include <slack/channels.archive.h>
