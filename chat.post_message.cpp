@@ -20,13 +20,13 @@ namespace response
 post_message::post_message(const std::string &raw_json)
         : slack::base::response{raw_json}
 {
-    if(!json_) return;
+    if (!json_) return;
 
     Json::Value result_ob = json_->json;
 
-    if (result_ob["channel"].isObject()) channel = slack::channel_id{result_ob["channel"].asString()};
-    if (result_ob["ts"].isObject()) ts = slack::ts{result_ob["ts"].asString()};
-
+    if (result_ob["channel"].isString()) channel = slack::channel_id{result_ob["channel"].asString()};
+    if (result_ob["ts"].isString()) ts = slack::ts{result_ob["ts"].asString()};
+    if (result_ob["message"].isObject()) message = {result_ob["message"]};
 }
 
 } //namespace response
@@ -96,7 +96,7 @@ response::post_message post_message::get_response()
         params.emplace("icon_emoji", *icon_emoji_);
     }
 
-    return get("chat.post_message", params);
+    return get("chat.postMessage", params);
 }
 
 } //namespace impl

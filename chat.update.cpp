@@ -46,7 +46,7 @@ response::update update::get_response()
     http::params params{
             {"ts", ts_},
             {"channel", channel_},
-            {"test",    text_}
+            {"text",    text_}
     };
 
     //optional parameters
