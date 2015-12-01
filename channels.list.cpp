@@ -22,6 +22,8 @@ namespace response
 list::list(const std::string &raw_json)
         : slack::base::response{raw_json}
 {
+    if(!json_) return;
+
     Json::Value result_ob = json_->json;
 
     if (!result_ob["channels"].isNull() && result_ob["channels"].isArray())

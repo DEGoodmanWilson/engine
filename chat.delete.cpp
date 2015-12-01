@@ -20,6 +20,8 @@ namespace response
 delete_it::delete_it(const std::string &raw_json)
         : slack::base::response{raw_json}
 {
+    if(!json_) return;
+
     Json::Value result_ob = json_->json;
 
     if (result_ob["channel"].isObject()) channel = slack::channel_id{result_ob["channel"].asString()};
@@ -46,7 +48,7 @@ response::delete_it delete_it::get_response()
             {"channel", channel_}
     };
 
-    return get("chat.delete_it", params);
+    return get("chat.delete", params);
 }
 
 } //namespace impl

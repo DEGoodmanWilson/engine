@@ -11,7 +11,7 @@ namespace slack
 namespace base
 {
 
-response::response(const std::string &raw_json) : raw_json{raw_json}
+response::response(const std::string &raw_json) : raw_json{raw_json}, json_{nullptr}
 {
     Json::Value result_ob;
     Json::Reader reader;

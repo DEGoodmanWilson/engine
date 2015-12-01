@@ -58,6 +58,10 @@ MAKE_STRING_LIKE(ts);
 
 MAKE_STRING_LIKE(channel_id);
 
+MAKE_STRING_LIKE(token);
+
+MAKE_STRING_LIKE(scope);
+
 struct message
 {
     message() = default;

@@ -20,6 +20,8 @@ namespace response
 create::create(const std::string &raw_json)
         : slack::base::response{raw_json}
 {
+    if(!json_) return;
+
     Json::Value result_ob = json_->json;
 
 //    The inability to say the following vexes me:

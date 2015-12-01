@@ -16,3 +16,4 @@
 #include <slack/chat.post_message.h>
 #include <slack/chat.update.h>
 #include <slack/rtm.start.h>
+#include <slack/oauth.access.h>

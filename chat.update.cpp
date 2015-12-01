@@ -20,6 +20,8 @@ namespace response
 update::update(const std::string &raw_json)
         : slack::base::response{raw_json}
 {
+    if(!json_) return;
+
     Json::Value result_ob = json_->json;
 
     if (result_ob["channel"].isString()) channel = slack::channel_id{result_ob["channel"].asString()};

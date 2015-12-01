@@ -22,6 +22,8 @@ namespace response
 test::test(const std::string &raw_json)
         : slack::base::response{raw_json}
 {
+    if(!json_) return;
+
     Json::Value result_ob = json_->json;
 
     if (result_ob["url"].isString()) url = result_ob["url"].asString();

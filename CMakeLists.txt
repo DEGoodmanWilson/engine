@@ -46,7 +46,11 @@ set(SLACK_FILES
         chat.post_message.cpp
         include/slack/chat.update.h
         chat.update.cpp
-        include/slack/rtm.start.h rtm.start.cpp)
+        include/slack/rtm.start.h
+        rtm.start.cpp
+        include/slack/oauth.access.h
+        oauth.access.cpp
+        )
 
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 
