@@ -84,7 +84,8 @@ class delete_it :
         public slack::base::impl<response::delete_it>
 {
 public:
-    delete_it(const ts &ts, const channel_id channel);
+    delete_it(const ts &ts, const channel_id &channel);
+
     //TODO can these be moved into the base class?
     response::delete_it get_response();
 
@@ -100,7 +101,7 @@ private:
 // MARK: - Public Interface
 
 
-response::delete_it delete_it(const ts &ts, const channel_id channel);
+response::delete_it delete_it(const ts &ts, const channel_id &channel);
 
 
 } //namespace chat

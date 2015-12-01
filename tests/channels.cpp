@@ -11,7 +11,7 @@ TEST(channels, channels_list_basic)
 {
     auto result = slack::channels::list();
     ASSERT_TRUE(result);
-    ASSERT_GT(result.channels->size(), 0); //in most cases it will be at least 2 (#general and #random)
+    ASSERT_LT(0, result.channels->size()); //in most cases it will be at least 2 (#general and #random)
 }
 
 TEST(channels, channels_create_basic)
@@ -23,7 +23,7 @@ TEST(channels, channels_create_basic)
     slack::channel chan{*result.channel};
     //TODO store the ID so we can delete its
     id = chan.id;
-    ASSERT_EQ(chan.name, name);
+    ASSERT_EQ(name, chan.name);
 }
 
 TEST(channels, channels_archive_basic)

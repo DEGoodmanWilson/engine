@@ -36,28 +36,31 @@ delete_it::delete_it(const std::string &raw_json)
 namespace impl
 {
 
-delete_it::delete_it(const ts &ts, const channel_id channel) : ts_{ts}, channel_{channel}
+delete_it::delete_it(const ts &ts, const channel_id &channel) : ts_{ts}, channel_{channel}
 { }
 
 response::delete_it delete_it::get_response()
 {
     http::params params{
-            {"ts", ts_},
+            {"ts",      ts_},
             {"channel", channel_}
     };
 
     return get("chat.delete_it", params);
 }
 
+} //namespace impl
+
+
 /*************************************************************/
 // MARK: - Public Interface
 
 
-response::delete_it delete_it(const ts &ts, const channel_id channel){
+response::delete_it delete_it(const ts &ts, const channel_id &channel)
+{
     class impl::delete_it impl{ts, channel};
     return impl.get_response();
 }
 
-} //namespace impl
 } //namespace channel
 } //namespace slack

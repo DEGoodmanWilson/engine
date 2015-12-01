@@ -106,18 +106,18 @@ private:
 // MARK: - Public Interface
 
 
-template<typename ...Ts>
+template<typename ...Os>
 response::test test()
 {
     class impl::test impl;
     return impl.get_response();
 }
 
-template<typename ...Ts>
-response::test test(Ts &&...ts)
+template<typename ...Os>
+response::test test(Os &&...os)
 {
     class impl::test impl;
-    set_option<decltype(impl)>(impl, std::forward<Ts>(ts)...);
+    set_option<decltype(impl)>(impl, std::forward<Os>(os)...);
     return impl.get_response();
 }
 

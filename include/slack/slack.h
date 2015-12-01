@@ -13,3 +13,5 @@
 #include <slack/channels.create.h>
 #include <slack/channels.archive.h>
 #include <slack/chat.delete.h>
+#include <slack/chat.post_message.h>
+#include <slack/chat.update.h>

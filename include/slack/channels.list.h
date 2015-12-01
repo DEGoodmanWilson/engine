@@ -99,18 +99,18 @@ private:
 // MARK: - Public Interface
 
 
-template<typename ...Ts>
+template<typename ...Os>
 response::list list()
 {
     class impl::list impl;
     return impl.get_response();
 }
 
-template<typename ...Ts>
-response::list list(Ts &&...ts)
+template<typename ...Os>
+response::list list(Os &&...os)
 {
     class impl::list impl;
-    set_option<decltype(impl)>(impl, std::forward<Ts>(ts)...);
+    set_option<decltype(impl)>(impl, std::forward<Os>(os)...);
     return impl.get_response();
 }
 

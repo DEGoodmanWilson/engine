@@ -33,8 +33,8 @@ TEST_F(chat_env, chat_post_basic)
     std::string message = "this is a test";
     auto result = slack::chat::post_message(channel_id, message);
     ASSERT_TRUE(result);
-    ASSERT_EQ(result.message.text, message);
-    ts = result.message.ts;
+    ASSERT_EQ(message, result.message->text);
+    ts = result.message->ts;
 }
 
 //this one is going to fail for now. Probably.
@@ -43,7 +43,7 @@ TEST_F(chat_env, chat_update_basic)
     std::string new_message = "This is not a test";
     auto result = slack::chat::update(ts, channel_id, new_message);
     ASSERT_TRUE(result);
-    ASSERT_EQ(result.text, new_message);
+    ASSERT_EQ(new_message, result.text.value());
 }
 
 //this one is going to fail for now. Probably.
