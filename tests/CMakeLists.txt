@@ -54,7 +54,7 @@ add_executable(slack_tests
         auth.cpp
         channels.cpp
         chat.cpp
-#        rtm.cpp
+        rtm.cpp
         )
 
 add_dependencies(slack_tests GTestExternal slack)

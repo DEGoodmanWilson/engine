@@ -15,3 +15,4 @@
 #include <slack/chat.delete.h>
 #include <slack/chat.post_message.h>
 #include <slack/chat.update.h>
+#include <slack/rtm.start.h>
