@@ -50,6 +50,11 @@ set(SLACK_FILES
 
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 
+set(SLACK_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "")
+set(SLACK_LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "")
+
 #tests
 #TODO make this an option.
-add_subdirectory(tests)
+if (SLACK_MAKE_TESTS)
+    add_subdirectory(tests)
+endif ()
