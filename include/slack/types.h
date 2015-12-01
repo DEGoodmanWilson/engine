@@ -6,7 +6,7 @@
 
 #include <string>
 #include <vector>
-#include <optional/optional.hpp>
+#include <slack/optional.hpp>
 
 #define SLACK_FWD(...) ::std::forward<decltype(__VA_ARGS__)>(__VA_ARGS__)
 

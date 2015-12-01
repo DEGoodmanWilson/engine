@@ -9,7 +9,7 @@
 #include <slack/base/response.h>
 #include <slack/base/impl.h>
 #include <string>
-#include <optional/optional.hpp>
+#include <slack/optional.hpp>
 
 namespace slack
 {

@@ -10,7 +10,7 @@
 #include <slack/base/impl.h>
 #include <string>
 #include <vector>
-#include <optional/optional.hpp>
+#include <slack/optional.hpp>
 
 namespace slack
 {

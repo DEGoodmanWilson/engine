@@ -6,7 +6,7 @@
 
 #include <slack/types.h>
 #include <string>
-#include <optional/optional.hpp>
+#include <slack/optional.hpp>
 #include <map>
 #include <memory>
 
