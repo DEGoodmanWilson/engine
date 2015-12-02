@@ -17,6 +17,8 @@ include_directories(SYSTEM
 
 
 set(SLACK_FILES
+        uricodec.h
+        uricodec.cpp
         include/slack/slack.h
         types.cpp
         include/slack/types.h
@@ -50,7 +52,9 @@ set(SLACK_FILES
         rtm.start.cpp
         include/slack/oauth.access.h
         oauth.access.cpp
-        channels.rename.cpp include/slack/channels.rename.h)
+        channels.rename.cpp
+        include/slack/channels.rename.h
+        )
 
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 
