@@ -50,7 +50,7 @@ set(SLACK_FILES
         rtm.start.cpp
         include/slack/oauth.access.h
         oauth.access.cpp
-        )
+        channels.rename.cpp include/slack/channels.rename.h)
 
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 

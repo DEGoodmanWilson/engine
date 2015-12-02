@@ -22,12 +22,12 @@ namespace channels
 
 namespace parameter
 {
-namespace create
+namespace rename
 {
 
 MAKE_BOOL_LIKE(exclude_archived);
 
-} //namespace create
+} //namespace rename
 } //namespace parameter
 
 /*************************************************************/
@@ -37,22 +37,25 @@ namespace response
 {
 namespace error
 {
-namespace create
+namespace rename
 {
 
 const auto UNKNOWN = std::string{"unknown"};
 const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
 const auto INVALID_RESPONSE = std::string{"invalid_response"};
-const auto NAME_TAKEN = std::string{"name_taken"};
-const auto RESTRICTED_ACTION = std::string{"restricted_action"};
-const auto NO_CHANNEL = std::string{"no_channel"};
-const auto NOT_AUTHED = std::string{"not_authed"};
-const auto INVALID_AUTH = std::string{"invalid_auth"};
-const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
+const auto CHANNEL_NOT_FOUND = std::string{"channel_not_found"};
+const auto NOT_IN_CHANNEL = std::string{"not_in_channel"} ;
+const auto NOT_AUTHORIZED = std::string{"not_authorized"} ;
+const auto INVALID_NAME = std::string{"invalid_name"} ;
+const auto NAME_TAKEN = std::string{"name_taken"} ;
+const auto NOT_AUTHED = std::string{"not_authed"} ;
+const auto INVALID_AUTH = std::string{"invalid_auth"} ;
+const auto ACCOUNT_INACTIVE = std::string{"account_inactive"} ;
 const auto USER_IS_BOT = std::string{"user_is_bot"};
 const auto USER_IS_RESTRICTED = std::string{"user_is_restricted"};
 
-} //namespace create
+
+} //namespace rename
 } //namespace error
 } //namespace response
 
@@ -63,10 +66,10 @@ const auto USER_IS_RESTRICTED = std::string{"user_is_restricted"};
 namespace response
 {
 
-struct create :
+struct rename :
         public slack::base::response
 {
-    create(const std::string &raw_json);
+    rename(const std::string &raw_json);
 
     std::experimental::optional<channel> channel;
 };
@@ -80,15 +83,16 @@ struct create :
 namespace impl
 {
 
-class create :
-        public slack::base::impl<response::create>
+class rename :
+        public slack::base::impl<response::rename>
 {
 public:
-    create(const std::string& name);
+    rename(const channel_id& channel, const std::string& name);
     //TODO can these be moved into the base class?
-    response::create get_response();
+    response::rename get_response();
 
 private:
+    channel_id channel_;
     std::string name_;
 };
 
@@ -99,7 +103,7 @@ private:
 // MARK: - Public Interface
 
 
-response::create create(const std::string& name);
+response::rename rename(const channel_id& channel, const std::string& name);
 
 
 } //namespace channels

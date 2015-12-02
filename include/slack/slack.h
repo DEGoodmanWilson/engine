@@ -11,6 +11,7 @@
 #include <slack/auth.test.h>
 #include <slack/channels.list.h>
 #include <slack/channels.create.h>
+#include <slack/channels.rename.h>
 #include <slack/channels.archive.h>
 #include <slack/chat.delete.h>
 #include <slack/chat.post_message.h>

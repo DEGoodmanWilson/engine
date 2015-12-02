@@ -4,6 +4,7 @@
 
 #include <gtest/gtest.h>
 #include <slack/slack.h>
+#include <random>
 
 slack::channel_id id;
 
@@ -24,6 +25,20 @@ TEST(channels, channels_create_basic)
     //TODO store the ID so we can delete its
     id = chan.id;
     ASSERT_EQ(name, chan.name);
+}
+
+//TODO shouldn't depend upon id stored in last test! Should find it anew!
+TEST(channels, channels_rename_basic)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis{};
+    int rand = dis(gen);
+    std::string new_name = "donbot-test-channel-"+std::to_string(rand);
+    auto result = slack::channels::rename(id, new_name);
+    ASSERT_TRUE(result);
+    slack::channel chan{*result.channel};
+    ASSERT_EQ(new_name, chan.name);
 }
 
 TEST(channels, channels_archive_basic)
