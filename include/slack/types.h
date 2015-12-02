@@ -6,6 +6,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <slack/optional.hpp>
 
 #define SLACK_FWD(...) ::std::forward<decltype(__VA_ARGS__)>(__VA_ARGS__)
@@ -65,6 +66,7 @@ MAKE_STRING_LIKE(scope);
 struct message
 {
     message() = default;
+
     template<class json>
     message(const json &parsed_json);
 
@@ -78,6 +80,7 @@ struct message
 struct channel
 {
     channel() = default;
+
     template<class json>
     channel(const json &parsed_json);
 
@@ -110,6 +113,26 @@ struct channel
     message latest;
     int64_t unread_count;
     int64_t unread_display_count;
+};
+
+
+//This is the data type that is returned from a slash command
+struct command
+{
+    command() = default;
+
+    command(const std::map<std::string, std::string> &params);
+
+    std::string token; // gIkuvaNzQIHg97ATvDxqgjtO
+    team_id team_id; // T0001
+    std::string team_domain; // example
+    channel_id channel_id; // C2147483705
+    std::string channel_name; // test
+    user_id user_id; // U2147483697
+    std::string user_name; // Steve
+    std::string command_name; // /weather
+    std::string text; // 94070
+    std::string response_url; // https://hooks.slack.com/commands/1234/5678
 };
 
 }
