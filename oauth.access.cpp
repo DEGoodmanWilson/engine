@@ -26,6 +26,9 @@ access::access(const std::string &raw_json)
 
     if (result_ob["access_token"].isString()) access_token = {result_ob["access_token"].asString()};
     if (result_ob["scope"].isString()) scope = {result_ob["scope"].asString()};
+    if (result_ob["team_name"].isString()) scope = {result_ob["team_name"].asString()};
+    if (result_ob["team_id"].isString()) scope = {result_ob["team_id"].asString()};
+
 }
 
 } //namespace response
