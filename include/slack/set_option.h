@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <slack/types.h>
+#include <slack/fwd.h>
 
 namespace slack
 {

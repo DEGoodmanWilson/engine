@@ -21,3 +21,15 @@ TEST(message, message_json_constructor)
     ASSERT_EQ(m.text, "this is a api.test");
 }
 
+TEST(incoming_webhooks, incoming_webhooks_basic)
+{
+    auto res = slack::incoming_webhook::payload::create_payload("foo", "bar").to_json();
+    ASSERT_EQ("{\n\t\"channel_id\" : \"foo\",\n\t\"text\" : \"bar\"\n}", res); //TODO the whitespace makes this fragile!
+}
+
+TEST(incoming_webhooks, incoming_webhooks_advanced)
+{
+    auto res = slack::incoming_webhook::payload::create_payload("foo", "bar", slack::incoming_webhook::parameter::username{"baz"}).to_json();
+    ASSERT_EQ("{\n\t\"channel_id\" : \"foo\",\n\t\"text\" : \"bar\",\n\t\"username\" : \"baz\"\n}", res); //TODO the ordering and whitespace makes this fragile!
+}
+

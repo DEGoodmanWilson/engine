@@ -54,7 +54,7 @@ set(SLACK_FILES
         oauth.access.cpp
         channels.rename.cpp
         include/slack/channels.rename.h
-        )
+        include/slack/fwd.h)
 
 add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
 

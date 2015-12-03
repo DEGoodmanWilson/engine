@@ -4,12 +4,13 @@
 
 #pragma once
 
+#include <slack/fwd.h>
+#include <slack/set_option.h>
 #include <string>
 #include <vector>
 #include <map>
 #include <slack/optional.hpp>
 
-#define SLACK_FWD(...) ::std::forward<decltype(__VA_ARGS__)>(__VA_ARGS__)
 
 #define MAKE_STRING_LIKE(x) class x : public std::string \
 { \
@@ -62,6 +63,8 @@ MAKE_STRING_LIKE(channel_id);
 MAKE_STRING_LIKE(token);
 
 MAKE_STRING_LIKE(scope);
+
+MAKE_STRING_LIKE(attachment); //HAHAHAHAHAHAHAHA
 
 struct message
 {
@@ -134,5 +137,78 @@ struct command
     std::string text; // 94070
     std::string response_url; // https://hooks.slack.com/commands/1234/5678
 };
+
+namespace incoming_webhook
+{
+
+namespace parameter
+{
+MAKE_STRING_LIKE(username);
+
+MAKE_STRING_LIKE(icon_emoji);
+
+using attachments = std::vector<slack::attachment>;enum class response_type
+{
+    in_channel,
+    ephemeral,
+};
+}
+
+class payload
+{
+public:
+    payload(const channel_id &channel, const std::string &text);
+
+    std::string to_json();
+
+    void set_option(const parameter::username &username)
+    { username_ = username; }
+
+    void set_option(parameter::username &&username)
+    { username_ = std::move(username); }
+
+    void set_option(const parameter::icon_emoji &icon_emoji)
+    { icon_emoji_ = icon_emoji; }
+
+    void set_option(parameter::icon_emoji &&icon_emoji)
+    { icon_emoji_ = std::move(icon_emoji); }
+
+    void set_option(const parameter::attachments &attachments)
+    { attachments_ = attachments; }
+
+    void set_option(parameter::attachments &&attachments)
+    { attachments_ = std::move(attachments); }
+
+    void set_option(const parameter::response_type &response_type)
+    { response_type_ = response_type; }
+
+    void set_option(parameter::response_type &&response_type)
+    { response_type_ = std::move(response_type); }
+
+    template<typename ...Os>
+    static payload create_payload(const channel_id &channel, const std::string &text)
+    {
+        return {channel, text};
+    }
+
+    template<typename ...Os>
+    static payload create_payload(const channel_id &channel, const std::string &text, Os &&...os)
+    {
+        payload p{channel, text};
+        slack::set_option<decltype(p)>(p, std::forward<Os>(os)...);
+        return p;
+    }
+
+private:
+
+    std::string text_;
+    channel_id channel_;
+    std::experimental::optional<parameter::username> username_;
+    std::experimental::optional<parameter::icon_emoji> icon_emoji_;
+    std::experimental::optional<parameter::attachments> attachments_;
+    std::experimental::optional<parameter::response_type> response_type_;
+};
+
+}
 
 }
