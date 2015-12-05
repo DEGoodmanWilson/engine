@@ -72,23 +72,77 @@ command::command(const std::map<std::string, std::string> &params)
     if (params.count("response_url")) response_url = UriDecode(params.at("response_url"));
 }
 
+template<>
+field::operator Json::Value()
+{
+    Json::Value root;
+
+    root["title"] = title;
+    root["value"] = value;
+    if (is_short)
+    {
+        root["short"] = *is_short;
+    }
+
+    return root;
+}
+
+template<>
+attachment::operator Json::Value()
+{
+    Json::Value root;
+
+    if (fallback) root["fallback"] = *fallback;
+    if (color) root["color"] = *color;
+    if (pretext) root["pretext"] = *pretext;
+    if (author_name) root["author_name"] = *author_name;
+    if (author_link) root["author_link"] = *author_link;
+    if (author_icon) root["author_icon"] = *author_icon;
+    if (title) root["title"] = *title;
+    if (title_link) root["title_link"] = *title_link;
+    if (text) root["text"] = *text;
+    if (fields)
+    {
+        Json::Value fs;
+        for (auto &f : *fields)
+        {
+            fs.append(f);
+        }
+        root["fields"] = fs;
+    }
+    if (mrkdwn_in) {
+
+        Json::Value ms;
+        for (auto &m : *mrkdwn_in)
+        {
+            ms.append(m);
+        }
+        root["mrkdwn_in"] = ms;
+    }
+    if (image_url) root["image_url"] = *image_url;
+    if (thumb_url) root["thumb_url"] = *thumb_url;
+
+    return root;
+}
+
 
 namespace incoming_webhook
 {
 
-payload::payload(const channel_id &channel, const std::string &text) : channel_{channel}, text_{text}
+payload::payload(const std::string &text) : text_{text}
 { }
 
 
-std::string payload::to_json()
+payload::operator std::string()
 {
     Json::Value root;
 
-    root["channel_id"] = channel_;
     root["text"] = text_;
 
+    if (channel_) root["channel"] = *channel_;
     if (username_) root["username"] = *username_;
     if (icon_emoji_) root["icon_emoji"] = *icon_emoji_;
+    if (mrkdwn_) root["mrkdwn"] = *mrkdwn_ ? "true" : "false";
     if (response_type_)
     {
         std::string val{""};
@@ -103,9 +157,10 @@ std::string payload::to_json()
         root["response_type"] = val;
     }
 
-    if (attachments_){
+    if (attachments_)
+    {
         Json::Value as;
-        for (const auto &a : *attachments_)
+        for (auto &a : *attachments_)
         {
             as.append(a);
         }

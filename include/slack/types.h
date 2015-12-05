@@ -64,8 +64,6 @@ MAKE_STRING_LIKE(token);
 
 MAKE_STRING_LIKE(scope);
 
-MAKE_STRING_LIKE(attachment); //HAHAHAHAHAHAHAHA
-
 struct message
 {
     message() = default;
@@ -138,14 +136,53 @@ struct command
     std::string response_url; // https://hooks.slack.com/commands/1234/5678
 };
 
+
+struct field
+{
+    template <class Json>
+    operator Json();
+
+    std::string title;
+    std::string value;
+    std::experimental::optional<bool> is_short; //because "short" is a keyword
+};
+
+struct attachment
+{
+    template <class Json>
+    operator Json();
+
+    std::experimental::optional<std::string> fallback;
+    std::experimental::optional<std::string> color;
+    std::experimental::optional<std::string> pretext;
+    std::experimental::optional<std::string> author_name;
+    std::experimental::optional<std::string> author_link;
+    std::experimental::optional<std::string> author_icon;
+    std::experimental::optional<std::string> title;
+    std::experimental::optional<std::string> title_link;
+    std::experimental::optional<std::string> text;
+    std::experimental::optional<std::vector<field> > fields;
+    std::experimental::optional<std::vector<std::string> > mrkdwn_in; //TODO shouldn't be strings
+    std::experimental::optional<std::string> image_url;
+    std::experimental::optional<std::string> thumb_url;
+};
+
+
 namespace incoming_webhook
 {
 
 namespace parameter
 {
+
+using channel_id = slack::channel_id;
+
 MAKE_STRING_LIKE(username);
 
+MAKE_BOOL_LIKE(mrkdwn);
+
 MAKE_STRING_LIKE(icon_emoji);
+
+using attachment = slack::attachment;
 
 using attachments = std::vector<slack::attachment>;enum class response_type
 {
@@ -157,9 +194,15 @@ using attachments = std::vector<slack::attachment>;enum class response_type
 class payload
 {
 public:
-    payload(const channel_id &channel, const std::string &text);
+    payload(const std::string &text);
 
-    std::string to_json();
+    operator std::string();
+
+    void set_option(const parameter::channel_id &channel)
+    { channel_ = channel; }
+
+    void set_option(parameter::channel_id &&channel)
+    { channel_ = std::move(channel); }
 
     void set_option(const parameter::username &username)
     { username_ = username; }
@@ -172,6 +215,12 @@ public:
 
     void set_option(parameter::icon_emoji &&icon_emoji)
     { icon_emoji_ = std::move(icon_emoji); }
+
+    void set_option(const parameter::mrkdwn &mrkdwn)
+    { mrkdwn_ = mrkdwn; }
+
+    void set_option(parameter::mrkdwn &&mrkdwn)
+    { mrkdwn_ = std::move(mrkdwn); }
 
     void set_option(const parameter::attachments &attachments)
     { attachments_ = attachments; }
@@ -186,15 +235,15 @@ public:
     { response_type_ = std::move(response_type); }
 
     template<typename ...Os>
-    static payload create_payload(const channel_id &channel, const std::string &text)
+    static payload create_payload(const std::string &text)
     {
-        return {channel, text};
+        return {text};
     }
 
     template<typename ...Os>
-    static payload create_payload(const channel_id &channel, const std::string &text, Os &&...os)
+    static payload create_payload(const std::string &text, Os &&...os)
     {
-        payload p{channel, text};
+        payload p{text};
         slack::set_option<decltype(p)>(p, std::forward<Os>(os)...);
         return p;
     }
@@ -202,9 +251,10 @@ public:
 private:
 
     std::string text_;
-    channel_id channel_;
+    std::experimental::optional<parameter::channel_id> channel_;
     std::experimental::optional<parameter::username> username_;
     std::experimental::optional<parameter::icon_emoji> icon_emoji_;
+    std::experimental::optional<parameter::mrkdwn> mrkdwn_;
     std::experimental::optional<parameter::attachments> attachments_;
     std::experimental::optional<parameter::response_type> response_type_;
 };
