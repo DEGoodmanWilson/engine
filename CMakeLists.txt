@@ -59,7 +59,7 @@ set(ENGINE_FILES
         oauth.access.cpp
         channels.rename.cpp
         include/slack/channels.rename.h
-        include/slack/fwd.h)
+        include/slack/fwd.h attachment.cpp include/slack/attachment.h incoming_webhook.cpp include/slack/incoming_webhook.h)
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 

@@ -6,6 +6,8 @@
 
 #include <slack/config.h>
 #include <slack/types.h>
+#include <slack/attachment.h>
+#include <slack/incoming_webhook.h>
 #include <slack/http.h>
 #include <slack/api.test.h>
 #include <slack/auth.test.h>

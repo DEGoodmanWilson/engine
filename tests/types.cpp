@@ -23,13 +23,13 @@ TEST(message, message_json_constructor)
 
 TEST(incoming_webhooks, incoming_webhooks_basic)
 {
-    auto res = static_cast<std::string>(slack::incoming_webhook::payload::create_payload("bar"));
+    auto res = static_cast<std::string>(slack::incoming_webhook::create_payload("bar"));
     ASSERT_EQ("{\n\t\"text\" : \"bar\"\n}", res); //TODO the whitespace makes this fragile!
 }
 
 TEST(incoming_webhooks, incoming_webhooks_advanced)
 {
-    auto res = static_cast<std::string>(slack::incoming_webhook::payload::create_payload("bar", slack::incoming_webhook::parameter::username{"baz"}));
+    auto res = static_cast<std::string>(slack::incoming_webhook::create_payload("bar", slack::incoming_webhook::parameter::username{"baz"}));
     ASSERT_EQ("{\n\t\"text\" : \"bar\",\n\t\"username\" : \"baz\"\n}", res); //TODO the ordering and whitespace makes this fragile!
 }
 
