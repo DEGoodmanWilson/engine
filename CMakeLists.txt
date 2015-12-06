@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.3)
-project(cpp-slack-client)
+project(engine)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
@@ -20,7 +20,7 @@ include_directories(SYSTEM
         )
 
 
-set(SLACK_FILES
+set(ENGINE_FILES
         uricodec.h
         uricodec.cpp
         include/slack/slack.h
@@ -60,13 +60,13 @@ set(SLACK_FILES
         include/slack/channels.rename.h
         include/slack/fwd.h)
 
-add_library(slack STATIC ${JSON_SOURCES} ${SLACK_FILES})
+add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 
-set(SLACK_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "")
-set(SLACK_LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "")
+set(ENGINE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "")
+set(ENGINE_LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "")
 
 #tests
 #TODO make this an option.
-if (SLACK_MAKE_TESTS)
+if (ENGINE_MAKE_TESTS)
     add_subdirectory(tests)
 endif ()

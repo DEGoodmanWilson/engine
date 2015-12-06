@@ -44,7 +44,7 @@ add_dependencies(GTest GTestMain)
 
 
 
-add_executable(slack_tests
+add_executable(engine_tests
         main.cpp
         types.cpp
         api.cpp
@@ -55,16 +55,16 @@ add_executable(slack_tests
         oauth.cpp
     )
 
-add_dependencies(slack_tests GTestExternal slack)
+add_dependencies(engine_tests GTestExternal engine)
 
-target_include_directories(slack_tests SYSTEM
+target_include_directories(engine_tests SYSTEM
         PUBLIC ${GTEST_INCLUDES}
         )
 
-target_link_libraries(slack_tests
+target_link_libraries(engine_tests
         GTestMain
         ${CPR_LIBRARIES}
         ${OPENSSL_LIBRARIES}
         curl
-        slack
+        engine
         )
