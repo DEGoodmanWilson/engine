@@ -22,7 +22,7 @@ payload::operator std::string()
     if (channel_) root["channel"] = *channel_;
     if (username_) root["username"] = *username_;
     if (icon_emoji_) root["icon_emoji"] = *icon_emoji_;
-    if (mrkdwn_) root["mrkdwn"] = *mrkdwn_ ? "true" : "false";
+    if (mrkdwn_) root["mrkdwn"] = static_cast<bool>(*mrkdwn_);
     if (response_type_)
     {
         std::string val{""};
