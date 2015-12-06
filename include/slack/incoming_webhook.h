@@ -30,7 +30,8 @@ using attachments = std::vector<attachment>;enum class response_type
     in_channel,
     ephemeral,
 };
-}
+
+} //namespace parameter
 
 class payload
 {
@@ -121,4 +122,4 @@ payload create_payload(const parameter::attachments &attachments, Os &&...os)
     return p;
 }
 
-}}
+}} //namespace incoming_webhook slack
