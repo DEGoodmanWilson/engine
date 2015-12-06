@@ -1,11 +1,11 @@
 ---
 layout: default
-title: C++ Slack Client
+title: Engine
 ---
 
-# Slack for C++ programmers
+# A C++ library for building Slack-enabled applications
 
-You want to connect your app or game with Slack. Or you want to write a Slack bot. And you want to do it in C++, because C++ is _awesome_. If that's you, read on.
+You want to connect your app or game with Slack. Or you want to write a Slack bot. And you want to do it in C++, because C++ is _awesome_. You need a Rocket Engine.
 
 ## Prerequisites
 
@@ -13,7 +13,7 @@ A C++11 compiler. Some kind of HTTP client library (we like [CPR](https://github
 
 # Installation & Usage
 
-# Using C++ Slack Client
+# Using Engine
 
 ## Setting up Slack, and getting a token
 
