@@ -23,9 +23,7 @@ MAKE_BOOL_LIKE(mrkdwn);
 
 MAKE_STRING_LIKE(icon_emoji);
 
-using attachment = slack::attachment::attachment;
-
-using attachments = std::vector<attachment>;enum class response_type
+using attachments = std::vector<slack::attachment::attachment>;enum class response_type
 {
     in_channel,
     ephemeral,

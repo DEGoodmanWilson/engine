@@ -29,14 +29,20 @@ TEST(incoming_webhooks, incoming_webhooks_basic)
 
 TEST(incoming_webhooks, incoming_webhooks_advanced)
 {
-    auto res = static_cast<std::string>(slack::incoming_webhook::create_payload("bar", slack::incoming_webhook::parameter::username{"baz"}));
-    ASSERT_EQ("{\n\t\"text\" : \"bar\",\n\t\"username\" : \"baz\"\n}", res); //TODO the ordering and whitespace makes this fragile!
+    auto res = static_cast<std::string>(slack::incoming_webhook::create_payload("bar",
+                                                                                slack::incoming_webhook::parameter::username{
+                                                                                        "baz"}));
+    ASSERT_EQ("{\n\t\"text\" : \"bar\",\n\t\"username\" : \"baz\"\n}",
+              res); //TODO the ordering and whitespace makes this fragile!
 }
 
-//TODO write this test!
-//TEST(incoming_webhooks, incoming_webhooks_attachments)
-//{
-//    auto res = static_cast<std::string>(slack::incoming_webhook::payload::create_payload("bar"));
-//    ASSERT_EQ("{\n\t\"text\" : \"bar\"\n}", res); //TODO the whitespace makes this fragile!
-//}
+TEST(incoming_webhooks, incoming_webhooks_attachments)
+{
+    auto attachment = slack::attachment::create_attachment(slack::attachment::parameter::text{"text"});
+    auto payload = slack::incoming_webhook::create_payload(
+            slack::incoming_webhook::parameter::attachments{attachment}
+    );
+    auto res = static_cast<std::string>(payload);
+    ASSERT_EQ("{\n\t\"attachments\" : \n\t[\n\t\t{\n\t\t\t\"text\" : \"text\"\n\t\t}\n\t]\n}", res); //TODO the whitespace makes this fragile!
+}
 
