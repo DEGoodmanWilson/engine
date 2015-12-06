@@ -129,9 +129,11 @@ attachment::operator Json::Value()
 namespace incoming_webhook
 {
 
-payload::payload(const std::string &text) : text_{text}
+payload::payload(const parameter::text &text) : text_{text}
 { }
 
+payload::payload(const parameter::attachments &attachments) : attachments_{attachments}
+{ }
 
 payload::operator std::string()
 {

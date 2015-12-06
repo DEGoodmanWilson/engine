@@ -139,7 +139,7 @@ struct command
 
 struct field
 {
-    template <class Json>
+    template<class Json>
     operator Json();
 
     std::string title;
@@ -149,7 +149,7 @@ struct field
 
 struct attachment
 {
-    template <class Json>
+    template<class Json>
     operator Json();
 
     std::experimental::optional<std::string> fallback;
@@ -174,6 +174,8 @@ namespace incoming_webhook
 namespace parameter
 {
 
+MAKE_STRING_LIKE(text);
+
 using channel_id = slack::channel_id;
 
 MAKE_STRING_LIKE(username);
@@ -194,9 +196,16 @@ using attachments = std::vector<slack::attachment>;enum class response_type
 class payload
 {
 public:
-    payload(const std::string &text);
+    payload(const parameter::text &text);
+    payload(const parameter::attachments &attachments);
 
     operator std::string();
+
+    void set_option(const parameter::text &text)
+    { text_ = text; }
+
+    void set_option(parameter::text &&text)
+    { text_ = std::move(text); }
 
     void set_option(const parameter::channel_id &channel)
     { channel_ = channel; }
@@ -235,22 +244,36 @@ public:
     { response_type_ = std::move(response_type); }
 
     template<typename ...Os>
-    static payload create_payload(const std::string &text)
+    static payload create_payload(const parameter::text &text)
     {
         return {text};
     }
 
     template<typename ...Os>
-    static payload create_payload(const std::string &text, Os &&...os)
+    static payload create_payload(const parameter::text &text, Os &&...os)
     {
         payload p{text};
         slack::set_option<decltype(p)>(p, std::forward<Os>(os)...);
         return p;
     }
 
+    template<typename ...Os>
+    static payload create_payload(const parameter::attachments &attachments)
+    {
+        return {attachments};
+    }
+
+    template<typename ...Os>
+    static payload create_payload(const parameter::attachments &attachments, Os &&...os)
+    {
+        payload p{attachments};
+        slack::set_option<decltype(p)>(p, std::forward<Os>(os)...);
+        return p;
+    }
+
 private:
 
-    std::string text_;
+    std::experimental::optional<parameter::text> text_;
     std::experimental::optional<parameter::channel_id> channel_;
     std::experimental::optional<parameter::username> username_;
     std::experimental::optional<parameter::icon_emoji> icon_emoji_;

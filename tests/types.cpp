@@ -33,3 +33,10 @@ TEST(incoming_webhooks, incoming_webhooks_advanced)
     ASSERT_EQ("{\n\t\"text\" : \"bar\",\n\t\"username\" : \"baz\"\n}", res); //TODO the ordering and whitespace makes this fragile!
 }
 
+//TODO write this test!
+//TEST(incoming_webhooks, incoming_webhooks_attachments)
+//{
+//    auto res = static_cast<std::string>(slack::incoming_webhook::payload::create_payload("bar"));
+//    ASSERT_EQ("{\n\t\"text\" : \"bar\"\n}", res); //TODO the whitespace makes this fragile!
+//}
+
