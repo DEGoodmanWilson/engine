@@ -42,10 +42,7 @@ set_target_properties(GTestMain PROPERTIES
 add_dependencies(GTest GTestMain)
 
 
-#cpr
-set(USE_SYSTEM_CURL YES)
-add_subdirectory(cpr)
-include_directories(${CPR_INCLUDE_DIRS})
+
 
 add_executable(slack_tests
         main.cpp

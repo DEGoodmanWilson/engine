@@ -3,6 +3,10 @@ project(cpp-slack-client)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
+#cpr
+set(USE_SYSTEM_CURL YES)
+add_subdirectory(cpr)
+include_directories(${CPR_INCLUDE_DIRS})
 
 #jsoncpp
 set(JSONCPP_INCLUDE_DIR jsoncpp)
