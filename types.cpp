@@ -139,8 +139,7 @@ payload::operator std::string()
 {
     Json::Value root;
 
-    root["text"] = text_;
-
+    if (text_) root["text"] = *text_;
     if (channel_) root["channel"] = *channel_;
     if (username_) root["username"] = *username_;
     if (icon_emoji_) root["icon_emoji"] = *icon_emoji_;
