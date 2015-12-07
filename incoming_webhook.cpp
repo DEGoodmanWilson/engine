@@ -8,12 +8,6 @@
 namespace slack { namespace incoming_webhook
 {
 
-payload::payload(const parameter::text &text) : text_{text}
-{ }
-
-payload::payload(const parameter::attachments &attachments) : attachments_{attachments}
-{ }
-
 payload::operator std::string()
 {
     Json::Value root;
@@ -28,10 +22,10 @@ payload::operator std::string()
         std::string val{""};
         switch (*response_type_)
         {
-            case parameter::response_type::in_channel:
+            case parameter::payload::response_type::in_channel:
                 val = "in_channel";
                 break;
-            case parameter::response_type::ephemeral:
+            case parameter::payload::response_type::ephemeral:
                 val = "ephemeral";
         }
         root["response_type"] = val;

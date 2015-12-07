@@ -10,7 +10,7 @@
 namespace slack { namespace incoming_webhook
 {
 
-namespace parameter
+namespace parameter { namespace payload
 {
 
 MAKE_STRING_LIKE(text);
@@ -23,101 +23,96 @@ MAKE_BOOL_LIKE(mrkdwn);
 
 MAKE_STRING_LIKE(icon_emoji);
 
-using attachments = std::vector<slack::attachment::attachment>;enum class response_type
+using attachments = std::vector<slack::incoming_webhook::attachment>;
+
+enum class response_type
 {
     in_channel,
     ephemeral,
 };
 
-} //namespace parameter
+}} //namespace payload parameter
 
 class payload
 {
 public:
-    payload(const parameter::text &text);
-    payload(const parameter::attachments &attachments);
+    template<typename ...Os>
+    payload(const parameter::payload::text &text)
+            : text_{text}
+    { }
+
+    template<typename ...Os>
+    payload(const parameter::payload::text &text, Os &&...os)
+            : text_{text}
+    {
+        slack::set_option<payload>(*this, std::forward<Os>(os)...);
+    }
+
+    template<typename ...Os>
+    payload(const parameter::payload::attachments &attachments)
+            : attachments_{attachments}
+    { }
+
+    template<typename ...Os>
+    payload(const parameter::payload::attachments &attachments, Os &&...os)
+            : attachments_{attachments}
+    {
+        slack::set_option<payload>(*this, std::forward<Os>(os)...);
+    }
 
     operator std::string();
 
-    void set_option(const parameter::text &text)
+    void set_option(const parameter::payload::text &text)
     { text_ = text; }
 
-    void set_option(parameter::text &&text)
+    void set_option(parameter::payload::text &&text)
     { text_ = std::move(text); }
 
-    void set_option(const parameter::channel_id &channel)
+    void set_option(const parameter::payload::channel_id &channel)
     { channel_ = channel; }
 
-    void set_option(parameter::channel_id &&channel)
+    void set_option(parameter::payload::channel_id &&channel)
     { channel_ = std::move(channel); }
 
-    void set_option(const parameter::username &username)
+    void set_option(const parameter::payload::username &username)
     { username_ = username; }
 
-    void set_option(parameter::username &&username)
+    void set_option(parameter::payload::username &&username)
     { username_ = std::move(username); }
 
-    void set_option(const parameter::icon_emoji &icon_emoji)
+    void set_option(const parameter::payload::icon_emoji &icon_emoji)
     { icon_emoji_ = icon_emoji; }
 
-    void set_option(parameter::icon_emoji &&icon_emoji)
+    void set_option(parameter::payload::icon_emoji &&icon_emoji)
     { icon_emoji_ = std::move(icon_emoji); }
 
-    void set_option(const parameter::mrkdwn &mrkdwn)
+    void set_option(const parameter::payload::mrkdwn &mrkdwn)
     { mrkdwn_ = mrkdwn; }
 
-    void set_option(parameter::mrkdwn &&mrkdwn)
+    void set_option(parameter::payload::mrkdwn &&mrkdwn)
     { mrkdwn_ = std::move(mrkdwn); }
 
-    void set_option(const parameter::attachments &attachments)
+    void set_option(const parameter::payload::attachments &attachments)
     { attachments_ = attachments; }
 
-    void set_option(parameter::attachments &&attachments)
+    void set_option(parameter::payload::attachments &&attachments)
     { attachments_ = std::move(attachments); }
 
-    void set_option(const parameter::response_type &response_type)
+    void set_option(const parameter::payload::response_type &response_type)
     { response_type_ = response_type; }
 
-    void set_option(parameter::response_type &&response_type)
+    void set_option(parameter::payload::response_type &&response_type)
     { response_type_ = std::move(response_type); }
 
 private:
 
-    std::experimental::optional<parameter::text> text_;
-    std::experimental::optional<parameter::channel_id> channel_;
-    std::experimental::optional<parameter::username> username_;
-    std::experimental::optional<parameter::icon_emoji> icon_emoji_;
-    std::experimental::optional<parameter::mrkdwn> mrkdwn_;
-    std::experimental::optional<parameter::attachments> attachments_;
-    std::experimental::optional<parameter::response_type> response_type_;
+    std::experimental::optional<parameter::payload::text> text_;
+    std::experimental::optional<parameter::payload::channel_id> channel_;
+    std::experimental::optional<parameter::payload::username> username_;
+    std::experimental::optional<parameter::payload::icon_emoji> icon_emoji_;
+    std::experimental::optional<parameter::payload::mrkdwn> mrkdwn_;
+    std::experimental::optional<parameter::payload::attachments> attachments_;
+    std::experimental::optional<parameter::payload::response_type> response_type_;
 };
-
-template<typename ...Os>
-payload create_payload(const parameter::text &text)
-{
-    return {text};
-}
-
-template<typename ...Os>
-payload create_payload(const parameter::text &text, Os &&...os)
-{
-    payload p{text};
-    slack::set_option<decltype(p)>(p, std::forward<Os>(os)...);
-    return p;
-}
-
-template<typename ...Os>
-payload create_payload(const parameter::attachments &attachments)
-{
-    return {attachments};
-}
-
-template<typename ...Os>
-payload create_payload(const parameter::attachments &attachments, Os &&...os)
-{
-    payload p{attachments};
-    slack::set_option<decltype(p)>(p, std::forward<Os>(os)...);
-    return p;
-}
 
 }} //namespace incoming_webhook slack

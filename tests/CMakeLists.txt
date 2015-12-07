@@ -47,12 +47,12 @@ add_dependencies(GTest GTestMain)
 add_executable(engine_tests
         main.cpp
         types.cpp
-        api.cpp
-        auth.cpp
-        channels.cpp
-        chat.cpp
-        rtm.cpp
-        oauth.cpp
+#        api.cpp
+#        auth.cpp
+#        channels.cpp
+#        chat.cpp
+#        rtm.cpp
+#        oauth.cpp
     )
 
 add_dependencies(engine_tests GTestExternal engine)

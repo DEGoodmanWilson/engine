@@ -23,26 +23,32 @@ TEST(message, message_json_constructor)
 
 TEST(incoming_webhooks, incoming_webhooks_basic)
 {
-    auto res = static_cast<std::string>(slack::incoming_webhook::create_payload("bar"));
+    auto res = static_cast<std::string>(slack::incoming_webhook::payload{
+            "bar",
+            slack::incoming_webhook::parameter::payload::text{"bar"}
+    });
     ASSERT_EQ("{\n\t\"text\" : \"bar\"\n}", res); //TODO the whitespace makes this fragile!
 }
 
 TEST(incoming_webhooks, incoming_webhooks_advanced)
 {
-    auto res = static_cast<std::string>(slack::incoming_webhook::create_payload("bar",
-                                                                                slack::incoming_webhook::parameter::username{
-                                                                                        "baz"}));
+    auto res = static_cast<std::string>(slack::incoming_webhook::payload{
+            "bar",
+            slack::incoming_webhook::parameter::payload::username{"baz"}
+    });
     ASSERT_EQ("{\n\t\"text\" : \"bar\",\n\t\"username\" : \"baz\"\n}",
               res); //TODO the ordering and whitespace makes this fragile!
 }
 
 TEST(incoming_webhooks, incoming_webhooks_attachments)
 {
-    auto attachment = slack::attachment::create_attachment(slack::attachment::parameter::text{"text"});
-    auto payload = slack::incoming_webhook::create_payload(
-            slack::incoming_webhook::parameter::attachments{attachment}
-    );
+    slack::incoming_webhook::payload payload{
+            slack::incoming_webhook::parameter::payload::attachments{
+                    {1, slack::incoming_webhook::parameter::attachment::text{"text"}}
+            }
+    };
     auto res = static_cast<std::string>(payload);
-    ASSERT_EQ("{\n\t\"attachments\" : \n\t[\n\t\t{\n\t\t\t\"text\" : \"text\"\n\t\t}\n\t]\n}", res); //TODO the whitespace makes this fragile!
+    ASSERT_EQ("{\n\t\"attachments\" : \n\t[\n\t\t{\n\t\t\t\"text\" : \"text\"\n\t\t}\n\t]\n}",
+              res); //TODO the whitespace makes this fragile!
 }
 
