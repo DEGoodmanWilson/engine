@@ -14,7 +14,7 @@ namespace parameter { namespace field
 
 MAKE_BOOL_LIKE(is_short);  //because "short" is a keyword
 
-} }//namepsace field parameter
+}}//namepsace field parameter
 
 
 class field
@@ -23,14 +23,13 @@ public:
 //    field(const std::string &title, const std::string &value);
 
     template<typename ...Os>
-    field(const std::string& title, const std::string& value)
+    field(const std::string &title, const std::string &value)
             : title_{title}, value_{value}
-
     { }
 
     template<typename ...Os>
-    field(const std::string& title, const std::string& value, Os &&...os)
-    : title_{title}, value_{value}
+    field(const std::string &title, const std::string &value, Os &&...os)
+            : title_{title}, value_{value}
     {
         slack::set_option<field>(*this, std::forward<Os>(os)...);
     }
@@ -84,20 +83,29 @@ MAKE_STRING_LIKE(image_url);
 
 MAKE_STRING_LIKE(thumb_url);
 
-} } //namespace attachment parameter
+}} //namespace attachment parameter
 
 class attachment
 {
 public:
-    template<typename ...Os>
-    attachment()
+    attachment(const attachment &) = default;
+    attachment(attachment&&) = default;
+
+
+    //http://stackoverflow.com/questions/13937873/how-can-i-prevent-a-variadic-constructor-from-being-preferred-to-the-copy-constr
+    //http://stackoverflow.com/questions/9287250/conflict-between-copy-constructor-and-forwarding-constructor
+    attachment(attachment &other)
+            : attachment(const_cast<const attachment &>(other))
     { }
 
+
+
     template<typename ...Os>
-    attachment(int i, Os &&...os)
+    attachment(Os &&...os)
     {
         slack::set_option<attachment>(*this, std::forward<Os>(os)...);
     }
+
 
     template<class Json>
     operator Json();

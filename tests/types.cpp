@@ -44,7 +44,7 @@ TEST(incoming_webhooks, incoming_webhooks_attachments)
 {
     slack::incoming_webhook::payload payload{
             slack::incoming_webhook::parameter::payload::attachments{
-                    {1, slack::incoming_webhook::parameter::attachment::text{"text"}}
+                    {slack::incoming_webhook::parameter::attachment::text{"text"}}
             }
     };
     auto res = static_cast<std::string>(payload);
