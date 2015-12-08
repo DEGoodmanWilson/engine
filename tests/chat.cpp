@@ -31,7 +31,7 @@ slack::ts ts;
 TEST_F(chat_env, chat_post_basic)
 {
     std::string message = "this is a test";
-    auto result = slack::chat::post_message(channel_id, message, slack::chat::post_message::parameter::as_user{true});
+    auto result = slack::chat::post_message(channel_id, message, slack::chat::post_message::parameter::as_user{true}, slack::chat::post_message::parameter::icon_url{"http://iosicongallery.com/iosicongallery/img/512/slack-2014.png"});
     ASSERT_TRUE(result);
     ASSERT_TRUE(static_cast<bool>(result.message));
     ASSERT_EQ(message, result.message->text);
