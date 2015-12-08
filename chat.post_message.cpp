@@ -4,44 +4,25 @@
 
 #include "slack/chat.post_message.h"
 #include "private.h"
+#include <json/json.h>
 
-namespace slack
-{
-namespace chat
-{
-
-
-/*************************************************************/
-// MARK: - Response
-
-namespace response
+namespace slack { namespace chat
 {
 
-post_message::post_message(const std::string &raw_json)
-        : slack::base::response{raw_json}
-{
-    if (!json_) return;
-
-    Json::Value result_ob = json_->json;
-
-    if (result_ob["channel"].isString()) channel = slack::channel_id{result_ob["channel"].asString()};
-    if (result_ob["ts"].isString()) ts = slack::ts{result_ob["ts"].asString()};
-    if (result_ob["message"].isObject()) message = {result_ob["message"]};
-}
-
-} //namespace response
+const std::string post_message::error::UNKNOWN = std::string{"unknown"};
+const std::string post_message::error::JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
+const std::string post_message::error::INVALID_RESPONSE = std::string{"invalid_response"};
+const std::string post_message::error::MESSAGE_NOT_FOUND = std::string{"message_not_found"};
+const std::string post_message::error::CHANNEL_NOT_FOUND = std::string{"channel_not_found"};
+const std::string post_message::error::CANT_DELETE_MESSAGE = std::string{"cant_delete_message"};
+const std::string post_message::error::COMPLIANCE_EXPORTS_PREVENT_DELETION = std::string{
+        "compliance_exports_prevent_deletion"};
+const std::string post_message::error::NOT_AUTHED = std::string{"not_authed"};
+const std::string post_message::error::INVALID_AUTH = std::string{"invalid_auth"};
+const std::string post_message::error::ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
 
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
-{
-
-post_message::post_message(const channel_id &channel, const std::string &text) : channel_{channel}, text_{text}
-{ }
-
-response::post_message post_message::get_response()
+void post_message::initialize_()
 {
     http::params params{
             {"channel", channel_},
@@ -62,10 +43,10 @@ response::post_message post_message::get_response()
         std::string parse_val{"none"};
         switch (*parse_)
         {
-            case parameter::post_message::parse::none:
+            case parameter::parse::none:
                 parse_val = "none";
                 break;
-            case parameter::post_message::parse::full:
+            case parameter::parse::full:
                 parse_val = "full";
                 break;
         }
@@ -96,20 +77,12 @@ response::post_message post_message::get_response()
         params.emplace("icon_emoji", *icon_emoji_);
     }
 
-    return get("chat.postMessage", params);
+    auto result_ob = slack_private::get(this, "chat.postMessage", params);
+    if (!this->error_message)
+    {
+        if (result_ob["channel"].isString()) channel = slack::channel_id{result_ob["channel"].asString()};
+        if (result_ob["ts"].isString()) ts = slack::ts{result_ob["ts"].asString()};
+        if (result_ob["message"].isObject()) message = {result_ob["message"]};
+    }
 }
-
-} //namespace impl
-
-/*************************************************************/
-// MARK: - Public Interface
-
-
-response::post_message post_message(const ts &ts, const channel_id channel)
-{
-    class impl::post_message impl{ts, channel};
-    return impl.get_response();
-}
-
-} //namespace channel
-} //namespace slack
+}} //namespace chat slack

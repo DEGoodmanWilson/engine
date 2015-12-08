@@ -11,13 +11,11 @@
 #include <string>
 #include <slack/optional.hpp>
 
-namespace slack
-{
-namespace auth
+namespace slack { namespace auth
 {
 
-class test : public slack::base::response2
-
+class test :
+        public slack::base::response2
 {
 public:
     // constructor
@@ -25,17 +23,18 @@ public:
 
     // parameters
     struct parameter
-    { };
+    {
+    };
 
     // errors
     struct error
     {
-        static const std::string UNKNOWN; // = std::string{"unknown"};
-        static const std::string JSON_PARSE_FAILURE; // = std::string{"json_parse_failure"};
-        static const std::string INVALID_RESPONSE; // = std::string{"invalid_response"};
-        static const std::string NOT_AUTHED; // = std::string{"not_authed"};
-        static const std::string INVALID_AUTH; // = std::string{"invalid_auth"};
-        static const std::string ACCOUNT_INACTIVE; // = std::string{"account_inactive"};
+        static const std::string UNKNOWN;
+        static const std::string JSON_PARSE_FAILURE;
+        static const std::string INVALID_RESPONSE;
+        static const std::string NOT_AUTHED;
+        static const std::string INVALID_AUTH;
+        static const std::string ACCOUNT_INACTIVE;
     };
 
     // response
@@ -48,6 +47,4 @@ public:
 private:
 };
 
-
-} //namespace auth
-} //namespace slack
+}} //namespace auth slack
