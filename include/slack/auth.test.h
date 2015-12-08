@@ -16,86 +16,38 @@ namespace slack
 namespace auth
 {
 
-/*************************************************************/
-// MARK: - Parameters
+class test : public slack::base::response2
 
-namespace parameter
 {
-namespace test
-{
+public:
+    // constructor
+    test();
 
-//no optional parameters
+    // parameters
+    struct parameter
+    { };
 
-} //namespace test
-} //namespace parameter
+    // errors
+    struct error
+    {
+        static const std::string UNKNOWN; // = std::string{"unknown"};
+        static const std::string JSON_PARSE_FAILURE; // = std::string{"json_parse_failure"};
+        static const std::string INVALID_RESPONSE; // = std::string{"invalid_response"};
+        static const std::string NOT_AUTHED; // = std::string{"not_authed"};
+        static const std::string INVALID_AUTH; // = std::string{"invalid_auth"};
+        static const std::string ACCOUNT_INACTIVE; // = std::string{"account_inactive"};
+    };
 
-/*************************************************************/
-// MARK: - Response Errors
-
-namespace response
-{
-namespace error
-{
-namespace test
-{
-
-const auto UNKNOWN = std::string{"unknown"};
-const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
-const auto INVALID_RESPONSE = std::string{"invalid_response"};
-const auto NOT_AUTHED = std::string{"not_authed"};
-const auto INVALID_AUTH = std::string{"invalid_auth"};
-const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
-
-} //namespace test
-} //namespace error
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Response
-
-namespace response
-{
-
-struct test :
-        public slack::base::response
-{
-    test(const std::string &raw_json);
-
+    // response
     std::experimental::optional<std::string> url;
     std::experimental::optional<std::string> teamname;
     std::experimental::optional<std::string> username;
     std::experimental::optional<team_id> team_id;
     std::experimental::optional<user_id> user_id;
-};
-
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
-{
-
-class test :
-        public slack::base::impl<response::test>
-{
-public:
-    response::test get_response();
 
 private:
-
 };
 
-} //namespace impl
-
-
-/*************************************************************/
-// MARK: - Public Interface
-
-
-response::test test();
 
 } //namespace auth
 } //namespace slack

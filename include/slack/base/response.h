@@ -20,6 +20,17 @@ namespace slack
 namespace base
 {
 
+struct response2
+{
+    std::string raw_json;
+    std::experimental::optional<std::string> error_message;
+
+    operator bool()
+    {
+        return !static_cast<bool>(error_message); //if error contains a value, return false
+    }
+};
+
 struct response
 {
     response(const std::string &raw_json);
