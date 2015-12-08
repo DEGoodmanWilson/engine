@@ -51,7 +51,7 @@ add_executable(engine_tests
         auth.cpp
         channels.cpp
         chat.cpp
-        rtm.cpp
+        real_time_client.cpp
         oauth.cpp
     )
 

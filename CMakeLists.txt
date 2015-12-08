@@ -9,6 +9,33 @@ set(USE_SYSTEM_CURL YES)
 add_subdirectory(cpr)
 include_directories(${CPR_INCLUDE_DIRS})
 
+#websocket
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost 1.45.0 COMPONENTS asio)
+
+add_definitions(-DBOOST_NETWORK_ENABLE_HTTPS)
+
+# Boost
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_COMPONENTS system regex filesystem thread)
+find_package(Boost 1.53 REQUIRED ${Boost_COMPONENTS})
+
+
+# OpenSSL
+#set(OPENSSL_ROOT_DIR /usr/local/Cellar/openssl/1.0.2d_1/)
+#find_package(OpenSSL 1.0.2 REQUIRED)
+# OpenSSL, because brew.
+set(OPENSSL_INCLUDE_DIR /usr/local/Cellar/openssl/1.0.2d_1/include)
+set(OPENSSL_LIB_DIR /usr/local/Cellar/openssl/1.0.2d_1/lib)
+set(OPENSSL_LIBRARIES ssl crypto)
+link_directories(${OPENSSL_LIB_DIR})
+
+#simple-web-socket
+set(SIMPLEWEB_INCLUDE_DIR SimpleWeb)
+
 #jsoncpp
 set(JSONCPP_INCLUDE_DIR jsoncpp)
 set(JSON_SOURCES jsoncpp/jsoncpp.cpp)
@@ -58,9 +85,19 @@ set(ENGINE_FILES
         oauth.access.cpp
         channels.rename.cpp
         include/slack/channels.rename.h
-        include/slack/fwd.h attachment.cpp include/slack/attachment.h incoming_webhook.cpp include/slack/incoming_webhook.h private.cpp)
+        private.cpp
+        include/slack/fwd.h
+        attachment.cpp
+        include/slack/attachment.h
+        incoming_webhook.cpp
+        include/slack/incoming_webhook.h
+        real_time_client.cpp
+        include/slack/real_time_client.h
+        )
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
+
+target_link_libraries(engine cpr simple-web-socket)
 
 set(ENGINE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "")
 set(ENGINE_LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "")
