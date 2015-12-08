@@ -10,6 +10,7 @@ Posting a message to a Slack channel is one of the most common use cases. It cou
 ```
 #include <slack/slack.h>
 
-auto response = slack::chat::post_message("some text", channel);
+slack::channel_id channel = …;
+auto response = slack::chat::post_message(channel, "some text");
 ```
 There is no step three. 
