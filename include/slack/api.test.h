@@ -20,7 +20,6 @@ class test :
 {
 public:
     //public interface
-
     template<typename ...Os>
     test()
     {

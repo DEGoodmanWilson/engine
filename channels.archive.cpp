@@ -5,56 +5,30 @@
 #include "slack/channels.archive.h"
 #include "private.h"
 
-namespace slack
-{
-namespace channels
+namespace slack { namespace channels
 {
 
-
-/*************************************************************/
-// MARK: - Response
-
-namespace response
-{
-
-archive::archive(const std::string &raw_json)
-        : slack::base::response{raw_json}
-{
-    if(!json_) return;
-
-    Json::Value result_ob = json_->json;
-}
-
-} //namespace response
+const std::string archive::error::CHANNEL_NOT_FOUND = std::string{"channel_not_found"};
+const std::string archive::error::ALREADY_ARCHIVED = std::string{"already_archived"};
+const std::string archive::error::CANT_ARCHIVE_GENERAL = std::string{"cant_archive_general"};
+const std::string archive::error::LAST_RA_CHANNEL = std::string{"last_ra_channel"};
+const std::string archive::error::RESTRICTED_ACTION = std::string{"restricted_action"};
+const std::string archive::error::NOT_AUTHED = std::string{"not_authed"};
+const std::string archive::error::INVALID_AUTH = std::string{"invalid_auth"};
+const std::string archive::error::ACCOUNT_INACTIVE = std::string{"account_inactive"};
+const std::string archive::error::USER_IS_BOT = std::string{"user_is_bot"};
+const std::string archive::error::USER_IS_RESTRICTED = std::string{"user_is_restricted"};
 
 
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
-{
-
-archive::archive(const channel_id &channel) : channel_{}
+archive::archive(const channel_id &channel) : channel_{channel}
 { }
 
-response::archive archive::get_response()
+
+void archive::initialize_()
 {
     http::params params{{"channel", channel_}};
 
-    return get("channels.archive", params);
+    slack_private::get(this, "channels.archive", params);
 }
 
-} //namespace impl
-
-
-/*************************************************************/
-// MARK: - Public Interface
-
-::slack::channels::response::archive archive(const channel_id &channel)
-{
-    class impl::archive impl{channel};
-    return impl.get_response();
-}
-
-} //namespace channel
-} //namespace slack
+}} //namespace channels slack

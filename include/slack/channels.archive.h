@@ -12,93 +12,45 @@
 #include <vector>
 #include <slack/optional.hpp>
 
-namespace slack
-{
-namespace channels
-{
-
-/*************************************************************/
-// MARK: - Parameters
-
-namespace parameter
-{
-namespace archive
-{
-
-} //namespace archive
-} //namespace parameter
-
-/*************************************************************/
-// MARK: - Response Errors
-
-namespace response
-{
-namespace error
-{
-namespace archive
-{
-
-const auto UNKNOWN = std::string{"unknown"};
-const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
-const auto INVALID_RESPONSE = std::string{"invalid_response"};
-const auto CHANNEL_NOT_FOUND = std::string{"channel_not_found"};
-const auto ALREADY_ARCHIVED = std::string{"already_archived"};
-const auto CANT_ARCHIVE_GENERAL = std::string{"cant_archive_general"};
-const auto LAST_RA_CHANNEL = std::string{"last_ra_channel"};
-const auto RESTRICTED_ACTION = std::string{"restricted_action"};
-const auto NOT_AUTHED = std::string{"not_authed"};
-const auto INVALID_AUTH = std::string{"invalid_auth"};
-const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
-const auto USER_IS_BOT = std::string{"user_is_bot"};
-const auto USER_IS_RESTRICTED = std::string{"user_is_restricted"};
-
-} //namespace archive
-} //namespace error
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Response
-
-namespace response
-{
-
-struct archive :
-        public slack::base::response
-{
-    archive(const std::string &raw_json);
-};
-
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
+namespace slack { namespace channels
 {
 
 class archive :
-        public slack::base::impl<response::archive>
+        public slack::base::response2
 {
 public:
-    archive(const channel_id& channel);
-    //TODO can these be moved into the base class?
-    response::archive get_response();
+    //public interface
+    archive(const channel_id &channel);
+
+    //parameters
+    struct parameter
+    {
+    };
+
+    //errors
+    struct error :
+            public slack::base::error
+    {
+        static const std::string CHANNEL_NOT_FOUND;
+        static const std::string ALREADY_ARCHIVED;
+        static const std::string CANT_ARCHIVE_GENERAL;
+        static const std::string LAST_RA_CHANNEL;
+        static const std::string RESTRICTED_ACTION;
+        static const std::string NOT_AUTHED;
+        static const std::string INVALID_AUTH;
+        static const std::string ACCOUNT_INACTIVE;
+        static const std::string USER_IS_BOT;
+        static const std::string USER_IS_RESTRICTED;
+    };
+
+    //response
+
+    //parameter setters
 
 private:
+    void initialize_();
+
     channel_id channel_;
 };
 
-} //namespace impl
-
-
-/*************************************************************/
-// MARK: - Public Interface
-
-
-response::archive archive(const channel_id& channel);
-
-
-} //namespace channels
-} //namespace slack
+} } //namespace channels slack
