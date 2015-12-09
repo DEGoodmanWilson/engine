@@ -22,7 +22,7 @@ public:
     delete_it(const ts &ts, const channel_id &channel);
 
     //parameters
-    struct paramater
+    struct parameter
     {
 
     };

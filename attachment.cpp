@@ -5,7 +5,7 @@
 #include "slack/attachment.h"
 #include <json/json.h>
 
-namespace slack { namespace incoming_webhook
+namespace slack
 {
 
 template<>
@@ -55,13 +55,13 @@ attachment::operator Json::Value()
             std::string val;
             switch(m)
             {
-                case parameter::attachment::mrkdwn_in_fields::text:
+                case parameter::mrkdwn_in_fields::text:
                     val = "text";
                     break;
-                case parameter::attachment::mrkdwn_in_fields::pretext:
+                case parameter::mrkdwn_in_fields::pretext:
                     val = "pretext";
                     break;
-                case parameter::attachment::mrkdwn_in_fields::fallback:
+                case parameter::mrkdwn_in_fields::fallback:
                     val = "fallback";
                     break;
             }
@@ -75,4 +75,4 @@ attachment::operator Json::Value()
     return root;
 }
 
-}}
+}

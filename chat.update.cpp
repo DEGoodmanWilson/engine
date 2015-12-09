@@ -5,46 +5,22 @@
 #include "slack/chat.update.h"
 #include "private.h"
 
-namespace slack
-{
-namespace chat
+namespace slack { namespace chat
 {
 
+const std::string update::error::MESSAGE_NOT_FOUND = std::string{"message_not_found"};
+const std::string update::error::CHANNEL_NOT_FOUND = std::string{"channel_not_found"};
+const std::string update::error::CANT_DELETE_MESSAGE = std::string{"cant_delete_message"};
+const std::string update::error::COMPLIANCE_EXPORTS_PREVENT_DELETION = std::string{
+        "compliance_exports_prevent_deletion"};
+const std::string update::error::NOT_AUTHED = std::string{"not_authed"};
+const std::string update::error::INVALID_AUTH = std::string{"invalid_auth"};
+const std::string update::error::ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
-/*************************************************************/
-// MARK: - Response
-
-namespace response
-{
-
-update::update(const std::string &raw_json)
-        : slack::base::response{raw_json}
-{
-    if(!json_) return;
-
-    Json::Value result_ob = json_->json;
-
-    if (result_ob["channel"].isString()) channel = slack::channel_id{result_ob["channel"].asString()};
-    if (result_ob["ts"].isString()) ts = slack::ts{result_ob["ts"].asString()};
-    if (result_ob["text"].isString()) text = result_ob["text"].asString();
-}
-
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
-{
-
-update::update(const ts &ts, const channel_id &channel, const std::string &text) : ts_{ts}, channel_{channel}, text_{text}
-{ }
-
-response::update update::get_response()
+void update::initialize_()
 {
     http::params params{
-            {"ts", ts_},
+            {"ts",      ts_},
             {"channel", channel_},
             {"text",    text_}
     };
@@ -55,10 +31,10 @@ response::update update::get_response()
         std::string parse_val{"none"};
         switch (*parse_)
         {
-            case parameter::update::parse::none:
+            case parameter::parse::none:
                 parse_val = "none";
                 break;
-            case parameter::update::parse::full:
+            case parameter::parse::full:
                 parse_val = "full";
                 break;
         }
@@ -70,24 +46,27 @@ response::update update::get_response()
     }
     if (attachments_)
     {
-        params.emplace("attachments", *attachments_);
+        //TODO this is ugly, but we need json strings.
+        Json::Value root;
+        for (auto &a : *attachments_)
+        {
+            root.append(a);
+        }
+
+        //TODO there is probably a better way?
+        std::stringstream ss;
+        ss << root;
+        params.emplace("attachments", ss.str());
     }
 
-    return get("chat.update", params);
+    auto result_ob = slack_private::get(this, "chat.update", params);
+
+    if (!this->error_message)
+    {
+        if (result_ob["channel"].isString()) channel = slack::channel_id{result_ob["channel"].asString()};
+        if (result_ob["ts"].isString()) ts = slack::ts{result_ob["ts"].asString()};
+        if (result_ob["text"].isString()) text = result_ob["text"].asString();
+    }
 }
 
-} //namespace impl
-
-
-/*************************************************************/
-// MARK: - Public Interface
-
-
-response::update update(const ts &ts, const channel_id &channel, const std::string &text)
-{
-    class impl::update impl{ts, channel, text};
-    return impl.get_response();
-}
-
-} //namespace channel
-} //namespace slack
+}} //namespace chat slack

@@ -5,6 +5,7 @@
 #pragma once
 
 #include <slack/types.h>
+#include <slack/attachment.h>
 #include <slack/set_option.h>
 #include <slack/base/response.h>
 #include <slack/base/impl.h>
@@ -44,8 +45,7 @@ public:
             full,
         };
         MAKE_BOOL_LIKE(link_names);
-//TODO This one needs to be better!!
-        MAKE_STRING_LIKE(attachments);
+        using attachments = std::vector<slack::attachment>;
         MAKE_BOOL_LIKE(unfurl_links);
         MAKE_BOOL_LIKE(unfurl_media);
         MAKE_STRING_LIKE(icon_url);
@@ -53,7 +53,7 @@ public:
     };
 
     // errors
-    struct error
+    struct error : public slack::base::error
     {
         static const std::string MESSAGE_NOT_FOUND;
         static const std::string CHANNEL_NOT_FOUND;

@@ -55,7 +55,17 @@ void post_message::initialize_()
     }
     if (attachments_)
     {
-        params.emplace("attachments", *attachments_);
+        //TODO this is ugly, but we need json strings.
+        Json::Value root;
+        for (auto &a : *attachments_)
+        {
+            root.append(a);
+        }
+
+        //TODO there is probably a better way?
+        std::stringstream ss;
+        ss << root;
+        params.emplace("attachments", ss.str());
     }
     if (unfurl_links_)
     {

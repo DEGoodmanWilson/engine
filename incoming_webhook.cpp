@@ -22,10 +22,10 @@ payload::operator std::string()
         std::string val{""};
         switch (*response_type_)
         {
-            case parameter::payload::response_type::in_channel:
+            case parameter::response_type::in_channel:
                 val = "in_channel";
                 break;
-            case parameter::payload::response_type::ephemeral:
+            case parameter::response_type::ephemeral:
                 val = "ephemeral";
         }
         root["response_type"] = val;
