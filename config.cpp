@@ -6,7 +6,9 @@
 
 namespace slack_config
 {
+
 std::string token_ = "";
+
 } //namespace slack_config
 
 namespace slack

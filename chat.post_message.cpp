@@ -92,4 +92,5 @@ void post_message::initialize_()
         if (result_ob["message"].isObject()) message = {result_ob["message"]};
     }
 }
+
 }} //namespace chat slack

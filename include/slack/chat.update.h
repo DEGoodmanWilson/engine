@@ -90,6 +90,7 @@ private:
     void initialize_();
 
     class ts ts_;
+
     channel_id channel_;
     std::string text_;
     std::experimental::optional<parameter::attachments> attachments_;

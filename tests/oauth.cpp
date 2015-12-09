@@ -8,7 +8,7 @@
 //really hard to test this without an app…
 TEST(oauth_access, oauth_access_failure)
 {
-    auto result = slack::oauth::access("hahaha", "nope", "you've got to be kidding me", slack::oauth::parameter::access::redirect_uri{"http://example.com"});
+    auto result = slack::oauth::access("hahaha", "nope", "you've got to be kidding me", slack::oauth::access::parameter::redirect_uri{"http://example.com"});
     ASSERT_FALSE(result);
-    ASSERT_EQ(slack::oauth::response::error::access::INVALID_CLIENT_ID, result.error.value());
+    ASSERT_EQ(slack::oauth::access::error::INVALID_CLIENT_ID, *result.error_message);
 }

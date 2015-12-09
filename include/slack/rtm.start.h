@@ -12,12 +12,11 @@
 #include <vector>
 #include <slack/optional.hpp>
 
-namespace slack
-{
-namespace rtm
+namespace slack { namespace rtm
 {
 
-class start : public slack::base::response2
+class start :
+        public slack::base::response2
 {
 public:
     //public interface
@@ -28,7 +27,7 @@ public:
     }
 
     template<typename ...Os>
-    start(Os&&...os)
+    start(Os &&...os)
     {
         slack::set_option<start>(*this, std::forward<Os>(os)...);
         initialize_();
@@ -92,4 +91,4 @@ private:
     std::experimental::optional<parameter::mpim_aware> mpim_aware_;
 };
 
-} }  //namespace rtm slack
+}}  //namespace rtm slack
