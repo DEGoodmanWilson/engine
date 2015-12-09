@@ -95,7 +95,7 @@ public:
     //http://stackoverflow.com/questions/13937873/how-can-i-prevent-a-variadic-constructor-from-being-preferred-to-the-copy-constr
     //http://stackoverflow.com/questions/9287250/conflict-between-copy-constructor-and-forwarding-constructor
     attachment(attachment &other)
-            : attachment(const_cast<const attachment &>(other))
+            : attachment{const_cast<const attachment &>(other)}
     { }
 
 

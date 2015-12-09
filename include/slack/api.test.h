@@ -12,114 +12,63 @@
 #include <string>
 #include <slack/optional.hpp>
 
-namespace slack
-{
-namespace api
-{
-
-/*************************************************************/
-// MARK: - Parameters
-
-namespace parameter
-{
-namespace test
-{
-
-MAKE_STRING_LIKE(error);
-
-MAKE_STRING_LIKE(foo);
-
-} //namespace test
-} //namespace parameter
-
-/*************************************************************/
-// MARK: - Response Errors
-
-namespace response
-{
-namespace error
-{
-namespace test
-{
-
-const auto UNKNOWN = std::string{"unknown"};
-const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
-const auto INVALID_RESPONSE = std::string{"invalid_response"};
-
-} //namespace test
-} //namespace error
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Response
-
-namespace response
-{
-
-struct test :
-        public slack::base::response
-{
-    test(const std::string &raw_json);
-
-    std::experimental::optional<std::map<std::string, std::string>> args;
-};
-
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
+namespace slack { namespace api
 {
 
 class test :
-        public slack::base::impl<response::test>
+        public slack::base::response2
 {
 public:
-    //TODO can these be moved into the base class?
-    response::test get_response();
+    //public interface
 
-    //TODO can we make a generic template?
-    void set_option(const parameter::test::error &error)
+    template<typename ...Os>
+    test()
+    {
+        initialize_();
+    }
+
+    template<typename ...Os>
+    test(Os &&...os)
+    {
+        slack::set_option<test>(*this, std::forward<Os>(os)...);
+        initialize_();
+    }
+
+    //parameters
+    struct parameter
+    {
+        MAKE_STRING_LIKE(error);
+
+        MAKE_STRING_LIKE(foo);
+    };
+
+    //errors
+    struct error :
+            public slack::base::error
+    {
+    };
+
+    //response
+    std::experimental::optional<std::map<std::string, std::string>> args;
+
+    //parameter setters
+    void set_option(const parameter::error &error)
     { error_ = error; }
 
-    void set_option(parameter::test::error &&error)
+    void set_option(parameter::error &&error)
     { error_ = std::move(error); }
 
-    void set_option(const parameter::test::foo &foo)
+    void set_option(const parameter::foo &foo)
     { foo_ = foo; }
 
-    void set_option(parameter::test::foo &&foo)
+    void set_option(parameter::foo &&foo)
     { foo_ = std::move(foo); }
 
 private:
-    std::experimental::optional<parameter::test::error> error_;
-    std::experimental::optional<parameter::test::foo> foo_;
+    void initialize_();
+
+    std::experimental::optional<parameter::error> error_;
+    std::experimental::optional<parameter::foo> foo_;
 };
 
-} //namespace impl
-
-
-/*************************************************************/
-// MARK: - Public Interface
-
-
-template<typename ...Os>
-response::test test()
-{
-    class impl::test impl;
-    return impl.get_response();
-}
-
-template<typename ...Os>
-response::test test(Os &&...os)
-{
-    class impl::test impl;
-    set_option<decltype(impl)>(impl, std::forward<Os>(os)...);
-    return impl.get_response();
-}
-
-} //namespace api
-} //namespace slack
+} } //namespace api slack

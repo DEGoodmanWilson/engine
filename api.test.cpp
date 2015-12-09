@@ -7,48 +7,17 @@
 #include "private.h"
 #include <json/json.h>
 
-namespace slack
+namespace slack { namespace api
 {
-namespace api
-{
+
 
 
 /*************************************************************/
 // MARK: - Response
 
-namespace response
+void test::initialize_()
 {
-
-test::test(const std::string &raw_json)
-        : slack::base::response{raw_json}
-{
-    if(!json_) return;
-
-    Json::Value result_ob = json_->json;
-
-    if (!result_ob["args"].isNull() && result_ob["args"].isObject())
-    {
-        args = std::map<std::string, std::string>{};
-
-        for (auto arg: result_ob["args"].getMemberNames())
-        {
-            args->emplace(arg, result_ob["args"][arg].asString());
-        }
-    }
-}
-
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
-{
-
-response::test test::get_response()
-{
-    http::params params;
+    http::params params{};
 
     if (error_)
     {
@@ -59,9 +28,20 @@ response::test test::get_response()
         params.emplace("foo", *foo_);
     }
 
-    return get("api.test", params, false);
+    auto result_ob = slack_private::get(this, "api.test", params, false);
+
+    if (!this->error_message)
+    {
+        if (!result_ob["args"].isNull() && result_ob["args"].isObject())
+        {
+            args = std::map<std::string, std::string>{};
+
+            for (auto arg: result_ob["args"].getMemberNames())
+            {
+                args->emplace(arg, result_ob["args"][arg].asString());
+            }
+        }
+    }
 }
 
-} //namespace impl
-} //namespace api
-} //namespace slack
+} } //namespace api slack

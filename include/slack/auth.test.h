@@ -29,9 +29,6 @@ public:
     // errors
     struct error
     {
-        static const std::string UNKNOWN;
-        static const std::string JSON_PARSE_FAILURE;
-        static const std::string INVALID_RESPONSE;
         static const std::string NOT_AUTHED;
         static const std::string INVALID_AUTH;
         static const std::string ACCOUNT_INACTIVE;

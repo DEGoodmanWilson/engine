@@ -20,6 +20,13 @@ namespace slack
 namespace base
 {
 
+struct error
+{
+    static const std::string UNKNOWN;
+    static const std::string JSON_PARSE_FAILURE;
+    static const std::string INVALID_RESPONSE;
+};
+
 struct response2
 {
     std::string raw_json;

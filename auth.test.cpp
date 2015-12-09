@@ -8,9 +8,6 @@
 namespace slack { namespace auth
 {
 
-const std::string test::error::UNKNOWN = std::string{"unknown"};
-const std::string test::error::JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
-const std::string test::error::INVALID_RESPONSE = std::string{"invalid_response"};
 const std::string test::error::NOT_AUTHED = std::string{"not_authed"};
 const std::string test::error::INVALID_AUTH = std::string{"invalid_auth"};
 const std::string test::error::ACCOUNT_INACTIVE = std::string{"account_inactive"};

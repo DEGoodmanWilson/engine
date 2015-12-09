@@ -11,24 +11,24 @@ TEST(api, api_test_basic)
     auto result = slack::api::test();
     ASSERT_TRUE(result);
     ASSERT_EQ(std::experimental::nullopt, result.args);
-    ASSERT_EQ(std::experimental::nullopt, result.error);
+    ASSERT_EQ(std::experimental::nullopt, result.error_message);
 }
 
 TEST(api, api_with_lvalue_parameters)
 {
-    slack::api::parameter::test::error e{"error"};
-    slack::api::parameter::test::foo f{"bar"};
+    slack::api::test::parameter::error e{"error"};
+    slack::api::test::parameter::foo f{"bar"};
 
     auto result = slack::api::test(e, f);
     ASSERT_FALSE(static_cast<bool>(result));
     ASSERT_EQ("bar", result.args.value()["foo"]);
-    ASSERT_EQ("error", result.error.value());
+    ASSERT_EQ("error", *result.error_message);
 }
 
 TEST(api, api_with_rvalue_parameters)
 {
-    auto result = slack::api::test(slack::api::parameter::test::foo{"bar"}, slack::api::parameter::test::error{"error"});
+    auto result = slack::api::test(slack::api::test::parameter::foo{"bar"}, slack::api::test::parameter::error{"error"});
     ASSERT_FALSE(static_cast<bool>(result));
     ASSERT_EQ("bar", result.args.value()["foo"]);
-    ASSERT_EQ("error", result.error.value());
+    ASSERT_EQ("error", *result.error_message);
 }

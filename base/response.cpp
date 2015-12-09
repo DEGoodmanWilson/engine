@@ -11,6 +11,10 @@ namespace slack
 namespace base
 {
 
+const std::string error::UNKNOWN = "unknown";
+const std::string error::JSON_PARSE_FAILURE = "json_parse_failure";
+const std::string error::INVALID_RESPONSE = "invalid_response";
+
 response::response(const std::string &raw_json) : raw_json{raw_json}, json_{nullptr}
 {
     Json::Value result_ob;

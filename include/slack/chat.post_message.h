@@ -55,9 +55,6 @@ public:
     // errors
     struct error
     {
-        static const std::string UNKNOWN;
-        static const std::string JSON_PARSE_FAILURE;
-        static const std::string INVALID_RESPONSE;
         static const std::string MESSAGE_NOT_FOUND;
         static const std::string CHANNEL_NOT_FOUND;
         static const std::string CANT_DELETE_MESSAGE;

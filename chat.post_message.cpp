@@ -9,9 +9,6 @@
 namespace slack { namespace chat
 {
 
-const std::string post_message::error::UNKNOWN = std::string{"unknown"};
-const std::string post_message::error::JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
-const std::string post_message::error::INVALID_RESPONSE = std::string{"invalid_response"};
 const std::string post_message::error::MESSAGE_NOT_FOUND = std::string{"message_not_found"};
 const std::string post_message::error::CHANNEL_NOT_FOUND = std::string{"channel_not_found"};
 const std::string post_message::error::CANT_DELETE_MESSAGE = std::string{"cant_delete_message"};
