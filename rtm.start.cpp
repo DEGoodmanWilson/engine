@@ -5,50 +5,16 @@
 #include "slack/rtm.start.h"
 #include "private.h"
 
-namespace slack
-{
-namespace rtm
+namespace slack { namespace rtm
 {
 
-
-/*************************************************************/
-// MARK: - Response
-
-namespace response
-{
-
-start::start(const std::string &raw_json)
-        : slack::base::response{raw_json}
-{
-    if(!json_) return;
-
-    Json::Value result_ob = json_->json;
-
-    if (result_ob["url"].isString()) url = result_ob["url"].asString();
-
-    if (!result_ob["channels"].isNull() && result_ob["channels"].isArray())
-    {
-        channels = std::vector<::slack::channel>{};
-        for (const auto channel_obj : result_ob["channels"])
-        {
-            channels->emplace_back(channel_obj);
-        }
-    }
-
-    //TODO: There is a lot of work left to be done here!
-
-}
-
-} //namespace response
+const auto MIGRATION_IN_PROGRESS = std::string{"migration_in_progress"};
+const auto NOT_AUTHED = std::string{"not_authed"};
+const auto INVALID_AUTH = std::string{"invalid_auth"};
+const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
 
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
-{
-
-response::start start::get_response()
+void start::initialize_()
 {
     http::params params;
 
@@ -66,9 +32,23 @@ response::start start::get_response()
         params.emplace("mpim_aware", (*mpim_aware_ ? "true" : "false"));
     }
 
-    return get("rtm.start", params);
+    auto result_ob = slack_private::get(this, "rtm.start", params);
+
+    if (!this->error_message)
+    {
+        if (result_ob["url"].isString()) url = result_ob["url"].asString();
+
+        if (!result_ob["channels"].isNull() && result_ob["channels"].isArray())
+        {
+            channels = std::vector<::slack::channel>{};
+            for (const auto channel_obj : result_ob["channels"])
+            {
+                channels->emplace_back(channel_obj);
+            }
+        }
+
+        //TODO: There is a lot of work left to be done here!
+    }
 }
 
-} //namespace impl
-} //namespace channel
-} //namespace slack
+}} //namespace rtm slack

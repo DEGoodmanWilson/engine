@@ -17,7 +17,7 @@ namespace slack { namespace api
 
 void test::initialize_()
 {
-    http::params params{};
+    http::params params;
 
     if (error_)
     {

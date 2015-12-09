@@ -17,57 +17,44 @@ namespace slack
 namespace rtm
 {
 
-/*************************************************************/
-// MARK: - Parameters
-
-namespace parameter
+class start : public slack::base::response2
 {
-namespace start
-{
+public:
+    //public interface
+    template<typename ...Os>
+    start()
+    {
+        initialize_();
+    }
 
-MAKE_BOOL_LIKE(simple_latest);
+    template<typename ...Os>
+    start(Os&&...os)
+    {
+        slack::set_option<start>(*this, std::forward<Os>(os)...);
+        initialize_();
+    }
 
-MAKE_BOOL_LIKE(no_unreads);
+    //parameters
+    struct parameter
+    {
+        MAKE_BOOL_LIKE(simple_latest);
 
-MAKE_BOOL_LIKE(mpim_aware);
+        MAKE_BOOL_LIKE(no_unreads);
 
-} //namespace start
-} //namespace parameter
+        MAKE_BOOL_LIKE(mpim_aware);
+    };
 
-/*************************************************************/
-// MARK: - Response Errors
+    //errors
+    struct error :
+            public slack::base::error
+    {
+        static const std::string MIGRATION_IN_PROGRESS;
+        static const std::string NOT_AUTHED;
+        static const std::string INVALID_AUTH;
+        static const std::string ACCOUNT_INACTIVE;
+    };
 
-namespace response
-{
-namespace error
-{
-namespace start
-{
-
-const auto UNKNOWN = std::string{"unknown"};
-const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
-const auto INVALID_RESPONSE = std::string{"invalid_response"};
-const auto MIGRATION_IN_PROGRESS = std::string{"migration_in_progress"};
-const auto NOT_AUTHED = std::string{"not_authed"};
-const auto INVALID_AUTH = std::string{"invalid_auth"};
-const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
-
-} //namespace start
-} //namespace error
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Response
-
-namespace response
-{
-
-struct start :
-        public slack::base::response
-{
-    start(const std::string &raw_json);
-
+    //response
     std::experimental::optional<std::string> url;
 //    std::experimental::optional<user> self;
 //    std::experimental::optional<team> team;
@@ -77,75 +64,32 @@ struct start :
 //    std::experimental::optional<std::vector<mpim>> mpims;
 //    std::experimental::optional<std::vector<im>> ims;
 //    std::experimental::optional<std::vector<bot>> bots;
-};
 
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
-{
-
-class start :
-        public slack::base::impl<response::start>
-{
-public:
-    start() = default;
-
-    //TODO can these be moved into the base class?
-    response::start get_response();
-
-    void set_option(const parameter::start::simple_latest &simple_latest)
+    //parameter setters
+    void set_option(const parameter::simple_latest &simple_latest)
     { simple_latest_ = simple_latest; }
 
-    void set_option(parameter::start::simple_latest &&simple_latest)
+    void set_option(parameter::simple_latest &&simple_latest)
     { simple_latest_ = std::move(simple_latest); }
 
-    void set_option(const parameter::start::no_unreads &no_unreads)
+    void set_option(const parameter::no_unreads &no_unreads)
     { no_unreads_ = no_unreads; }
 
-    void set_option(parameter::start::no_unreads &&no_unreads)
+    void set_option(parameter::no_unreads &&no_unreads)
     { no_unreads_ = std::move(no_unreads); }
 
-    void set_option(const parameter::start::mpim_aware &mpim_aware)
+    void set_option(const parameter::mpim_aware &mpim_aware)
     { mpim_aware_ = mpim_aware; }
 
-    void set_option(parameter::start::mpim_aware &&mpim_aware)
+    void set_option(parameter::mpim_aware &&mpim_aware)
     { mpim_aware_ = std::move(mpim_aware); }
 
 private:
-    std::experimental::optional<parameter::start::simple_latest> simple_latest_;
-    std::experimental::optional<parameter::start::no_unreads> no_unreads_;
-    std::experimental::optional<parameter::start::mpim_aware> mpim_aware_;
+    void initialize_();
+
+    std::experimental::optional<parameter::simple_latest> simple_latest_;
+    std::experimental::optional<parameter::no_unreads> no_unreads_;
+    std::experimental::optional<parameter::mpim_aware> mpim_aware_;
 };
 
-} //namespace impl
-
-
-/*************************************************************/
-// MARK: - Public Interface
-
-
-template<typename ...Os>
-response::start start()
-{
-    class impl::start impl;
-    return impl.get_response();
-}
-
-template<typename ...Os>
-response::start start(Os &&...os)
-{
-    class impl::start impl;
-
-    set_option<decltype(impl)>(impl, std::forward<Os>(os)
-            ...);
-    return impl.
-
-            get_response();
-}
-
-} //namespace rtm
-} //namespace slack
+} }  //namespace rtm slack
