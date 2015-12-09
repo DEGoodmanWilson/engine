@@ -5,61 +5,33 @@
 #include "slack/channels.create.h"
 #include "private.h"
 
-namespace slack
-{
-namespace channels
+namespace slack { namespace channels
 {
 
-
-/*************************************************************/
-// MARK: - Response
-
-namespace response
-{
-
-create::create(const std::string &raw_json)
-        : slack::base::response{raw_json}
-{
-    if(!json_) return;
-
-    Json::Value result_ob = json_->json;
-
-//    The inability to say the following vexes me:
-//    if (result_ob["channel"].isObject()) channel = slack::channel{result_ob["channel"]};
-    if (result_ob["channel"].isObject()) channel = slack::channel(result_ob["channel"]);
-
-}
-
-} //namespace response
+const auto NAME_TAKEN = std::string{"name_taken"};
+const auto RESTRICTED_ACTION = std::string{"restricted_action"};
+const auto NO_CHANNEL = std::string{"no_channel"};
+const auto NOT_AUTHED = std::string{"not_authed"};
+const auto INVALID_AUTH = std::string{"invalid_auth"};
+const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
+const auto USER_IS_BOT = std::string{"user_is_bot"};
+const auto USER_IS_RESTRICTED = std::string{"user_is_restricted"};
 
 
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
-{
-
-create::create(const std::string &name) : name_{name}
+create::create(const std::string &name)
+: name_{name}
 { }
 
-response::create create::get_response()
+
+void create::initialize_()
 {
     http::params params{{"name", name_}};
 
-    return get("channels.create", params);
+    auto result_ob = slack_private::get(this, "channels.create", params);
+    if(!this->error_message)
+    {
+        if (result_ob["channel"].isObject()) channel = slack::channel{result_ob["channel"]};
+    }
 }
 
-} //namespace impl
-
-
-/*************************************************************/
-// MARK: - Public Interface
-
-::slack::channels::response::create create(const std::string &name)
-{
-    class impl::create impl{name};
-    return impl.get_response();
-}
-
-} //namespace channel
-} //namespace slack
+}} //namespace channels slack

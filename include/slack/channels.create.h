@@ -12,95 +12,44 @@
 #include <vector>
 #include <slack/optional.hpp>
 
-namespace slack
-{
-namespace channels
-{
-
-/*************************************************************/
-// MARK: - Parameters
-
-namespace parameter
-{
-namespace create
-{
-
-MAKE_BOOL_LIKE(exclude_archived);
-
-} //namespace create
-} //namespace parameter
-
-/*************************************************************/
-// MARK: - Response Errors
-
-namespace response
-{
-namespace error
-{
-namespace create
-{
-
-const auto UNKNOWN = std::string{"unknown"};
-const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
-const auto INVALID_RESPONSE = std::string{"invalid_response"};
-const auto NAME_TAKEN = std::string{"name_taken"};
-const auto RESTRICTED_ACTION = std::string{"restricted_action"};
-const auto NO_CHANNEL = std::string{"no_channel"};
-const auto NOT_AUTHED = std::string{"not_authed"};
-const auto INVALID_AUTH = std::string{"invalid_auth"};
-const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
-const auto USER_IS_BOT = std::string{"user_is_bot"};
-const auto USER_IS_RESTRICTED = std::string{"user_is_restricted"};
-
-} //namespace create
-} //namespace error
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Response
-
-namespace response
-{
-
-struct create :
-        public slack::base::response
-{
-    create(const std::string &raw_json);
-
-    std::experimental::optional<channel> channel;
-};
-
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
+namespace slack { namespace channels
 {
 
 class create :
-        public slack::base::impl<response::create>
+        public slack::base::response2
 {
 public:
+    //public interface
     create(const std::string& name);
-    //TODO can these be moved into the base class?
-    response::create get_response();
+
+    //parameters
+    struct parameter
+    {
+        MAKE_BOOL_LIKE(exclude_archived);
+    };
+
+    //errors
+    struct error : slack::base::error
+    {
+        static const std::string NAME_TAKEN;
+        static const std::string RESTRICTED_ACTION;
+        static const std::string NO_CHANNEL;
+        static const std::string NOT_AUTHED;
+        static const std::string INVALID_AUTH;
+        static const std::string ACCOUNT_INACTIVE;
+        static const std::string USER_IS_BOT;
+        static const std::string USER_IS_RESTRICTED;
+    };
+
+    //response
+    std::experimental::optional<channel> channel;
+
+    //parameter setters
 
 private:
+    void initialize_();
+
     std::string name_;
 };
 
-} //namespace impl
-
-
-/*************************************************************/
-// MARK: - Public Interface
-
-
-response::create create(const std::string& name);
-
-
-} //namespace channels
-} //namespace slack
+}} //namespace channels slack
