@@ -7,7 +7,6 @@
 #include <slack/types.h>
 #include <slack/set_option.h>
 #include <slack/base/response.h>
-#include <slack/base/impl.h>
 #include <string>
 #include <vector>
 #include <slack/optional.hpp>
@@ -54,8 +53,7 @@ public:
 
     //response
     std::experimental::optional<token> access_token;
-//    std::experimental::optional<std::vector<scope>> scope; //this should be how it is handled. Until I can discover otherwise
-    std::experimental::optional<scope> scope;
+    std::experimental::optional<std::vector<scope>> scope;
     std::experimental::optional<std::string> team_name;
     std::experimental::optional<team_id> team_id;
 

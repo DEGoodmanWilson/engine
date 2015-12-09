@@ -7,7 +7,6 @@
 #include <slack/types.h>
 #include <slack/set_option.h>
 #include <slack/base/response.h>
-#include <slack/base/impl.h>
 #include <map>
 #include <string>
 #include <slack/optional.hpp>

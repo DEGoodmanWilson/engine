@@ -8,7 +8,6 @@
 #include <slack/attachment.h>
 #include <slack/set_option.h>
 #include <slack/base/response.h>
-#include <slack/base/impl.h>
 #include <string>
 #include <vector>
 #include <slack/optional.hpp>

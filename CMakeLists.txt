@@ -32,7 +32,6 @@ set(ENGINE_FILES
         config.cpp
         base/response.cpp
         include/slack/base/response.h
-        include/slack/base/impl.h
         private.h
         include/slack/http.h
         http.cpp
