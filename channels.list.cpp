@@ -7,45 +7,14 @@
 #include "private.h"
 #include <json/json.h>
 
-namespace slack
-{
-namespace channels
+namespace slack { namespace channels
 {
 
+const std::string list::error::NOT_AUTHED = std::string{"not_authed"};
+const std::string list::error::INVALID_AUTH = std::string{"invalid_auth"};
+const std::string list::error::ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
-/*************************************************************/
-// MARK: - Response
-
-namespace response
-{
-
-list::list(const std::string &raw_json)
-        : slack::base::response{raw_json}
-{
-    if(!json_) return;
-
-    Json::Value result_ob = json_->json;
-
-    if (!result_ob["channels"].isNull() && result_ob["channels"].isArray())
-    {
-        channels = std::vector<::slack::channel>{};
-        for (const auto channel_obj : result_ob["channels"])
-        {
-            channels->emplace_back(channel_obj);
-        }
-    }
-}
-
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
-{
-
-response::list list::get_response()
+void list::initialize_()
 {
     http::params params;
 
@@ -54,9 +23,18 @@ response::list list::get_response()
         params.emplace("exclude_archived", (*exclude_archived_ ? "true" : "false"));
     }
 
-    return get("channels.list", params);
+    auto result_ob = slack_private::get(this, "channels.list", params);
+    if (!this->error_message)
+    {
+        if (!result_ob["channels"].isNull() && result_ob["channels"].isArray())
+        {
+            channels = std::vector<::slack::channel>{};
+            for (const auto channel_obj : result_ob["channels"])
+            {
+                channels->emplace_back(channel_obj);
+            }
+        }
+    }
 }
 
-} //namespace impl
-} //namespace channel
-} //namespace slack
+}} //namespace channels slack

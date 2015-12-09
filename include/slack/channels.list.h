@@ -12,108 +12,55 @@
 #include <vector>
 #include <slack/optional.hpp>
 
-namespace slack
-{
-namespace channels
+namespace slack { namespace channels
 {
 
-/*************************************************************/
-// MARK: - Parameters
-
-namespace parameter
-{
-namespace list
-{
-
-MAKE_BOOL_LIKE(exclude_archived);
-
-} //namespace list
-} //namespace parameter
-
-/*************************************************************/
-// MARK: - Response Errors
-
-namespace response
-{
-namespace error
-{
-namespace list
-{
-
-const auto UNKNOWN = std::string{"unknown"};
-const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
-const auto INVALID_RESPONSE = std::string{"invalid_response"};
-const auto NOT_AUTHED = std::string{"not_authed"};
-const auto INVALID_AUTH = std::string{"invalid_auth"};
-const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
-
-} //namespace list
-} //namespace error
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Response
-
-namespace response
-{
-
-struct list :
-        public slack::base::response
-{
-    list(const std::string &raw_json);
-
-    std::experimental::optional<std::vector<::slack::channel>> channels;
-};
-
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
-{
-
-class list :
-        public slack::base::impl<response::list>
+class list : public slack::base::response2
 {
 public:
-    //TODO can these be moved into the base class?
-    response::list get_response();
+    //public interface
+    template<typename ...Os>
+    list()
+    {
+        initialize_();
+    }
 
-    void set_option(const parameter::list::exclude_archived &exclude_archived)
+    template<typename ...Os>
+    list(Os &&...os)
+    {
+        slack::set_option<list>(*this, std::forward<Os>(os)...);
+        initialize_();
+    }
+
+    //parameters
+    struct parameter
+    {
+        MAKE_BOOL_LIKE(exclude_archived);
+    };
+
+    //errors
+    struct error : slack::base::error
+    {
+        static const std::string NOT_AUTHED;
+        static const std::string INVALID_AUTH;
+        static const std::string ACCOUNT_INACTIVE;
+    };
+
+    //response
+    std::experimental::optional<std::vector<::slack::channel>> channels;
+
+    //parameter setters
+    void set_option(const parameter::exclude_archived &exclude_archived)
     { exclude_archived_ = exclude_archived; }
 
-    void set_option(parameter::list::exclude_archived &&exclude_archived)
+    void set_option(parameter::exclude_archived &&exclude_archived)
     { exclude_archived_ = exclude_archived; }
+
 
 private:
-    std::experimental::optional<parameter::list::exclude_archived> exclude_archived_;
+    void initialize_();
+
+    std::experimental::optional<parameter::exclude_archived> exclude_archived_;
 };
 
-} //namespace impl
-
-
-/*************************************************************/
-// MARK: - Public Interface
-
-
-template<typename ...Os>
-response::list list()
-{
-    class impl::list impl;
-    return impl.get_response();
-}
-
-template<typename ...Os>
-response::list list(Os &&...os)
-{
-    class impl::list impl;
-    set_option<decltype(impl)>(impl, std::forward<Os>(os)...);
-    return impl.get_response();
-}
-
-
-} //namespace channel
-} //namespace slack
+}} //namespace channels slack
