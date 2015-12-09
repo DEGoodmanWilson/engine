@@ -10,11 +10,6 @@
 namespace slack { namespace api
 {
 
-
-
-/*************************************************************/
-// MARK: - Response
-
 void test::initialize_()
 {
     http::params params;
@@ -44,4 +39,4 @@ void test::initialize_()
     }
 }
 
-} } //namespace api slack
+}} //namespace api slack

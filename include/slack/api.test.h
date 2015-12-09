@@ -20,6 +20,12 @@ class test :
 {
 public:
     //public interface
+    test(const test &other) = default;
+    test(test &&other) = default;
+    test(test &other)
+            : test(const_cast<const test &>(other))
+    { }
+
     template<typename ...Os>
     test()
     {
@@ -70,4 +76,4 @@ private:
     std::experimental::optional<parameter::foo> foo_;
 };
 
-} } //namespace api slack
+}} //namespace api slack

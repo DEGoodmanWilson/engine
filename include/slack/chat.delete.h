@@ -12,97 +12,45 @@
 #include <vector>
 #include <slack/optional.hpp>
 
-namespace slack
-{
-namespace chat
+namespace slack { namespace chat
 {
 
-/*************************************************************/
-// MARK: - Parameters
-
-namespace parameter
-{
-namespace delete_it
-{
-
-//no optional parameters
-
-} //namespace delete_it
-} //namespace parameter
-
-/*************************************************************/
-// MARK: - Response Errors
-
-namespace response
-{
-namespace error
-{
-namespace delete_it
-{
-
-const auto UNKNOWN = std::string{"unknown"};
-const auto JSON_PARSE_FAILURE = std::string{"json_parse_failure"};
-const auto INVALID_RESPONSE = std::string{"invalid_response"};
-const auto MESSAGE_NOT_FOUND = std::string{"message_not_found"};
-const auto CHANNEL_NOT_FOUND = std::string{"channel_not_found"};
-const auto CANT_DELETE_MESSAGE = std::string{"cant_delete_message"};
-const auto COMPLIANCE_EXPORTS_PREVENT_DELETION = std::string{"compliance_exports_prevent_deletion"};
-const auto NOT_AUTHED = std::string{"not_authed"};
-const auto INVALID_AUTH = std::string{"invalid_auth"};
-const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
-
-} //namespace delete_it
-} //namespace error
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Response
-
-namespace response
-{
-
-struct delete_it :
-        public slack::base::response
-{
-    delete_it(const std::string &raw_json);
-
-    std::experimental::optional<channel_id> channel;
-    std::experimental::optional<ts> ts;
-};
-
-} //namespace response
-
-
-/*************************************************************/
-// MARK: - Impl
-
-namespace impl
-{
-
-class delete_it :
-        public slack::base::impl<response::delete_it>
+class delete_it : public slack::base::response2
 {
 public:
+    //public interface
     delete_it(const ts &ts, const channel_id &channel);
 
-    //TODO can these be moved into the base class?
-    response::delete_it get_response();
+    //parameters
+    struct paramater
+    {
+
+    };
+
+    //errors
+    struct error :
+            public slack::base::error
+    {
+        static const std::string MESSAGE_NOT_FOUND;
+        static const std::string CHANNEL_NOT_FOUND;
+        static const std::string CANT_DELETE_MESSAGE;
+        static const std::string COMPLIANCE_EXPORTS_PREVENT_DELETION;
+        static const std::string NOT_AUTHED;
+        static const std::string INVALID_AUTH;
+        static const std::string ACCOUNT_INACTIVE;
+    };
+
+    //response
+    std::experimental::optional<channel_id> channel;
+    std::experimental::optional<ts> ts;
+
+    //parameter setters
 
 private:
-    ts ts_;
+    void initialize_();
+
+    class ts ts_;
     channel_id channel_;
 };
 
-} //namespace impl
-
-
-/*************************************************************/
-// MARK: - Public Interface
-
-
-response::delete_it delete_it(const ts &ts, const channel_id &channel);
-
-
-} //namespace chat
-} //namespace slack
+}} //namespace chat slack
