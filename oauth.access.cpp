@@ -4,6 +4,9 @@
 
 #include "slack/oauth.access.h"
 #include "private.h"
+#include <vector>
+#include <sstream>
+#include <iostream>
 
 namespace slack { namespace oauth
 {
@@ -30,9 +33,17 @@ void access::initialize_()
     if (!this->error_message)
     {
         if (result_ob["access_token"].isString()) access_token = {result_ob["access_token"].asString()};
-        if (result_ob["scope"].isString()) scope = {result_ob["scope"].asString()};
-        if (result_ob["team_name"].isString()) scope = {result_ob["team_name"].asString()};
-        if (result_ob["team_id"].isString()) scope = {result_ob["team_id"].asString()};
+        if (result_ob["scope"].isString())
+        {
+            scopes = std::vector<scope>{};
+            std::string s;
+            std::istringstream f{result_ob["scope"].asString()};
+            while (std::getline(f, s, ',')) {
+                scopes->push_back(s);
+            }
+        }
+        if (result_ob["team_name"].isString()) team_name = {result_ob["team_name"].asString()};
+        if (result_ob["team_id"].isString()) team_id = {result_ob["team_id"].asString()};
     }
 }
 

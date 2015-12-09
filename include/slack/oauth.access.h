@@ -53,7 +53,7 @@ public:
 
     //response
     std::experimental::optional<token> access_token;
-    std::experimental::optional<std::vector<scope>> scope;
+    std::experimental::optional<std::vector<scope>> scopes;
     std::experimental::optional<std::string> team_name;
     std::experimental::optional<team_id> team_id;
 

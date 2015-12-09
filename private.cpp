@@ -10,21 +10,23 @@ namespace slack_private
 const std::string HOSTNAME = "https://slack.com/api/";
 
 
-Json::Value get(slack::base::response * obj, std::string endpoint, slack::http::params params, bool auth)
+Json::Value get(slack::base::response *obj, std::string endpoint, slack::http::params params, bool auth)
 {
     Json::Value result_ob;
 
-    if(auth)
+    if (auth)
     {
         params["token"] = ::slack::get_token();
     }
-    auto response = slack::http::get(HOSTNAME+endpoint, params);
-    if(response.status_code != 200)
+    auto response = slack::http::get(HOSTNAME + endpoint, params);
+    if (response.status_code != 200)
     {
         //TODO do something!
         obj->error_message = std::string{"TODO"};
         return result_ob;
     }
+
+    obj->raw_json = response.body;
 
     Json::Reader reader;
     bool parsed_success = reader.parse(response.body, result_ob, false);
