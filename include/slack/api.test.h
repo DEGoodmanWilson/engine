@@ -16,7 +16,7 @@ namespace slack { namespace api
 {
 
 class test :
-        public slack::base::response2
+        public slack::base::response
 {
 public:
     //public interface

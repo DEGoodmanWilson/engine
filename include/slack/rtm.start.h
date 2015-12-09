@@ -16,7 +16,7 @@ namespace slack { namespace rtm
 {
 
 class start :
-        public slack::base::response2
+        public slack::base::response
 {
 public:
     //public interface

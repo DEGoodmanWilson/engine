@@ -17,7 +17,7 @@ namespace slack { namespace chat
 {
 
 class update :
-        public slack::base::response2
+        public slack::base::response
 {
 public:
     //public interface

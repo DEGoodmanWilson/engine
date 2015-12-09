@@ -16,7 +16,7 @@ namespace slack { namespace channels
 {
 
 class archive :
-        public slack::base::response2
+        public slack::base::response
 {
 public:
     //public interface

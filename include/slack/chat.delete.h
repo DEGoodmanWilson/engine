@@ -15,7 +15,7 @@
 namespace slack { namespace chat
 {
 
-class delete_it : public slack::base::response2
+class delete_it : public slack::base::response
 {
 public:
     //public interface

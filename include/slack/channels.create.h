@@ -16,7 +16,7 @@ namespace slack { namespace channels
 {
 
 class create :
-        public slack::base::response2
+        public slack::base::response
 {
 public:
     //public interface

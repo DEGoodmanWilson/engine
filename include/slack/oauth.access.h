@@ -16,7 +16,7 @@ namespace slack { namespace oauth
 {
 
 class access :
-        public slack::base::response2
+        public slack::base::response
 {
 public:
     //public interface

@@ -10,7 +10,7 @@ namespace slack_private
 const std::string HOSTNAME = "https://slack.com/api/";
 
 
-Json::Value get(slack::base::response2* obj, std::string endpoint, slack::http::params params, bool auth)
+Json::Value get(slack::base::response * obj, std::string endpoint, slack::http::params params, bool auth)
 {
     Json::Value result_ob;
 

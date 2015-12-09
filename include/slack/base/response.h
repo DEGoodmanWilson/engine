@@ -27,7 +27,7 @@ struct error
     static const std::string INVALID_RESPONSE;
 };
 
-struct response2
+struct response
 {
     std::string raw_json;
     std::experimental::optional<std::string> error_message;

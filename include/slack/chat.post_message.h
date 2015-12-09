@@ -16,7 +16,7 @@
 namespace slack { namespace chat
 {
 
-class post_message : public slack::base::response2
+class post_message : public slack::base::response
 {
 public:
     template<typename ...Os>
