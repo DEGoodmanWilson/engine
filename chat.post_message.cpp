@@ -1,5 +1,5 @@
 //
-// Copyright © 2015 Slack Technologies, Inc. All rights reserved.
+// Copyright © 2015 D.E. Goodman-Wilson. All rights reserved.
 //
 
 #include "slack/chat.post_message.h"
