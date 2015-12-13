@@ -3,79 +3,73 @@
 //
 
 #include "slack/real_time_client.h"
-#include <slack/rtm.start.h>
-#include <easywsclient/easywsclient.hpp>
 #include <thread>
 
 namespace slack
 {
 
-using client = websocketpp::client<websocketpp::config::asio_client>;
-
 // This method will block until the connection is complete
 real_time_client::real_time_client(const std::string &url)
-        : open_{false},done_{false},url_{url}
+        : wss_client_{url, false}, is_connected_{false}
 {
-    // set up access channels to only log interesting things
-    client_.clear_access_channels(websocketpp::log::alevel::all);
-    client_.set_access_channels(websocketpp::log::alevel::connect);
-    client_.set_access_channels(websocketpp::log::alevel::disconnect);
-    client_.set_access_channels(websocketpp::log::alevel::app);
-
-    // Initialize the Asio transport policy
-    client_.init_asio();
-
-    // Bind the handlers we are using
-    using websocketpp::lib::placeholders::_1;
-    using websocketpp::lib::bind;
-    client_.set_open_handler(bind(&telemetry_client::on_open, this, _1));
-    client_.set_close_handler(bind(&telemetry_client::on_close, this, _1));
-    client_.set_fail_handler(bind(&telemetry_client::on_fail, this, _1));
-
+    wss_client_.onopen = std::bind(&real_time_client::on_open_, this);
+    wss_client_.onclose = std::bind(&real_time_client::on_close_, this, std::placeholders::_1, std::placeholders::_2);
+//    wss_client_.onmessage=[&client](shared_ptr<WssClient::Message> message) {
+//        auto message_str=message->string();
+//
+//        cout << "Client: Message received: \"" << message_str << "\"" << endl;
+//
+//        cout << "Client: Sending close connection" << endl;
+//        wss_client_.send_close(1000);
+//    };
+//
+//    wss_client_.onopen=[&client]() {
+//        cout << "Client: Opened connection" << endl;
+//
+//        string message="Hello";
+//        cout << "Client: Sending message: \"" << message << "\"" << endl;
+//
+//        auto send_stream=make_shared<WssClient::SendStream>();
+//        *send_stream << message;
+//        wss_client_.send(send_stream);
+//    };
+//
+//    wss_client_.onclose=[](int status, const string& reason) {
+//        cout << "Client: Closed connection with status code " << status << endl;
+//    };
+//
+//    //See http://www.boost.org/doc/libs/1_55_0/doc/html/boost_asio/reference.html, Error Codes for error code meanings
+//    wss_client_.onerror=[](const boost::system::error_code& ec) {
+//        cout << "Client: Error: " << ec << ", error message: " << ec.message() << endl;
+//    };
 
 }
 
-real_time_client::~real_time_client()
+
+bool real_time_client::start()
 {
-    if(asio_thread_.joinable())
-        asio_thread_.join();
-    else
-        asio_thread_.detach();
-
-    if(telemetry_thread_.joinable())
-        telemetry_thread_.join();
-    else
-        telemetry_thread_.detach();
-}
-
-bool real_time_client::run();
-    // Create a new connection to the given URI
-    websocketpp::lib::error_code ec;
-    client::connection_ptr con = client_.get_connection(url_, ec);
-    if (ec)
-    {
-        client_.get_alog().write(websocketpp::log::alevel::app,
-                                  "Get Connection Error: " + ec.message());
-        return false;
-    }
-
-    // Grab a handle for this connection so we can talk to it in a thread
-    // safe manor after the event loop starts.
-    hdl_= con->get_handle();
-
-    // Queue the connection. No DNS queries or network connections will be
-    // made until the io_service event loop is run.
-    client_.connect(con);
-
-    // Create a thread to run the ASIO io_service event loop
-    asio_thread_ = {&client::run, &client_};
-
-    // Create a thread to run the telemetry loop
-    telemetry_thread_ = {&telemetry_client::telemetry_loop, this};
-
+    wss_client_.start();
     return true;
 }
 
-} //namespace slack
+
+bool real_time_client::stop()
+{
+    wss_client_.stop();
+    return true;
+}
+
+
+void real_time_client::on_open_()
+{
+    is_connected_ = true; //it's atomic, so this is ok!
+}
+
+
+void real_time_client::on_close_(int status, const std::string& reason)
+{
+    is_connected_ = false;
+    //TODO other things.
+}
 
 } //namespace slack

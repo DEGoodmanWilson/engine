@@ -9,32 +9,29 @@ set(USE_SYSTEM_CURL YES)
 add_subdirectory(cpr)
 include_directories(${CPR_INCLUDE_DIRS})
 
-#websocket
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.45.0 COMPONENTS asio)
+#websockets
+#add_subdirectory(Simple-WebSocket-Server)
+include_directories(Simple-WebSocket-Server)
 
-add_definitions(-DBOOST_NETWORK_ENABLE_HTTPS)
 
 # Boost
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_COMPONENTS system regex filesystem thread)
 find_package(Boost 1.53 REQUIRED ${Boost_COMPONENTS})
+include_directories(${Boost_INCLUDE_DIR})
 
 
 # OpenSSL
 #set(OPENSSL_ROOT_DIR /usr/local/Cellar/openssl/1.0.2d_1/)
 #find_package(OpenSSL 1.0.2 REQUIRED)
 # OpenSSL, because brew.
-set(OPENSSL_INCLUDE_DIR /usr/local/Cellar/openssl/1.0.2d_1/include)
-set(OPENSSL_LIB_DIR /usr/local/Cellar/openssl/1.0.2d_1/lib)
+set(OPENSSL_INCLUDE_DIR /usr/local/opt/openssl/include)
+set(OPENSSL_LIB_DIR /usr/local/opt/openssl/lib)
 set(OPENSSL_LIBRARIES ssl crypto)
+include_directories(${OPENSSL_INCLUDE_DIR})
 link_directories(${OPENSSL_LIB_DIR})
 
-#simple-web-socket
-set(SIMPLEWEB_INCLUDE_DIR SimpleWeb)
 
 #jsoncpp
 set(JSONCPP_INCLUDE_DIR jsoncpp)
@@ -97,7 +94,7 @@ set(ENGINE_FILES
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 
-target_link_libraries(engine cpr simple-web-socket)
+target_link_libraries(engine cpr ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES})
 
 set(ENGINE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "")
 set(ENGINE_LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "")
