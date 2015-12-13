@@ -14,6 +14,8 @@ real_time_client::real_time_client(const std::string &url)
 {
     wss_client_.onopen = std::bind(&real_time_client::on_open_, this);
     wss_client_.onclose = std::bind(&real_time_client::on_close_, this, std::placeholders::_1, std::placeholders::_2);
+    wss_client_.onerror = std::bind(&real_time_client::on_error_, this, std::placeholders::_1);
+    wss_client_.onmessage = std::bind(&real_time_client::on_message_, this, std::placeholders::_1);
 //    wss_client_.onmessage=[&client](shared_ptr<WssClient::Message> message) {
 //        auto message_str=message->string();
 //
@@ -46,17 +48,15 @@ real_time_client::real_time_client(const std::string &url)
 }
 
 
-bool real_time_client::start()
+void real_time_client::start()
 {
     wss_client_.start();
-    return true;
 }
 
 
-bool real_time_client::stop()
+void real_time_client::stop()
 {
     wss_client_.stop();
-    return true;
 }
 
 
@@ -70,6 +70,18 @@ void real_time_client::on_close_(int status, const std::string& reason)
 {
     is_connected_ = false;
     //TODO other things.
+}
+
+
+void real_time_client::on_error_(const boost::system::error_code &error_code)
+{
+
+}
+
+
+void real_time_client::on_message_(std::shared_ptr<WssClient::Message> message)
+{
+
 }
 
 } //namespace slack
