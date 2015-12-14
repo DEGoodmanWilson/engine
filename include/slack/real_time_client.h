@@ -39,7 +39,8 @@ public:
     void stop();
 
     //TODO use something more sophisticated here?
-//    void register_callback(real_time_message_types type, std::function<void(const message&)>> handler);
+    void register_callback(real_time_message_types type, std::function<void(const slack::message&)> handler);
+    bool post_message(message mesg);
 
 protected:
     friend class SimpleWeb::SocketClient<SimpleWeb::WSS>;
@@ -52,6 +53,7 @@ private:
     WssClient wss_client_;
     std::atomic<bool> is_connected_;
     std::thread ping_thread_;
+    std::map<real_time_message_types, std::function<void(const message&)>> handlers_;
 };
 
 }

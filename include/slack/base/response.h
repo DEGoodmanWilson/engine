@@ -38,5 +38,6 @@ struct response
     }
 };
 
+
 } //namespace base
 } //namespace slack

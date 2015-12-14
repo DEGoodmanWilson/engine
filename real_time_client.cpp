@@ -63,6 +63,7 @@ void real_time_client::stop()
 void real_time_client::on_open_()
 {
     is_connected_ = true; //it's atomic, so this is ok!
+    // And start the ping thread
 }
 
 
@@ -70,18 +71,26 @@ void real_time_client::on_close_(int status, const std::string& reason)
 {
     is_connected_ = false;
     //TODO other things.
+    // and stop the ping thread
 }
 
 
 void real_time_client::on_error_(const boost::system::error_code &error_code)
 {
-
+    //TODO
+    std::cout << error_code << std::endl;
 }
 
 
-void real_time_client::on_message_(std::shared_ptr<WssClient::Message> message)
+void real_time_client::on_message_(std::shared_ptr<WssClient::Message> mesg)
 {
-
+//    //TODO this is where the rubber meets the road
+//    std::cout << mesg->string() << std::endl;
+//    message parsed_message{mesg->string()};
+//    if(handlers_.at(parsed_message.type))
+//    {
+//        handlers_[parsed_message.type](parsed_message);
+//    }
 }
 
 } //namespace slack

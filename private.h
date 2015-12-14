@@ -12,6 +12,8 @@
 namespace slack_private
 {
 
+Json::Value parse(const std::string &json);
+
 Json::Value get(slack::base::response *obj, std::string endpoint, slack::http::params params, bool auth = true);
 
 struct json_impl

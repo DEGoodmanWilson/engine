@@ -51,6 +51,8 @@ set(ENGINE_FILES
         include/slack/slack.h
         types.cpp
         include/slack/types.h
+        include/slack/event.h
+        event.cpp
         include/slack/config.h
         config.h
         config.cpp
