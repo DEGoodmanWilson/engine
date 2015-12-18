@@ -3,16 +3,26 @@
 //
 
 #include "slack/event.h"
+#include "private.h"
 #include <json/json.h>
 
 namespace slack { namespace event
 {
 
-template<>
-user_typing::user_typing(const Json::Value &parsed_json)
+void initialize_events(void)
 {
-    if (parsed_json["channel"].isString()) channel = channel_id{parsed_json["channel"].asString()};
-    if (parsed_json[""].isString()) user = user_id{parsed_json["user"].asString()};
+    //This is the tedious bit
+
+    slack_private::events_factory.register_type<hello>(hello::type, [](const Json::Value& root)
+    {
+        return std::make_shared<hello>();
+    });
+
+    slack_private::events_factory.register_type<user_typing>(user_typing::type, [](const Json::Value& root)
+    {
+        return std::make_shared<user_typing>(root);
+    });
 }
+
 
 }} //namespace events slack

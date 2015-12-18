@@ -51,8 +51,6 @@ set(ENGINE_FILES
         include/slack/slack.h
         types.cpp
         include/slack/types.h
-        include/slack/event.h
-        event.cpp
         include/slack/config.h
         config.h
         config.cpp
@@ -92,7 +90,12 @@ set(ENGINE_FILES
         include/slack/incoming_webhook.h
         real_time_client.cpp
         include/slack/real_time_client.h
-        )
+        event.cpp
+        include/slack/base/event.h
+        include/slack/event/hello.h
+        event/hello.cpp
+        event/user_typing.cpp include/slack/event/user_typing.h
+        include/slack/event.h)
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 

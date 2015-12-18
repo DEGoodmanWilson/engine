@@ -4,27 +4,18 @@
 
 #pragma once
 
-#include <slack/types.h>
-#include <slack/base/response.h>
-#include <string>
-#include <slack/optional.hpp>
+#include <slack/base/event.h>
+#include <slack/event/hello.h>
+#include <slack/event/user_typing.h>
 
 namespace slack { namespace event
 {
 
-struct hello
+template<class T>
+std::shared_ptr<T> cast(std::shared_ptr<base::event> event)
 {
-};
+    static_assert(std::is_base_of<base::event, T>::value, "Not a type derived from event");
+    return std::dynamic_pointer_cast<T>(event);
+}
 
-struct user_typing
-{
-    user_typing() = default;
-    template<class json>
-    user_typing(const json &parsed_json);
-
-    std::experimental::optional<channel_id> channel;
-    std::experimental::optional<user_id> user;
-};
-
-
-}} //namespace events
+}} //namespace event slack

@@ -3,48 +3,33 @@
 //
 
 #include "slack/real_time_client.h"
+#include "private.h"
 #include <thread>
+#include <json/json.h>
 
 namespace slack
 {
 
+namespace event
+{
+void initialize_events(void); //declared in event.cpp
+}
+
+void real_time_client::initialize_(void)
+{
+    event::initialize_events();
+}
+
 // This method will block until the connection is complete
 real_time_client::real_time_client(const std::string &url)
-        : wss_client_{url, false}, is_connected_{false}
+        : wss_client_{std::string{url}.erase(0,6), false}, is_connected_{false}
 {
     wss_client_.onopen = std::bind(&real_time_client::on_open_, this);
     wss_client_.onclose = std::bind(&real_time_client::on_close_, this, std::placeholders::_1, std::placeholders::_2);
     wss_client_.onerror = std::bind(&real_time_client::on_error_, this, std::placeholders::_1);
     wss_client_.onmessage = std::bind(&real_time_client::on_message_, this, std::placeholders::_1);
-//    wss_client_.onmessage=[&client](shared_ptr<WssClient::Message> message) {
-//        auto message_str=message->string();
-//
-//        cout << "Client: Message received: \"" << message_str << "\"" << endl;
-//
-//        cout << "Client: Sending close connection" << endl;
-//        wss_client_.send_close(1000);
-//    };
-//
-//    wss_client_.onopen=[&client]() {
-//        cout << "Client: Opened connection" << endl;
-//
-//        string message="Hello";
-//        cout << "Client: Sending message: \"" << message << "\"" << endl;
-//
-//        auto send_stream=make_shared<WssClient::SendStream>();
-//        *send_stream << message;
-//        wss_client_.send(send_stream);
-//    };
-//
-//    wss_client_.onclose=[](int status, const string& reason) {
-//        cout << "Client: Closed connection with status code " << status << endl;
-//    };
-//
-//    //See http://www.boost.org/doc/libs/1_55_0/doc/html/boost_asio/reference.html, Error Codes for error code meanings
-//    wss_client_.onerror=[](const boost::system::error_code& ec) {
-//        cout << "Client: Error: " << ec << ", error message: " << ec.message() << endl;
-//    };
 
+    initialize_();
 }
 
 
@@ -84,13 +69,42 @@ void real_time_client::on_error_(const boost::system::error_code &error_code)
 
 void real_time_client::on_message_(std::shared_ptr<WssClient::Message> mesg)
 {
-//    //TODO this is where the rubber meets the road
-//    std::cout << mesg->string() << std::endl;
-//    message parsed_message{mesg->string()};
-//    if(handlers_.at(parsed_message.type))
-//    {
-//        handlers_[parsed_message.type](parsed_message);
-//    }
+    handle_event_from_slack(mesg->string());
 }
 
+void real_time_client::handle_event_from_slack(const std::string &event_str)
+{
+    //TODO this is where the rubber meets the road
+    std::cout << event_str << std::endl;
+
+    Json::Value result_ob;
+    Json::Reader reader;
+    bool parsed_success = reader.parse(event_str, result_ob, false);
+    if (!parsed_success)
+    {
+        //TODO
+        return;
+    }
+
+    std::string type = result_ob["type"].asString();
+    auto event = slack_private::events_factory.create(type, result_ob);
+
+    if(handlers_.at(type))
+    {
+        handlers_[type](event);
+    }
+}
+
+
+void real_time_client::register_event_handler(const std::string &type, event_handler handler)
+{
+    handlers_[type] = handler;
+}
+
+
+bool real_time_client::post_event_to_slack(std::shared_ptr<base::event> event)
+{
+    //TODO
+    return false;
+}
 } //namespace slack

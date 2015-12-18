@@ -42,18 +42,17 @@ set_target_properties(GTestMain PROPERTIES
 add_dependencies(GTest GTestMain)
 
 
-
-
 add_executable(engine_tests
         main.cpp
-        types.cpp
-        api.cpp
-        auth.cpp
-        channels.cpp
-        chat.cpp
+#        types.cpp
+#        api.cpp
+#        auth.cpp
+#        channels.cpp
+#        chat.cpp
+#        oauth.cpp
+#        rtm.cpp
         real_time_client.cpp
-        oauth.cpp
-    )
+        )
 
 add_dependencies(engine_tests GTestExternal engine)
 
@@ -65,6 +64,5 @@ target_link_libraries(engine_tests
         GTestMain
         ${CPR_LIBRARIES}
         ${OPENSSL_LIBRARIES}
-        curl
         engine
         )

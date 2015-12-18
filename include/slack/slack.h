@@ -20,3 +20,5 @@
 #include <slack/chat.update.h>
 #include <slack/rtm.start.h>
 #include <slack/oauth.access.h>
+#include <slack/event.h>
+#include <slack/real_time_client.h>

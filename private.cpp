@@ -61,5 +61,6 @@ Json::Value get(slack::base::response *obj, std::string endpoint, slack::http::p
     return parse(obj, response.body);
 }
 
+factory<slack::base::event> events_factory;
 
 } //namespace slack_private
