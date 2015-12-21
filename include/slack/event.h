@@ -27,8 +27,7 @@ public:
 
     void call(std::shared_ptr<slack::base::event> event)
     {
-        auto event_cast = std::static_pointer_cast<std::shared_ptr<EventT>>(event);
-        function_(event_cast);
+        function_(std::static_pointer_cast<EventT>(event));
     }
 
 private:
