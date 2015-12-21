@@ -6,12 +6,35 @@
 #include "private.h"
 #include <json/json.h>
 
+
 namespace slack { namespace event
 {
+
+event_handler::~event_handler()
+{
+    handler_map::iterator it = handlers_.begin();
+    while(it != handlers_.end())
+    {
+        delete it->second;
+        ++it;
+    }
+    handlers_.clear();
+}
+
+void event_handler::handle_event(std::shared_ptr<base::event> event)
+{
+
+    auto it = handlers_.find(type_info(typeid(*event)));
+    if(it != handlers_.end())
+    {
+        it->second->exec(event);
+    }
+}
 
 void initialize_events(void)
 {
     //This is the tedious bit
+    //TODO do we need this?
 
     slack_private::events_factory.register_type<hello>(hello::type, [](const Json::Value& root)
     {
@@ -23,6 +46,5 @@ void initialize_events(void)
         return std::make_shared<user_typing>(root);
     });
 }
-
 
 }} //namespace events slack

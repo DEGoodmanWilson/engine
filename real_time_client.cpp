@@ -89,18 +89,8 @@ void real_time_client::handle_event_from_slack(const std::string &event_str)
     std::string type = result_ob["type"].asString();
     auto event = slack_private::events_factory.create(type, result_ob);
 
-    if(handlers_.at(type))
-    {
-        handlers_[type](event);
-    }
+    handle_event(event);
 }
-
-
-void real_time_client::register_event_handler(const std::string &type, event_handler handler)
-{
-    handlers_[type] = handler;
-}
-
 
 bool real_time_client::post_event_to_slack(std::shared_ptr<base::event> event)
 {

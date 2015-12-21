@@ -19,9 +19,8 @@
 namespace slack
 {
 using WssClient = SimpleWeb::SocketClient<SimpleWeb::WSS>;
-using event_handler = std::function<void(std::shared_ptr<base::event>)>;
 
-class real_time_client
+class real_time_client : public event::event_handler
 {
 public:
 //    real_time_client(); //do this later
@@ -31,9 +30,6 @@ public:
     void start();
 
     void stop();
-
-    //TODO use something more sophisticated here?
-    void register_event_handler(const std::string &type, event_handler handler);
 
     void handle_event_from_slack(const std::string& event_str);
 
@@ -54,7 +50,6 @@ private:
     WssClient wss_client_;
     std::atomic<bool> is_connected_;
     std::thread ping_thread_;
-    std::map<std::string, event_handler> handlers_;
 
     void initialize_(void);
 };
