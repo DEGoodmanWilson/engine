@@ -10,17 +10,6 @@
 namespace slack { namespace event
 {
 
-event_handler::~event_handler()
-{
-    handler_map::iterator it = handlers_.begin();
-    while(it != handlers_.end())
-    {
-        delete it->second;
-        ++it;
-    }
-    handlers_.clear();
-}
-
 void event_handler::handle_event(std::shared_ptr<base::event> event)
 {
 

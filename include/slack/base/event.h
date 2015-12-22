@@ -14,7 +14,7 @@ struct event
 {
     //This space left intentionally blank
     event() = default;
-    virtual ~event() {}
+    virtual ~event() = default;
 };
 
 /***
@@ -24,7 +24,7 @@ struct event
 class event_handler_callback
 {
 public:
-    virtual ~event_handler_callback() {};
+    virtual ~event_handler_callback() = default;
     void exec(std::shared_ptr<slack::base::event> event) {call(event);}
 
 private:

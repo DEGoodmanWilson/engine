@@ -19,11 +19,13 @@ namespace slack { namespace event
  * Adapted from http://www.gamedev.net/page/resources/_/technical/game-programming/effective-event-handling-in-c-r2459
  */
 
-template <class EventT>
-class event_handler_callback_template : public base::event_handler_callback
+template<class EventT>
+class event_handler_callback_template :
+        public base::event_handler_callback
 {
 public:
-    event_handler_callback_template(std::function<void(std::shared_ptr<EventT>)> memFn) : function_(memFn) {};
+    event_handler_callback_template(std::function<void(std::shared_ptr<EventT>)> memFn) : function_(memFn)
+    { };
 
     void call(std::shared_ptr<slack::base::event> event)
     {
@@ -37,22 +39,24 @@ private:
 class event_handler
 {
 public:
-    ~event_handler();
+    virtual ~event_handler() = default;
+
     void handle_event(std::shared_ptr<slack::base::event> event);
 
-    template <class EventT>
+    template<class EventT>
     void register_event_handler(std::function<void(std::shared_ptr<EventT>)>);
 
 private:
-    using handler_map = std::map<type_info, base::event_handler_callback*>; //TODO make unique_ptr!
+    using handler_map = std::map<type_info, std::unique_ptr<base::event_handler_callback>>; //TODO make unique_ptr!
     handler_map handlers_;
 };
 
 
-template <class EventT>
+template<class EventT>
 void event_handler::register_event_handler(std::function<void(std::shared_ptr<EventT>)> func)
 {
-    handlers_[type_info(typeid(EventT))]= new event_handler_callback_template<EventT>(func);
+    handlers_[type_info(typeid(EventT))] = std::unique_ptr<base::event_handler_callback>{
+            new event_handler_callback_template<EventT>(func)};
 }
 
 }} //namespace event slack
