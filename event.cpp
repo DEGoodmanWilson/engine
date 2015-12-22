@@ -25,12 +25,12 @@ void initialize_events(void)
     //This is the tedious bit
     //TODO do we need this?
 
-    slack_private::events_factory.register_type<hello>(hello::type, [](const Json::Value& root)
+    slack_private::events_factory.register_type<hello>(hello::event_name, [](const Json::Value& root)
     {
         return std::make_shared<hello>();
     });
 
-    slack_private::events_factory.register_type<user_typing>(user_typing::type, [](const Json::Value& root)
+    slack_private::events_factory.register_type<user_typing>(user_typing::event_name, [](const Json::Value& root)
     {
         return std::make_shared<user_typing>(root);
     });
