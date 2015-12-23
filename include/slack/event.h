@@ -45,6 +45,8 @@ public:
 
     template<class EventT>
     void register_event_handler(std::function<void(std::shared_ptr<EventT>)>);
+    template<class EventT>
+    void deregister_event_handler();
 
 private:
     using handler_map = std::map<std::type_index, std::unique_ptr<base::event_handler_callback>>; //TODO make unique_ptr!
@@ -57,6 +59,13 @@ void event_handler::register_event_handler(std::function<void(std::shared_ptr<Ev
 {
     handlers_[std::type_index{typeid(EventT)}] = std::unique_ptr<base::event_handler_callback>{
             new event_handler_callback_template<EventT>(func)};
+}
+
+//This feels...hackish? But it should work.
+template <class EventT>
+void event_handler::deregister_event_handler()
+{
+    handlers_.erase(std::type_index{typeid(EventT)});
 }
 
 }} //namespace event slack
