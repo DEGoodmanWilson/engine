@@ -98,7 +98,7 @@ set(ENGINE_FILES
         include/slack/event/user_typing.h
         include/slack/event.h
         include/slack/websocket.h
-        )
+        websocket.cpp)
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 

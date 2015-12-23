@@ -36,4 +36,23 @@ public:
     virtual void send_message(const std::string &message) = 0;
 };
 
+//TODO if def this!
+// This is a wrapper class around Simple-Websocket-Server that clients can use if they like
+class simple_websocket : public websocket
+{
+
+public:
+    simple_websocket();
+
+    virtual void open(const std::string &url) override;
+
+    virtual void close() override;
+
+    virtual void send_message(const std::string &message) override;
+
+private:
+    class simple_websocket_impl;
+    std::unique_ptr<simple_websocket_impl> impl_;
+};
+
 } //namespace slack
