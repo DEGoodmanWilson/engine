@@ -5,35 +5,39 @@
 #include <gtest/gtest.h>
 #include <slack/slack.h>
 #include <cpr.h>
+#include <Simple-WebSocket-Server/client_wss.hpp>
 
 class Environment :
         public ::testing::Environment
 {
+public:
     virtual void SetUp() override
     {
-        slack::http::get = [](std::string url, slack::http::params params) -> slack::http::response {
-            cpr::Parameters p;
-            for (auto &kv : params)
-            {
-                p.AddParameter({kv.first, kv.second});
-            }
+//        //set up HTTP client
+//        slack::http::get = [](std::string url, slack::http::params params) -> slack::http::response {
+//            cpr::Parameters p;
+//            for (auto &kv : params)
+//            {
+//                p.AddParameter({kv.first, kv.second});
+//            }
+//
+//            auto response = cpr::Get(cpr::Url{url}, p);
+//
+//            return {static_cast<uint32_t>(response.status_code), response.text};
+//        };
+//
+//        slack::http::post = [](std::string url, slack::http::params params) -> slack::http::response {
+//            cpr::Parameters p;
+//            for (auto &kv : params)
+//            {
+//                p.AddParameter({kv.first, kv.second});
+//            }
+//
+//            auto response = cpr::Post(cpr::Url{url}, p);
+//
+//            return {static_cast<uint32_t>(response.status_code), response.text};
+//        };
 
-            auto response = cpr::Get(cpr::Url{url}, p);
-
-            return {static_cast<uint32_t>(response.status_code), response.text};
-        };
-
-        slack::http::post = [](std::string url, slack::http::params params) -> slack::http::response {
-            cpr::Parameters p;
-            for (auto &kv : params)
-            {
-                p.AddParameter({kv.first, kv.second});
-            }
-
-            auto response = cpr::Post(cpr::Url{url}, p);
-
-            return {static_cast<uint32_t>(response.status_code), response.text};
-        };
 
     }
 
@@ -41,6 +45,9 @@ class Environment :
     {
     }
 
+private:
+    std::unique_ptr<SimpleWeb::SocketClient<SimpleWeb::WSS>> wss_client_;
+    std::unique_ptr<slack::real_time_client> rtm_client;
 };
 
 std::string token;

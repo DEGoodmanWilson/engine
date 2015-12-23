@@ -94,8 +94,11 @@ set(ENGINE_FILES
         include/slack/base/event.h
         include/slack/event/hello.h
         event/hello.cpp
-        event/user_typing.cpp include/slack/event/user_typing.h
-        include/slack/event.h include/slack/type_info.h)
+        event/user_typing.cpp
+        include/slack/event/user_typing.h
+        include/slack/event.h
+        include/slack/websocket.h
+        )
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 

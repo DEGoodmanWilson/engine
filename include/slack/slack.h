@@ -9,6 +9,7 @@
 #include <slack/attachment.h>
 #include <slack/incoming_webhook.h>
 #include <slack/http.h>
+#include <slack/websocket.h>
 #include <slack/api.test.h>
 #include <slack/auth.test.h>
 #include <slack/channels.list.h>
