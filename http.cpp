@@ -8,6 +8,7 @@
 namespace slack { namespace http
 {
 
+//TODO ifdef this. Also, this doesn't actually work like I think it does. So.
 std::function<response(std::string url, params)> get = [](std::string url,
                                                           slack::http::params params) -> slack::http::response {
     cpr::Parameters p;
