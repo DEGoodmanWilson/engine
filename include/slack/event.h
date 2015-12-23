@@ -5,7 +5,7 @@
 #pragma once
 
 #include <slack/base/event.h>
-#include <slack/type_info.h>
+#include <typeindex>
 #include <map>
 
 
@@ -47,7 +47,7 @@ public:
     void register_event_handler(std::function<void(std::shared_ptr<EventT>)>);
 
 private:
-    using handler_map = std::map<type_info, std::unique_ptr<base::event_handler_callback>>; //TODO make unique_ptr!
+    using handler_map = std::map<std::type_index, std::unique_ptr<base::event_handler_callback>>; //TODO make unique_ptr!
     handler_map handlers_;
 };
 
@@ -55,7 +55,7 @@ private:
 template<class EventT>
 void event_handler::register_event_handler(std::function<void(std::shared_ptr<EventT>)> func)
 {
-    handlers_[type_info(typeid(EventT))] = std::unique_ptr<base::event_handler_callback>{
+    handlers_[std::type_index{typeid(EventT)}] = std::unique_ptr<base::event_handler_callback>{
             new event_handler_callback_template<EventT>(func)};
 }
 

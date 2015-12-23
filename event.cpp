@@ -13,7 +13,7 @@ namespace slack { namespace event
 void event_handler::handle_event(std::shared_ptr<base::event> event)
 {
 
-    auto it = handlers_.find(type_info(typeid(*event)));
+    auto it = handlers_.find(std::type_index{typeid(*event)});
     if(it != handlers_.end())
     {
         it->second->exec(event);
