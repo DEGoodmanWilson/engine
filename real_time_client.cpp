@@ -20,7 +20,7 @@ void initialize_events(void); //declared in event.cpp
 
 // This method will block until the connection is complete
 real_time_client::real_time_client(std::shared_ptr<websocket> socket)
-        : socket_{std::move(socket)}, is_connected_{false}, is_socket_thread_running{false}
+        : socket_{std::move(socket)}, is_connected_{false}
 {
     event::initialize_events();
 
@@ -44,17 +44,6 @@ void real_time_client::start()
 }
 
 
-void real_time_client::start_async()
-{
-    if (is_socket_thread_running) return;
-
-    socket_thread_ = std::thread{[this]() {
-        is_socket_thread_running = true;
-        socket_->start();
-        is_socket_thread_running = false;
-    }};
-}
-
 void real_time_client::stop()
 {
     socket_->stop();
@@ -62,11 +51,6 @@ void real_time_client::stop()
     is_connected_ = false; //just jumpstart that
     ping_cv_.notify_all(); //they're waiting on it!
     std::cout << "Disconnecting" << std::endl;
-
-    if (socket_thread_.joinable())
-    {
-        socket_thread_.join();
-    }
 
     if (ping_thread_.joinable())
     {
@@ -86,10 +70,8 @@ void real_time_client::on_connect_()
 
 void real_time_client::on_close_(websocket::close_reason reason)
 {
-    is_connected_ = false; //this _shoud_ stop the ping thread
-    ping_cv_.notify_all(); //they're waiting on it!
     std::cout << "Close!" << std::endl;
-    //TODO other things. This function is a bit messed up. Should we call stop?
+    stop();
 }
 
 
@@ -109,8 +91,10 @@ void real_time_client::ping_worker_()
         std::cout << "Ping! " << std::endl;
 
         //TODO be better about how this is done.
-        socket_->send_message("{\"id\": 1234, \"type\": \"ping\"}");
-
+        if(this->is_connected_)
+        {
+            socket_->send_message("{\"id\": 1234, \"type\": \"ping\"}");
+        }
         lk.unlock();
     }
     std::cout << "Ping thread stopping" << std::endl;

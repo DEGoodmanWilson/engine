@@ -26,7 +26,6 @@ public:
     ~real_time_client();
 
     void start();
-    void start_async();
     void stop();
 
     //Method to send a message to Slack
@@ -44,10 +43,6 @@ private:
     std::shared_ptr<websocket> socket_;
 
     bool is_connected_; //it's already atomic
-
-    std::mutex socket_mutex_;
-    bool is_socket_thread_running;
-    std::thread socket_thread_;
 
     void ping_worker_();
     std::mutex ping_mutex_;
