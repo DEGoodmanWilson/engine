@@ -21,16 +21,16 @@ namespace slack
 class real_time_client : public event::event_handler
 {
 public:
-    real_time_client(std::shared_ptr<websocket> socket, const std::string &url);
+    real_time_client(std::shared_ptr<websocket> socket);
 
-    //Methods to be invoked by the client websocket implementation
-
+    void start(); //TODO this is blocking, and should be put into a background thread. Who should be responsible for that? us? YES
+    void stop();
 
     //Method to send a message to Slack
 //    void send_message(const slack::event::message& message);
 
 private:
-    void on_open_();
+    void on_connect_();
 
     void on_close_(websocket::close_reason reason);
 

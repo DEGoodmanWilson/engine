@@ -19,43 +19,46 @@ class simple_websocket::simple_websocket_impl :
 
 
 public:
-    simple_websocket_impl(simple_websocket *delegate) : delegate_(delegate)
-    { }
-
-
-    virtual void open(const std::string &url) override
+    simple_websocket_impl(const std::string &url, simple_websocket *delegate) :
+            wss_client_{std::string{url}.erase(0, 6)},
+            delegate_{delegate}
     {
-        wss_client_ = std::make_unique<WssClient>(std::string{url}.erase(0, 6));
-        wss_client_->onopen = std::bind(&simple_websocket_impl::on_open_, this);
-        wss_client_->onclose = std::bind(&simple_websocket_impl::on_close_,
+        wss_client_.onopen = std::bind(&simple_websocket_impl::on_connect_, this);
+        wss_client_.onclose = std::bind(&simple_websocket_impl::on_close_,
                                          this,
                                          std::placeholders::_1,
                                          std::placeholders::_2);
-        wss_client_->onerror = std::bind(&simple_websocket_impl::on_error_, this, std::placeholders::_1);
-        wss_client_->onmessage = std::bind(&simple_websocket_impl::on_message_, this, std::placeholders::_1);
+        wss_client_.onerror = std::bind(&simple_websocket_impl::on_error_, this, std::placeholders::_1);
+        wss_client_.onmessage = std::bind(&simple_websocket_impl::on_message_, this, std::placeholders::_1);
     }
 
-    virtual void close() override
+
+    virtual void start() override
     {
-        wss_client_.reset();
+        wss_client_.start();
+    }
+
+    virtual void stop() override
+    {
+        wss_client_.stop();
     }
 
     virtual void send_message(const std::string &message) override
     {
         auto send_stream = std::make_shared<WssClient::SendStream>();
         *send_stream << message;
-        wss_client_->send(send_stream);
+        wss_client_.send(send_stream);
     }
 
 
 private:
     simple_websocket *delegate_;
 
-    void on_open_()
+    void on_connect_()
     {
-        if (delegate_->on_open)
+        if (delegate_->on_connect)
         {
-            delegate_->on_open();
+            delegate_->on_connect();
         }
     }
 
@@ -88,22 +91,24 @@ private:
         }
     }
 
-    std::unique_ptr<WssClient> wss_client_;
+    WssClient wss_client_;
 };
 
 
-simple_websocket::simple_websocket()
-        : impl_{new simple_websocket_impl{this}}
+simple_websocket::simple_websocket(const std::string &url)
+        : impl_{new simple_websocket_impl{url, this}}
 { }
 
-void slack::simple_websocket::open(const std::string &url)
+simple_websocket::~simple_websocket() = default;
+
+void slack::simple_websocket::start()
 {
-    impl_->open(url);
+    impl_->start();
 }
 
-void slack::simple_websocket::close()
+void slack::simple_websocket::stop()
 {
-    impl_->close();
+    impl_->stop();
 }
 
 void slack::simple_websocket::send_message(const std::string &message)

@@ -19,20 +19,29 @@ void initialize_events(void); //declared in event.cpp
 }
 
 // This method will block until the connection is complete
-real_time_client::real_time_client(std::shared_ptr<websocket> socket, const std::string &url)
+real_time_client::real_time_client(std::shared_ptr<websocket> socket)
         : socket_{std::move(socket)}, is_connected_{false}
 {
     event::initialize_events();
 
-    socket_->on_open = std::bind(&real_time_client::on_open_, this);
+    socket_->on_connect = std::bind(&real_time_client::on_connect_, this);
     socket_->on_close = std::bind(&real_time_client::on_close_, this, std::placeholders::_1);
     socket_->on_error = std::bind(&real_time_client::on_error_, this, std::placeholders::_1);
     socket_->on_message = std::bind(&real_time_client::on_message_, this, std::placeholders::_1);
-
-    socket_->open(url);
 }
 
-void real_time_client::on_open_()
+
+void real_time_client::start()
+{
+    socket_->start();
+}
+
+void real_time_client::stop()
+{
+    socket_->stop();
+}
+
+void real_time_client::on_connect_()
 {
     is_connected_ = true; //it's atomic, so this is ok!
     // TODO And start the ping thread
