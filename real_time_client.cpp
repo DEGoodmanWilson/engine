@@ -33,6 +33,8 @@ real_time_client::real_time_client(std::shared_ptr<websocket> socket)
 
 real_time_client::~real_time_client()
 {
+    std::cout << "D'TOR" << std::endl;
+
     stop();
 }
 
@@ -44,48 +46,81 @@ void real_time_client::start()
 
 void real_time_client::start_async()
 {
-    if(is_socket_thread_running) return;
+    if (is_socket_thread_running) return;
 
     socket_thread_ = std::thread{[this]() {
         is_socket_thread_running = true;
         socket_->start();
+        is_socket_thread_running = false;
     }};
 }
 
 void real_time_client::stop()
 {
     //TODO stop ping!
+    std::cout << "STOP. " << ping_thread_.joinable() << std::endl;
+
+    if(!is_connected_)
+    {
+        std::cout << "   our job is done here" << std::endl;
+        return;
+    }
 
     socket_->stop();
 
-    if (is_socket_thread_running && socket_thread_.joinable())
+    is_connected_ = false; //just jumpstart that
+
+    if (socket_thread_.joinable())
     {
-        std::lock_guard<std::mutex> lock{socket_mutex_};
-
-        is_socket_thread_running = false;
-
+        std::cout << "JOIN 1" << std::endl;
         socket_thread_.join();
     }
 
+    if (ping_thread_.joinable())
+    {
+        std::cout << "JOIN 2" << std::endl;
+        ping_thread_.join();
+    }
 }
 
 void real_time_client::on_connect_()
 {
     is_connected_ = true; //it's atomic, so this is ok!
-    // TODO And start the ping thread
+    std::cout << "Connect!" << std::endl;
+    // Start the ping thread
+    //TODO don't like this being a lambda
+    ping_thread_ = std::thread{std::bind(&real_time_client::ping_worker_, this)};
 }
 
 
 void real_time_client::on_close_(websocket::close_reason reason)
 {
-    is_connected_ = false;
-    //TODO other things.
-    // and stop the ping thread
+    is_connected_ = false; //this _shoud_ stop the ping thread
+    std::cout << "Close!" << std::endl;
+    //TODO other things. This function is a bit messed up. Should we call stop?
 }
 
 
+void real_time_client::ping_worker_()
+{
+    while (is_connected_)
+    {
+        std::unique_lock<std::mutex> lk{ping_mutex_};
+        ping_cv_.wait_for(lk, std::chrono::milliseconds(5000), [this] {
+            return !(this->is_connected_);
+        });
+
+        std::cout << "Ping! " << std::endl;
+        //TODO SEND THE DAMNED PING!
+
+        lk.unlock();
+    }
+    std::cout << "Ping thread stopping" << std::endl;
+}
+
 void real_time_client::on_error_(websocket::error_code error)
 {
+    std::cout << "Error!" << std::endl;
     //TODO
 }
 
@@ -93,6 +128,7 @@ void real_time_client::on_error_(websocket::error_code error)
 void real_time_client::on_message_(const std::string &message)
 {
     //TODO this is where the rubber meets the road
+    std::cout << "Message! " << message << std::endl;
 
     Json::Value result_ob;
     Json::Reader reader;

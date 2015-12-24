@@ -41,15 +41,17 @@ private:
 
     void on_message_(const std::string &message);
 
-
     std::shared_ptr<websocket> socket_;
 
-    std::atomic<bool> is_connected_;
+    bool is_connected_; //it's already atomic
 
     std::mutex socket_mutex_;
-    std::atomic<bool> is_socket_thread_running;
+    bool is_socket_thread_running;
     std::thread socket_thread_;
 
+    void ping_worker_();
+    std::mutex ping_mutex_;
+    std::condition_variable ping_cv_;
     std::thread ping_thread_;
 };
 
