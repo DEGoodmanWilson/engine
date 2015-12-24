@@ -20,7 +20,7 @@ class simple_websocket::simple_websocket_impl :
 
 public:
     simple_websocket_impl(const std::string &url, simple_websocket *delegate) :
-            wss_client_{std::string{url}.erase(0, 6)},
+            wss_client_{std::string{url}.erase(0, 6), false}, //TODO MAKE THIS TRUE!
             delegate_{delegate}
     {
         wss_client_.onopen = std::bind(&simple_websocket_impl::on_connect_, this);

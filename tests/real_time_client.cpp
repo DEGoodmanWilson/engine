@@ -82,6 +82,8 @@ TEST(rtm, actually_connect)
         ASSERT_TRUE(static_cast<bool>(event));
         client.stop();
     });
+
+    client.start();
 }
 
 //TODO tests for real time pinging!
