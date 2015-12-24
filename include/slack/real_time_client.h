@@ -11,6 +11,7 @@
 #include <memory>
 #include <functional>
 #include <thread>
+#include <mutex>
 #include "websocket.h"
 
 // We need to think very carefully about the threading model. Who owns the thread?
@@ -45,7 +46,10 @@ private:
 
     std::atomic<bool> is_connected_;
 
+    std::mutex socket_mutex_;
+    std::atomic<bool> is_socket_thread_running;
     std::thread socket_thread_;
+
     std::thread ping_thread_;
 };
 
