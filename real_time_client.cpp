@@ -31,14 +31,34 @@ real_time_client::real_time_client(std::shared_ptr<websocket> socket)
 }
 
 
+real_time_client::~real_time_client()
+{
+    stop();
+}
+
 void real_time_client::start()
 {
     socket_->start();
 }
 
+
+void real_time_client::start_async()
+{
+    socket_thread_ = std::thread{[this]() {
+        socket_->start();
+    }};
+}
+
 void real_time_client::stop()
 {
+    //TODO stop ping!
+
     socket_->stop();
+
+    if (socket_thread_.joinable())
+    {
+        socket_thread_.join();
+    }
 }
 
 void real_time_client::on_connect_()

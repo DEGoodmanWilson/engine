@@ -22,8 +22,10 @@ class real_time_client : public event::event_handler
 {
 public:
     real_time_client(std::shared_ptr<websocket> socket);
+    ~real_time_client();
 
-    void start(); //TODO this is blocking, and should be put into a background thread. Who should be responsible for that? us? YES
+    void start();
+    void start_async();
     void stop();
 
     //Method to send a message to Slack
@@ -43,6 +45,7 @@ private:
 
     std::atomic<bool> is_connected_;
 
+    std::thread socket_thread_;
     std::thread ping_thread_;
 };
 
