@@ -112,4 +112,23 @@ TEST(rtm, actually_connect_async)
     ASSERT_TRUE(done);
 }
 
+TEST(rtm, test_ping)
+{
+    auto resp = slack::rtm::start();
+    auto socket = std::make_shared<slack::simple_websocket>(*resp.url);
+    slack::real_time_client client{socket};
+    bool done = false;
+
+    //Set up a handler to handle that first hello. Notice that we, uh, really ought to time out in case we don't connect!
+    client.register_event_handler<slack::event::pong>([&](std::shared_ptr<slack::event::pong> event) {
+        ASSERT_TRUE(static_cast<bool>(event));
+        done = true;
+        client.stop();
+    });
+
+    client.start();
+
+    ASSERT_TRUE(done);
+}
+
 //TODO tests for real time pinging!

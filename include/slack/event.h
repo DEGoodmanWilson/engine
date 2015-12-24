@@ -11,6 +11,7 @@
 
 #include <slack/event/hello.h>
 #include <slack/event/user_typing.h>
+#include <slack/event/pong.h>
 
 namespace slack { namespace event
 {

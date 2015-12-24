@@ -57,28 +57,19 @@ void real_time_client::start_async()
 
 void real_time_client::stop()
 {
-    //TODO stop ping!
-    std::cout << "STOP. " << ping_thread_.joinable() << std::endl;
-
-    if(!is_connected_)
-    {
-        std::cout << "   our job is done here" << std::endl;
-        return;
-    }
-
     socket_->stop();
 
     is_connected_ = false; //just jumpstart that
+    ping_cv_.notify_all(); //they're waiting on it!
+    std::cout << "Disconnecting" << std::endl;
 
     if (socket_thread_.joinable())
     {
-        std::cout << "JOIN 1" << std::endl;
         socket_thread_.join();
     }
 
     if (ping_thread_.joinable())
     {
-        std::cout << "JOIN 2" << std::endl;
         ping_thread_.join();
     }
 }
@@ -87,8 +78,8 @@ void real_time_client::on_connect_()
 {
     is_connected_ = true; //it's atomic, so this is ok!
     std::cout << "Connect!" << std::endl;
+
     // Start the ping thread
-    //TODO don't like this being a lambda
     ping_thread_ = std::thread{std::bind(&real_time_client::ping_worker_, this)};
 }
 
@@ -96,6 +87,7 @@ void real_time_client::on_connect_()
 void real_time_client::on_close_(websocket::close_reason reason)
 {
     is_connected_ = false; //this _shoud_ stop the ping thread
+    ping_cv_.notify_all(); //they're waiting on it!
     std::cout << "Close!" << std::endl;
     //TODO other things. This function is a bit messed up. Should we call stop?
 }
@@ -103,15 +95,21 @@ void real_time_client::on_close_(websocket::close_reason reason)
 
 void real_time_client::ping_worker_()
 {
+    //send an initial ping
+    socket_->send_message("{\"id\": 0, \"type\": \"ping\"}");
+
     while (is_connected_)
     {
         std::unique_lock<std::mutex> lk{ping_mutex_};
-        ping_cv_.wait_for(lk, std::chrono::milliseconds(5000), [this] {
+        ping_cv_.wait_for(lk, std::chrono::milliseconds(30000), [this] {
+            std::cout << "wait_for" << std::endl;
             return !(this->is_connected_);
         });
 
         std::cout << "Ping! " << std::endl;
-        //TODO SEND THE DAMNED PING!
+
+        //TODO be better about how this is done.
+        socket_->send_message("{\"id\": 1234, \"type\": \"ping\"}");
 
         lk.unlock();
     }
