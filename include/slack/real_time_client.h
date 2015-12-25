@@ -28,6 +28,8 @@ public:
     void start();
     void stop();
 
+    void set_ping_timeout(std::chrono::milliseconds timeout);
+
     //Method to send a message to Slack
 //    void send_message(const slack::event::message& message);
 
@@ -48,6 +50,8 @@ private:
     std::mutex ping_mutex_;
     std::condition_variable ping_cv_;
     std::thread ping_thread_;
+
+    std::chrono::milliseconds ping_timeout_;
 };
 
 }

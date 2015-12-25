@@ -20,7 +20,7 @@ void initialize_events(void); //declared in event.cpp
 
 // This method will block until the connection is complete
 real_time_client::real_time_client(std::shared_ptr<websocket> socket)
-        : socket_{std::move(socket)}, is_connected_{false}
+        : socket_{std::move(socket)}, is_connected_{false}, ping_timeout_{30000}
 {
     event::initialize_events();
 
@@ -46,16 +46,26 @@ void real_time_client::start()
 
 void real_time_client::stop()
 {
+    std::unique_lock<std::mutex> lk{ping_mutex_};
+
     socket_->stop();
 
     is_connected_ = false; //just jumpstart that
     ping_cv_.notify_all(); //they're waiting on it!
     std::cout << "Disconnecting" << std::endl;
 
+    lk.unlock();
+
     if (ping_thread_.joinable())
     {
         ping_thread_.join();
     }
+}
+
+
+void real_time_client::set_ping_timeout(std::chrono::milliseconds timeout)
+{
+    ping_timeout_ = timeout;
 }
 
 void real_time_client::on_connect_()
@@ -83,17 +93,19 @@ void real_time_client::ping_worker_()
     while (is_connected_)
     {
         std::unique_lock<std::mutex> lk{ping_mutex_};
-        ping_cv_.wait_for(lk, std::chrono::milliseconds(30000), [this] {
-            std::cout << "wait_for" << std::endl;
+        ping_cv_.wait_for(lk, ping_timeout_, [this] {
+            std::cout << "wait_for " << this->is_connected_ << std::endl;
             return !(this->is_connected_);
         });
 
-        std::cout << "Ping! " << std::endl;
-
-        //TODO be better about how this is done.
         if(this->is_connected_)
         {
+            std::cout << "Ping! " << std::endl;
             socket_->send_message("{\"id\": 1234, \"type\": \"ping\"}");
+        }
+        else
+        {
+            std::cout << "No ping! " << std::endl;
         }
         lk.unlock();
     }

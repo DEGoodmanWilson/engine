@@ -39,9 +39,7 @@ TEST(rtm, hello)
     auto socket = std::make_shared<websocket>();
 
     slack::real_time_client client{socket};
-//    client.register_event_handler(slack::event::hello::type, [](std::shared_ptr<slack::base::event> event){
-//       ASSERT_TRUE(static_cast<bool>(event));
-//    });
+
     client.register_event_handler<slack::event::hello>([](std::shared_ptr<slack::event::hello> event) {
         ASSERT_TRUE(static_cast<bool>(event));
     });
@@ -69,6 +67,59 @@ TEST(rtm, user_typing)
         ASSERT_EQ("U024BE7LH", *event->user);
     });
     socket->receive_message(event_str);
+}
+
+class websocket_ping_mock :
+        public slack::websocket
+{
+
+public:
+    websocket_ping_mock() : ping_count{0}
+    { }
+
+    void receive_message(const std::string &message)
+    {
+        this->on_message(message);
+    }
+
+
+    virtual void start() override
+    {
+        on_connect();
+    }
+
+    virtual void stop() override
+    {
+    }
+
+    virtual void send_message(const std::string &message) override
+    {
+        //check to see if a ping gets sent
+        if (message.find("ping") != std::string::npos)
+        {
+            ++ping_count;
+            std::cout << "ping count incr " << ping_count << std::endl;
+        }
+    }
+
+    int ping_count;
+};
+
+TEST(rtm, test_no_final_ping)
+{
+    auto socket = std::make_shared<websocket_ping_mock>();
+
+    slack::real_time_client client{socket};
+
+    client.set_ping_timeout(std::chrono::milliseconds(100));
+
+    client.start();
+    //TODO need to do this better
+    while(socket->ping_count <=1);
+
+    client.stop();
+
+    ASSERT_EQ(2, socket->ping_count); //Because we send a ping first thing, and then one after n milliseconds
 }
 
 TEST(rtm, actually_connect_sync)
@@ -109,4 +160,6 @@ TEST(rtm, test_ping)
     ASSERT_TRUE(done);
 }
 
-//TODO tests for real time pinging!
+
+
+
