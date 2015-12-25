@@ -69,6 +69,21 @@ TEST(rtm, user_typing)
     socket->receive_message(event_str);
 }
 
+TEST(rtm, non_existant)
+{
+    std::string event_str = R"(
+    {
+        "type": "foobar"
+    }
+    )";
+
+    auto socket = std::make_shared<websocket>();
+
+    slack::real_time_client client{socket};
+
+    ASSERT_NO_FATAL_FAILURE(socket->receive_message(event_str));
+}
+
 class websocket_ping_mock :
         public slack::websocket
 {
