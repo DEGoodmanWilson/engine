@@ -2,5 +2,5 @@ A library for accessing the Slack API, in C++
 
 
 # TODO list
-* what about de-registering event handlers?
-* Abstracting out websockets layer and moving websocket dependencies to client (with a fallback!)
+* Test HTTP functions using a mock
+* Refactoring websocket implementation to automatically fall back when one isn't supplied.

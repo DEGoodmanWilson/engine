@@ -19,11 +19,15 @@ void initialize_events(void); //declared in event.cpp
 }
 
 // This method will block until the connection is complete
-real_time_client::real_time_client(std::shared_ptr<websocket> socket)
-        : socket_{std::move(socket)}, is_connected_{false}, ping_timeout_{30000}
+real_time_client::real_time_client(const std::string& url, std::shared_ptr<websocket> socket)
+        : url_{url}, socket_{socket}, is_connected_{false}, ping_timeout_{30000}
 {
     event::initialize_events();
 
+    if(!socket_)
+    {
+        socket_ = std::make_shared<slack::simple_websocket>();
+    }
     socket_->on_connect = std::bind(&real_time_client::on_connect_, this);
     socket_->on_close = std::bind(&real_time_client::on_close_, this, std::placeholders::_1);
     socket_->on_error = std::bind(&real_time_client::on_error_, this, std::placeholders::_1);
@@ -40,7 +44,7 @@ real_time_client::~real_time_client()
 
 void real_time_client::start()
 {
-    socket_->start();
+    socket_->start(url_);
 }
 
 

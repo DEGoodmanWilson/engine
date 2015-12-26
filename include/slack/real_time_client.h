@@ -22,7 +22,7 @@ namespace slack
 class real_time_client : public event::event_handler
 {
 public:
-    real_time_client(std::shared_ptr<websocket> socket);
+    real_time_client(const std::string& url = "", std::shared_ptr<websocket> socket = nullptr);
     ~real_time_client();
 
     void start();
@@ -41,6 +41,8 @@ private:
     void on_error_(websocket::error_code error);
 
     void on_message_(const std::string &message);
+
+    std::string url_;
 
     std::shared_ptr<websocket> socket_;
 

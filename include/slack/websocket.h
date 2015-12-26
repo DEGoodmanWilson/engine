@@ -32,7 +32,7 @@ public:
     std::function<void(close_reason)> on_close;
 
 //Functions engine will call, to be implemented by the client
-    virtual void start() = 0;
+    virtual void start(const std::string& url) = 0;
     virtual void stop() = 0;
     virtual void send_message(const std::string &message) = 0;
 };
@@ -43,10 +43,10 @@ class simple_websocket : public websocket
 {
 
 public:
-    simple_websocket(const std::string& url);
+    simple_websocket();
     ~simple_websocket();
 
-    void start() override;
+    void start(const std::string& url) override;
 
     void stop() override;
 
