@@ -10,20 +10,36 @@
 
 namespace slack
 {
-namespace http
+class http
 {
+public:
+    using params = std::map<std::string, std::string>;
 
-struct response
-{
-    uint32_t status_code;
-    //TODO other error codes here.
-    std::string body;
+    struct response
+    {
+        uint32_t status_code;
+        //TODO other error codes here.
+        std::string body;
+    };
+
+    virtual response get(const std::string& url, const params& params) = 0;
+
+    virtual response post(const std::string& url, const params& params) = 0;
+    //put, delete, patch
 };
 
-using params = std::map<std::string, std::string>;
+class simple_http : public http
+{
+public:
+    simple_http();
+    ~simple_http();
 
-extern std::function<response(std::string url, params)> get;
-extern std::function<response(std::string url, params)> post;
+    response get(const std::string &url, const params &params) override;
+    response post(const std::string &url, const params &params) override;
 
-} //namespace http
+private:
+    class simple_http_impl;
+    std::unique_ptr<simple_http_impl> impl_;
+};
+
 } //namespace slack

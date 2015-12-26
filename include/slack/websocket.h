@@ -46,11 +46,11 @@ public:
     simple_websocket(const std::string& url);
     ~simple_websocket();
 
-    virtual void start() override;
+    void start() override;
 
-    virtual void stop() override;
+    void stop() override;
 
-    virtual void send_message(const std::string &message) override;
+    void send_message(const std::string &message) override;
 
 private:
     class simple_websocket_impl;

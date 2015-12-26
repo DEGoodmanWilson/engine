@@ -3,6 +3,7 @@
 //
 
 #include "private.h"
+#include "slack/http.h"
 
 namespace slack_private
 {
@@ -48,9 +49,16 @@ Json::Value get(slack::base::response *obj, std::string endpoint, slack::http::p
 
     if (auth)
     {
-        params["token"] = ::slack::get_token();
+        params["token"] = slack::get_token();
     }
-    auto response = slack::http::get(HOSTNAME + endpoint, params);
+
+    if(!slack::get_http())
+    {
+        //TODO only if opted in! Otherwise we need to error out!
+        slack::set_http(std::make_shared<slack::simple_http>());
+    }
+
+    auto response = slack::get_http()->get(HOSTNAME + endpoint, params);
     if (response.status_code != 200)
     {
         //TODO do something!

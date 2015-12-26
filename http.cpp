@@ -5,34 +5,53 @@
 #include "slack/http.h"
 #include <cpr.h>
 
-namespace slack { namespace http
+namespace slack {
+
+class simple_http::simple_http_impl : public http
 {
+public:
 
-//TODO ifdef this. Also, this doesn't actually work like I think it does. So.
-std::function<response(std::string url, params)> get = [](std::string url,
-                                                          slack::http::params params) -> slack::http::response {
-    cpr::Parameters p;
-    for (auto &kv : params)
+    virtual response get(const std::string &url, const params &params) override
     {
-        p.AddParameter({kv.first, kv.second});
+        cpr::Parameters p;
+        for (auto &kv : params)
+        {
+            p.AddParameter({kv.first, kv.second});
+        }
+
+        auto response = cpr::Get(cpr::Url{url}, p);
+
+        return {static_cast<uint32_t>(response.status_code), response.text};
     }
 
-    auto response = cpr::Get(cpr::Url{url}, p);
-
-    return {static_cast<uint32_t>(response.status_code), response.text};
-};
-
-std::function<response(std::string url, params)> post = [](std::string url,
-                                                           slack::http::params params) -> slack::http::response {
-    cpr::Parameters p;
-    for (auto &kv : params)
+    virtual response post(const std::string &url, const params &params) override
     {
-        p.AddParameter({kv.first, kv.second});
+        cpr::Parameters p;
+        for (auto &kv : params)
+        {
+            p.AddParameter({kv.first, kv.second});
+        }
+
+        auto response = cpr::Post(cpr::Url{url}, p);
+
+        return {static_cast<uint32_t>(response.status_code), response.text};
     }
-
-    auto response = cpr::Post(cpr::Url{url}, p);
-
-    return {static_cast<uint32_t>(response.status_code), response.text};
 };
 
-}} //namespace http slack
+simple_http::simple_http()
+        : impl_{new simple_http_impl}
+{ }
+
+simple_http::~simple_http() = default;
+
+http::response simple_http::get(const std::string &url, const http::params &params)
+{
+    return impl_->get(url, params);
+}
+
+http::response simple_http::post(const std::string &url, const http::params &params)
+{
+    return impl_->post(url, params);
+}
+
+} //namespace http slack
