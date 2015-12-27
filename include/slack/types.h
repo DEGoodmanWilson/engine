@@ -47,6 +47,21 @@ private: \
     bool value; \
 }
 
+#define MAKE_LONG_LONG_LIKE(x) class x\
+{ \
+public: \
+    x() = default; \
+    x(const x &rhs) = default; \
+    x(x &&rhs) = default; \
+    x &operator=(const x &rhs) = default; \
+    x &operator=(x &&rhs) = default; \
+    x(long long new_val) : value{new_val} {} \
+    x & operator=(long long && new_value) {value = new_value;} \
+    explicit operator long long() {return value;} \
+private: \
+    long long value; \
+}
+
 namespace slack
 {
 

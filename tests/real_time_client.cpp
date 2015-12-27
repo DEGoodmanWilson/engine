@@ -124,9 +124,7 @@ TEST(rtm, test_no_final_ping)
 {
     auto socket = std::make_shared<websocket_ping_mock>();
 
-    slack::real_time_client client{"", socket};
-
-    client.set_ping_timeout(std::chrono::milliseconds(100));
+    slack::real_time_client client{"", socket, slack::real_time_client::parameter::ping_interval{100}};
 
     client.start();
     //TODO need to do this better
@@ -140,6 +138,8 @@ TEST(rtm, test_no_final_ping)
 TEST(rtm, actually_connect_sync)
 {
     auto resp = slack::rtm::start();
+
+    ASSERT_TRUE(static_cast<bool>(resp));
 
     slack::real_time_client client{*resp.url};
     bool done = false;
@@ -159,6 +159,8 @@ TEST(rtm, actually_connect_sync)
 TEST(rtm, test_ping)
 {
     auto resp = slack::rtm::start();
+
+    ASSERT_TRUE(static_cast<bool>(resp));
 
     slack::real_time_client client{*resp.url};
     bool done = false;

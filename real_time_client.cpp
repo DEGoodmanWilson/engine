@@ -19,19 +19,19 @@ void initialize_events(void); //declared in event.cpp
 }
 
 // This method will block until the connection is complete
-real_time_client::real_time_client(const std::string& url, std::shared_ptr<websocket> socket)
-        : url_{url}, socket_{socket}, is_connected_{false}, ping_timeout_{30000}
+
+void real_time_client::initialize_()
 {
     event::initialize_events();
 
-    if(!socket_)
+    if (!websocket_)
     {
-        socket_ = std::make_shared<slack::simple_websocket>();
+        websocket_ = std::make_shared<slack::simple_websocket>();
     }
-    socket_->on_connect = std::bind(&real_time_client::on_connect_, this);
-    socket_->on_close = std::bind(&real_time_client::on_close_, this, std::placeholders::_1);
-    socket_->on_error = std::bind(&real_time_client::on_error_, this, std::placeholders::_1);
-    socket_->on_message = std::bind(&real_time_client::on_message_, this, std::placeholders::_1);
+    websocket_->on_connect = std::bind(&real_time_client::on_connect_, this);
+    websocket_->on_close = std::bind(&real_time_client::on_close_, this, std::placeholders::_1);
+    websocket_->on_error = std::bind(&real_time_client::on_error_, this, std::placeholders::_1);
+    websocket_->on_message = std::bind(&real_time_client::on_message_, this, std::placeholders::_1);
 }
 
 
@@ -44,15 +44,22 @@ real_time_client::~real_time_client()
 
 void real_time_client::start()
 {
-    socket_->start(url_);
+    websocket_->start(url_);
 }
+
+//void real_time_client::restart_()
+//{
+//    next_reconnect_ *= * reconnect_policy_.retry_backoff_factor_;
+//    //TODO start a timer going, because we won't get a disconnect message if we fail to connect.
+//    real_time_client->start();
+//}
 
 
 void real_time_client::stop()
 {
     std::unique_lock<std::mutex> lk{ping_mutex_};
 
-    socket_->stop();
+    websocket_->stop();
 
     is_connected_ = false; //just jumpstart that
     ping_cv_.notify_all(); //they're waiting on it!
@@ -66,24 +73,31 @@ void real_time_client::stop()
     }
 }
 
-
-void real_time_client::set_ping_timeout(std::chrono::milliseconds timeout)
-{
-    ping_timeout_ = timeout;
-}
-
 void real_time_client::on_connect_()
 {
     is_connected_ = true; //it's atomic, so this is ok!
     std::cout << "Connect!" << std::endl;
 
+    next_reconnect_ = reconnect_policy_.retry_interval_; //reset the reconnect interval to the default
+
     // Start the ping thread
-    ping_thread_ = std::thread{std::bind(&real_time_client::ping_worker_, this)};
+    if (auto_ping_)
+    {
+        ping_thread_ = std::thread{std::bind(&real_time_client::ping_worker_, this)};
+    }
 }
 
 
 void real_time_client::on_close_(websocket::close_reason reason)
 {
+    //if we didn't close, try again
+    if (auto_reconnect_ && (reason != websocket::close_reason::CLOSED_BY_CLIENT))
+    {
+        //reconnect
+//        std::cout << "Will try reconnect in " << next_reconnect_ << " milliseconds" << std::endl;
+        return;
+    }
+
     std::cout << "Close!" << std::endl;
     stop();
 }
@@ -92,20 +106,20 @@ void real_time_client::on_close_(websocket::close_reason reason)
 void real_time_client::ping_worker_()
 {
     //send an initial ping
-    socket_->send_message("{\"id\": 0, \"type\": \"ping\"}");
+    websocket_->send_message("{\"id\": 0, \"type\": \"ping\"}");
 
     while (is_connected_)
     {
         std::unique_lock<std::mutex> lk{ping_mutex_};
-        ping_cv_.wait_for(lk, ping_timeout_, [this] {
+        ping_cv_.wait_for(lk, ping_interval_, [this] {
             std::cout << "wait_for " << this->is_connected_ << std::endl;
             return !(this->is_connected_);
         });
 
-        if(this->is_connected_)
+        if (this->is_connected_)
         {
             std::cout << "Ping! " << std::endl;
-            socket_->send_message("{\"id\": 1234, \"type\": \"ping\"}");
+            websocket_->send_message("{\"id\": 1234, \"type\": \"ping\"}");
         }
         else
         {

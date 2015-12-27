@@ -25,6 +25,7 @@ public:
     std::function<void(error_code)> on_error;
     enum class close_reason
     {
+        UNKNOWN,
         NETWORK_ERROR,
         CLOSED_BY_CLIENT,
         CLOSED_BY_SERVER,
