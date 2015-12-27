@@ -85,6 +85,11 @@ void real_time_client::on_connect_()
     {
         ping_thread_ = std::thread{std::bind(&real_time_client::ping_worker_, this)};
     }
+
+    if(on_connect)
+    {
+        on_connect();
+    }
 }
 
 
@@ -100,6 +105,11 @@ void real_time_client::on_close_(websocket::close_reason reason)
 
     std::cout << "Close!" << std::endl;
     stop();
+
+    if(on_close)
+    {
+        on_close(reason);
+    }
 }
 
 
@@ -134,6 +144,11 @@ void real_time_client::on_error_(websocket::error_code error)
 {
     std::cout << "Error!" << std::endl;
     //TODO
+
+    if(on_error)
+    {
+        on_error(error);
+    }
 }
 
 
@@ -155,6 +170,11 @@ void real_time_client::on_message_(const std::string &message)
     auto event = slack_private::events_factory.create(type, result_ob);
 
     handle_event(event);
+
+    if(on_message)
+    {
+        on_message(message);
+    }
 }
 
 } //namespace slack

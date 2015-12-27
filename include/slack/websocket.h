@@ -21,12 +21,12 @@ public:
     enum class error_code
     {
         UNKNOWN,
+        NETWORK_ERROR,
     };
     std::function<void(error_code)> on_error;
     enum class close_reason
     {
         UNKNOWN,
-        NETWORK_ERROR,
         CLOSED_BY_CLIENT,
         CLOSED_BY_SERVER,
     };
@@ -45,13 +45,14 @@ class simple_websocket : public websocket
 
 public:
     simple_websocket();
-    ~simple_websocket();
 
-    void start(const std::string& url) override;
+    virtual ~simple_websocket();
 
-    void stop() override;
+    virtual void start(const std::string& url) override;
 
-    void send_message(const std::string &message) override;
+    virtual void stop() override;
+
+    virtual void send_message(const std::string &message) override;
 
 private:
     class simple_websocket_impl;

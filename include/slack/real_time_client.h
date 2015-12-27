@@ -114,6 +114,11 @@ public:
         next_reconnect_ = reconnect_policy_.retry_interval_;
     }
 
+    // Clients can hook up to these for notification of websocket events
+    std::function<void(void)> on_connect;
+    std::function<void(const std::string &)> on_message;
+    std::function<void(websocket::error_code)> on_error;
+    std::function<void(websocket::close_reason)> on_close;
 
     void start();
 

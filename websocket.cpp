@@ -31,10 +31,19 @@ public:
                                         this,
                                         std::placeholders::_1,
                                         std::placeholders::_2);
-        wss_client_->onerror = std::bind(&simple_websocket_impl::on_error_, this, std::placeholders::_1);
+        wss_client_->onerror = std::bind(&simple_websocket_impl::on_error_asio_, this, std::placeholders::_1);
         wss_client_->onmessage = std::bind(&simple_websocket_impl::on_message_, this, std::placeholders::_1);
 
-        wss_client_->start();
+        try
+        {
+            wss_client_->start();
+        }
+        catch(std::invalid_argument e)
+        {
+            std::cout << e.what() << std::endl;
+            //we don't get the entire error_code, obnoxously
+            on_error_(websocket::error_code::NETWORK_ERROR);
+        }
     }
 
     virtual void stop() override
@@ -73,12 +82,19 @@ private:
         if (delegate_->on_close)
         {
             //TODO
-            delegate_->on_close(websocket::close_reason::NETWORK_ERROR);
+            delegate_->on_close(websocket::close_reason::UNKNOWN);
         }
     }
 
+    void on_error_(websocket::error_code code)
+    {
+        if(delegate_->on_error)
+        {
+            delegate_->on_error(code);
+        }
+    }
 
-    void on_error_(const boost::system::error_code &error_code)
+    void on_error_asio_(const boost::system::error_code &error_code)
     {
         if (delegate_->on_error)
         {

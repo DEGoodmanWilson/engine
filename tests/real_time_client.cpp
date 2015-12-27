@@ -17,7 +17,7 @@ public:
     }
 
 
-    virtual void start(const std::string& url) override
+    virtual void start(const std::string &url) override
     { }
 
     virtual void stop() override
@@ -98,7 +98,7 @@ public:
     }
 
 
-    virtual void start(const std::string& url) override
+    virtual void start(const std::string &url) override
     {
         on_connect();
     }
@@ -128,7 +128,7 @@ TEST(rtm, test_no_final_ping)
 
     client.start();
     //TODO need to do this better
-    while(socket->ping_count <=1);
+    while (socket->ping_count <= 1);
 
     client.stop();
 
@@ -177,6 +177,27 @@ TEST(rtm, test_ping)
     ASSERT_TRUE(done);
 }
 
+TEST(rtm, test_failed_socket_connection)
+{
+    slack::real_time_client client{"wss://foobar.example"}; //this should just fail spectacularly
 
+    bool error = false;
+    bool connect = false;
 
+    client.on_connect = [&]() {
+        //This shouldn't happen!
+        connect = true;
+        client.stop();
+    };
+    client.on_error = [&](websocket::error_code code) {
+        //This _should_ happen
+        error = true;
+        client.stop();
+    };
+
+    client.start();
+
+    ASSERT_TRUE(error);
+    ASSERT_FALSE(connect);
+}
 
