@@ -189,7 +189,7 @@ TEST(rtm, test_failed_socket_connection)
         connect = true;
         client.stop();
     };
-    client.on_error = [&](websocket::error_code code) {
+    client.on_error = [&](websocket::error_code code, bool will_reconnect) {
         //This _should_ happen
         error = true;
         client.stop();
@@ -199,5 +199,33 @@ TEST(rtm, test_failed_socket_connection)
 
     ASSERT_TRUE(error);
     ASSERT_FALSE(connect);
+}
+
+TEST(rtm, test_failed_socket_connection_with_reconnect)
+{
+    slack::real_time_client::parameter::reconnect_policy policy{2, std::chrono::milliseconds{50}, 1.0};
+
+    slack::real_time_client client{"wss://foobar.example", policy}; //this should just fail spectacularly
+
+    bool error = false;
+    int reconnect_count = 0;
+
+    client.on_connect = [&]() {
+        //This shouldn't happen!
+        client.stop();
+    };
+    client.on_error = [&](websocket::error_code code, bool will_reconnect) {
+        //This _should_ happen
+        if(will_reconnect)
+        {
+            ++reconnect_count;
+        }
+        error = true;
+        ASSERT_GE(2, reconnect_count);
+    };
+
+    client.start();
+
+    ASSERT_TRUE(error);
 }
 
