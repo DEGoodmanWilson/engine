@@ -24,6 +24,8 @@ void real_time_client::initialize_()
 {
     event::initialize_events();
 
+    reset_reconnect_();
+
     if (!websocket_)
     {
         websocket_ = std::make_shared<slack::simple_websocket>();
@@ -32,40 +34,54 @@ void real_time_client::initialize_()
     websocket_->on_close = std::bind(&real_time_client::on_close_, this, std::placeholders::_1);
     websocket_->on_error = std::bind(&real_time_client::on_error_, this, std::placeholders::_1);
     websocket_->on_message = std::bind(&real_time_client::on_message_, this, std::placeholders::_1);
+
+//    std::cout << "Reconnection interval = " << std::chrono::duration <double, std::milli> (next_reconnect_interval_).count() << " ms" << std::endl;
+
 }
 
 
 real_time_client::~real_time_client()
 {
-    std::cout << "D'TOR" << std::endl;
+//    std::cout << "D'TOR" << std::endl;
 
     stop();
 }
 
 void real_time_client::start()
 {
+//    std::cout << "Reconnection interval = " << std::chrono::duration <double, std::milli> (next_reconnect_interval_).count() << " ms" << std::endl;
+
     if(auto_reconnect_)
     {
         //connect...
         websocket_->start(url_);
 
+//        auto start_time = std::chrono::steady_clock::now();
+
         //Uh-oh, if we got here, we lost the connection somehow. Let's see if we ought to reconnect
         while(!is_connected_ and should_reconnect_ and (reconnect_count_ <= reconnect_policy_.max_reconnect_attempts) )
         {
+//            std::cout << "Reconnecting in " << std::chrono::duration <double, std::milli> (next_reconnect_interval_).count() << " ms" << std::endl;
             std::unique_lock<std::mutex> lk{reconnect_cv_mutex_};
             if (ping_cv_.wait_for(lk, next_reconnect_interval_, [this] {
                 return !!(this->is_connected_);
             }))
             {
                 //is_connected has changed to true
-                std::cout << "No reconnect! " << std::endl;
+//                std::cout << "No reconnect! " << std::endl;
                 //basically no-op here, fall through, and let the while loop terminate to start the reconnect process
             }
             else
             {
+//                auto end_time = std::chrono::steady_clock::now();
+//                auto diff = end_time - start_time;
+////                std::cout << std::chrono::duration <double, std::milli> (diff).count() << " ms" << std::endl;
+
                 //timed out---let's try to reconnect
-                std::cout << "Ping! " << std::endl;
+//                std::cout << "Reconnect! " << std::endl;
                 websocket_->start(url_);
+
+//                start_time = std::chrono::steady_clock::now();
             }
             lk.unlock();
         }
@@ -87,7 +103,7 @@ void real_time_client::stop()
 void real_time_client::on_connect_()
 {
     is_connected_ = true; //it's atomic, so this is ok!
-    std::cout << "Connect!" << std::endl;
+//    std::cout << "Connect!" << std::endl;
 
     reset_reconnect_(); //reset the reconnect interval to the default
 
@@ -106,7 +122,7 @@ void real_time_client::on_connect_()
 
 void real_time_client::on_close_(websocket::close_reason reason)
 {
-    std::cout << "Close!" << std::endl;
+//    std::cout << "Close!" << std::endl;
     do_stop_();
 
     //if *WE* didn't close the connection, try again
@@ -126,7 +142,7 @@ void real_time_client::on_close_(websocket::close_reason reason)
 
 void real_time_client::on_error_(websocket::error_code error)
 {
-    std::cout << "Error!" << std::endl;
+//    std::cout << "Error!" << std::endl;
     do_stop_();
 
     //TODO, depending on the nature of the error, we should try reconnecting...or not.
@@ -147,7 +163,7 @@ void real_time_client::on_error_(websocket::error_code error)
 void real_time_client::on_message_(const std::string &message)
 {
     //TODO this is where the rubber meets the road
-    std::cout << "Message! " << message << std::endl;
+//    std::cout << "Message! " << message << std::endl;
 
     Json::Value result_ob;
     Json::Reader reader;
@@ -174,12 +190,15 @@ void real_time_client::on_message_(const std::string &message)
 void real_time_client::setup_reconnect_()
 {
     should_reconnect_ = false;
-    ++reconnect_count_;
-    if(reconnect_count_ <= reconnect_policy_.max_reconnect_attempts)
+    if(reconnect_count_)
     {
         should_reconnect_ = true;
-        next_reconnect_interval_ *= reconnect_policy_.retry_backoff_factor;
+        if (reconnect_count_ < reconnect_policy_.max_reconnect_attempts)
+        {
+            next_reconnect_interval_ *= reconnect_policy_.retry_backoff_factor;
+        }
     }
+    ++reconnect_count_;
     reconnect_cv_.notify_one();
 }
 
@@ -205,18 +224,18 @@ void real_time_client::ping_worker_()
         }))
         {
             //is_connected has changed to true
-            std::cout << "No ping! " << std::endl;
+//            std::cout << "No ping! " << std::endl;
             //basically no-op here, fall through, and let the while loop terminate
         }
         else
         {
             //timed out---this is the normal case, this is where we do the periodic work
-            std::cout << "Ping! " << std::endl;
+//            std::cout << "Ping! " << std::endl;
             websocket_->send_message("{\"id\": 1234, \"type\": \"ping\"}");
         }
         lk.unlock();
     }
-    std::cout << "Ping thread stopping" << std::endl;
+//    std::cout << "Ping thread stopping" << std::endl;
 }
 
 
@@ -226,7 +245,7 @@ void real_time_client::do_stop_()
 
     is_connected_ = false; //just jumpstart that
     ping_cv_.notify_all(); //they're waiting on it!
-    std::cout << "Disconnecting" << std::endl;
+//    std::cout << "Disconnecting" << std::endl;
 
     if (ping_thread_.joinable())
     {

@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 #include <slack/slack.h>
-
+#include <chrono>
 
 class websocket :
         public slack::websocket
@@ -113,7 +113,7 @@ public:
         if (message.find("ping") != std::string::npos)
         {
             ++ping_count;
-            std::cout << "ping count incr " << ping_count << std::endl;
+//            std::cout << "ping count incr " << ping_count << std::endl;
         }
     }
 
@@ -214,7 +214,7 @@ TEST(rtm, test_failed_socket_connection_with_reconnect)
         //This shouldn't happen!
         client.stop();
     };
-    client.on_error = [&](websocket::error_code code, bool will_reconnect) {
+    client.on_error = [&](slack::websocket::error_code code, bool will_reconnect) {
         //This _should_ happen
         if(will_reconnect)
         {
@@ -229,3 +229,62 @@ TEST(rtm, test_failed_socket_connection_with_reconnect)
     ASSERT_TRUE(error);
 }
 
+TEST(rtm, test_failed_socket_connection_with_reconnect_timing
+)
+{
+slack::real_time_client::parameter::reconnect_policy policy{2, std::chrono::milliseconds{50}, 2.0};
+
+slack::real_time_client client{"wss://foobar.example", policy}; //this should just fail spectacularly
+
+bool error = false;
+int reconnect_count = 0;
+auto retry_duration = policy.retry_interval;
+
+auto start_time = std::chrono::steady_clock::now();
+auto delta = std::chrono::milliseconds{10};
+
+client.
+on_connect = [&]() {
+    //This shouldn't happen!
+    client.stop();
+};
+client.on_error = [&](slack::websocket::error_code code, bool will_reconnect) {
+    //This _should_ happen
+
+    if(reconnect_count) //ignore first attempt --- we only care about _re_connects
+    {
+
+        auto end_time = std::chrono::steady_clock::now();
+        auto diff = end_time - start_time;
+        auto max = retry_duration + delta;
+        auto min = retry_duration - delta;
+//        std::cout << "retry_duration " << std::chrono::duration<double, std::milli>(retry_duration).count() << " ms" <<
+//        std::endl;
+//        std::cout << "delta " << std::chrono::duration<double, std::milli>(delta).count() << " ms" << std::endl;
+//
+//        std::cout << std::chrono::duration<double, std::milli>(min).count() << " ms" << std::endl;
+//        std::cout << std::chrono::duration<double, std::milli>(diff).count() << " ms" << std::endl;
+//        std::cout << std::chrono::duration<double, std::milli>(max).count() << " ms" << std::endl;
+
+        ASSERT_LE(min, diff);
+        ASSERT_GE(max, diff);
+        retry_duration *= policy.retry_backoff_factor;
+        delta *= policy.retry_backoff_factor;
+    }
+    start_time = std::chrono::steady_clock::now();
+
+    error = true;
+    if (will_reconnect)
+    {
+        ++reconnect_count;
+    }
+    ASSERT_GE(2, reconnect_count);
+
+};
+
+client.
+
+start();
+
+ASSERT_TRUE(error);
+}

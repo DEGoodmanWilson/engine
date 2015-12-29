@@ -40,7 +40,7 @@ public:
         }
         catch(std::invalid_argument e)
         {
-            std::cout << e.what() << std::endl;
+//            std::cout << e.what() << std::endl;
             //we don't get the entire error_code, obnoxously
             on_error_(websocket::error_code::NETWORK_ERROR);
         }

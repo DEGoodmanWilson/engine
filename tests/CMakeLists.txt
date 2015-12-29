@@ -13,7 +13,7 @@ ExternalProject_Add(GTestExternal
         #        SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk
         #        SVN_REVISION -r746
         URL https://googletest.googlecode.com/files/gtest-1.7.0.zip
-        TIMEOUT 30
+        TIMEOUT 500
         PREFIX "${GTEST_PREFIX}"
         INSTALL_COMMAND ""
         LOG_DOWNLOAD ON
@@ -44,13 +44,13 @@ add_dependencies(GTest GTestMain)
 
 add_executable(engine_tests
         main.cpp
-#        types.cpp
-#        api.cpp
-#        auth.cpp
-#        channels.cpp
-#        chat.cpp
-#        oauth.cpp
-#        rtm.cpp
+        types.cpp
+        api.cpp
+        auth.cpp
+        channels.cpp
+        chat.cpp
+        oauth.cpp
+        rtm.cpp
         real_time_client.cpp
         )
 
