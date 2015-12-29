@@ -38,7 +38,7 @@ TEST(rtm, hello)
 
     auto socket = std::make_shared<websocket>();
 
-    slack::real_time_client client("", socket);
+    slack::real_time_client client(slack::real_time_client::parameter::url{"none"}, socket);
 
     client.register_event_handler<slack::event::hello>([](std::shared_ptr<slack::event::hello> event) {
         ASSERT_TRUE(static_cast<bool>(event));
@@ -60,7 +60,7 @@ TEST(rtm, user_typing)
 
     auto socket = std::make_shared<websocket>();
 
-    slack::real_time_client client{"", socket};
+    slack::real_time_client client{slack::real_time_client::parameter::url{"none"}, socket};
     client.register_event_handler<slack::event::user_typing>([](std::shared_ptr<slack::event::user_typing> event) {
         ASSERT_TRUE(static_cast<bool>(event));
         ASSERT_EQ("C02ELGNBH", *event->channel);
@@ -79,7 +79,7 @@ TEST(rtm, non_existant)
 
     auto socket = std::make_shared<websocket>();
 
-    slack::real_time_client client{"", socket};
+    slack::real_time_client client{slack::real_time_client::parameter::url{"none"}, socket};
 
     ASSERT_NO_FATAL_FAILURE(socket->receive_message(event_str));
 }
@@ -124,7 +124,7 @@ TEST(rtm, test_no_final_ping)
 {
     auto socket = std::make_shared<websocket_ping_mock>();
 
-    slack::real_time_client client{"", socket, slack::real_time_client::parameter::ping_interval{100}};
+    slack::real_time_client client{slack::real_time_client::parameter::url{"none"}, socket, slack::real_time_client::parameter::ping_interval{100}};
 
     client.start();
     //TODO need to do this better
@@ -137,11 +137,7 @@ TEST(rtm, test_no_final_ping)
 
 TEST(rtm, actually_connect_sync)
 {
-    auto resp = slack::rtm::start();
-
-    ASSERT_TRUE(static_cast<bool>(resp));
-
-    slack::real_time_client client{*resp.url};
+    slack::real_time_client client{};
     bool done = false;
 
     //Set up a handler to handle that first hello. Notice that we, uh, really ought to time out in case we don't connect!
@@ -158,11 +154,7 @@ TEST(rtm, actually_connect_sync)
 
 TEST(rtm, test_ping)
 {
-    auto resp = slack::rtm::start();
-
-    ASSERT_TRUE(static_cast<bool>(resp));
-
-    slack::real_time_client client{*resp.url};
+    slack::real_time_client client{};
     bool done = false;
 
     //Set up a handler to handle that first hello. Notice that we, uh, really ought to time out in case we don't connect!
@@ -179,7 +171,7 @@ TEST(rtm, test_ping)
 
 TEST(rtm, test_failed_socket_connection)
 {
-    slack::real_time_client client{"wss://foobar.example"}; //this should just fail spectacularly
+    slack::real_time_client client{slack::real_time_client::parameter::url{"wss://foobar.example"}}; //this should just fail spectacularly
 
     bool error = false;
     bool connect = false;
@@ -205,7 +197,7 @@ TEST(rtm, test_failed_socket_connection_with_reconnect)
 {
     slack::real_time_client::parameter::reconnect_policy policy{2, std::chrono::milliseconds{50}, 1.0};
 
-    slack::real_time_client client{"wss://foobar.example", policy}; //this should just fail spectacularly
+    slack::real_time_client client{slack::real_time_client::parameter::url{"wss://foobar.example"}, policy}; //this should just fail spectacularly
 
     bool error = false;
     int reconnect_count = 0;
@@ -234,9 +226,10 @@ TEST(rtm, test_failed_socket_connection_with_reconnect_timing
 {
 slack::real_time_client::parameter::reconnect_policy policy{2, std::chrono::milliseconds{50}, 2.0};
 
-slack::real_time_client client{"wss://foobar.example", policy}; //this should just fail spectacularly
+    slack::real_time_client client{slack::real_time_client::parameter::url{"wss://foobar.example"}, policy}; //this should just fail spectacularly
 
-bool error = false;
+
+    bool error = false;
 int reconnect_count = 0;
 auto retry_duration = policy.retry_interval;
 

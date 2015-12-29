@@ -2,6 +2,7 @@
 // Copyright © 2015 Slack Technologies, Inc. All rights reserved.
 //
 
+#include "slack/rtm.start.h"
 #include "slack/real_time_client.h"
 #include "slack/websocket.h"
 #include "private.h"
@@ -24,7 +25,10 @@ void real_time_client::initialize_()
 {
     event::initialize_events();
 
-    reset_reconnect_();
+    if(auto_reconnect_)
+    {
+        reset_reconnect_();
+    }
 
     if (!websocket_)
     {
@@ -35,7 +39,12 @@ void real_time_client::initialize_()
     websocket_->on_error = std::bind(&real_time_client::on_error_, this, std::placeholders::_1);
     websocket_->on_message = std::bind(&real_time_client::on_message_, this, std::placeholders::_1);
 
-//    std::cout << "Reconnection interval = " << std::chrono::duration <double, std::milli> (next_reconnect_interval_).count() << " ms" << std::endl;
+    if (url_.empty())
+    {
+        //fetch a url from a call to rtm.start
+        auto response = rtm::start(rtm::start::parameter::simple_latest{true}, rtm::start::parameter::no_unreads{true});
+        url_ = *response.url;
+    }
 
 }
 

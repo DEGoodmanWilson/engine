@@ -25,35 +25,29 @@ class real_time_client :
 public:
     //public interface
     template<typename ...Os>
-    real_time_client(const std::string &url)
+    real_time_client()
             :
-            url_{url},
+            url_{},
             auto_ping_{true},
             auto_reconnect_{true},
             websocket_{nullptr},
             is_connected_{false},
             ping_interval_{30000},
-            reconnect_policy_{},
-            reconnect_count_{0},
-            should_reconnect_{auto_reconnect_},
-            next_reconnect_interval_{reconnect_policy_.retry_interval}
+            reconnect_policy_{}
     {
         initialize_();
     }
 
     template<typename ...Os>
-    real_time_client(const std::string &url, Os &&...os)
+    real_time_client(Os &&...os)
             :
-            url_{url},
+            url_{},
             auto_ping_{true},
             auto_reconnect_{true},
             websocket_{nullptr},
             is_connected_{false},
             ping_interval_{30000},
-            reconnect_policy_{},
-            reconnect_count_{0},
-            should_reconnect_{auto_reconnect_},
-            next_reconnect_interval_{reconnect_policy_.retry_interval}
+            reconnect_policy_{}
     {
         slack::set_option<real_time_client>(*this, std::forward<Os>(os)...);
         initialize_();
@@ -65,6 +59,8 @@ public:
     //parameters
     struct parameter
     {
+        MAKE_STRING_LIKE(url);
+
         MAKE_BOOL_LIKE(auto_ping);
 
         MAKE_BOOL_LIKE(auto_reconnect);
@@ -91,6 +87,12 @@ public:
             double retry_backoff_factor;
         };
     };
+
+    void set_option(parameter::url &url)
+    { url_ = url; }
+
+    void set_option(parameter::url &&url)
+    { url_ = std::move(url); }
 
     void set_option(parameter::auto_ping &auto_ping)
     { auto_ping_ = static_cast<bool>(auto_ping); }
