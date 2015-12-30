@@ -98,7 +98,7 @@ set(ENGINE_FILES
         include/slack/event/user_typing.h
         include/slack/event.h
         include/slack/websocket.h
-        websocket.cpp include/slack/event/pong.h event/pong.cpp)
+        websocket.cpp include/slack/event/pong.h event/pong.cpp include/slack/event/message.h event/message.cpp include/slack/event/channel_archive.h event/channel_archive.cpp)
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 

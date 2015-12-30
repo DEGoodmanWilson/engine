@@ -72,4 +72,15 @@ command::command(const std::map<std::string, std::string> &params)
     if (params.count("response_url")) response_url = UriDecode(params.at("response_url"));
 }
 
+template<>
+reaction::reaction(const Json::Value &parsed_json)
+{
+    name = parsed_json["name"].asString();
+    count = parsed_json["count"].asInt64();
+    for(auto u: parsed_json["users"])
+    {
+        users.emplace_back(user_id{u.asString()});
+    }
+}
+
 } //namespace slack

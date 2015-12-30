@@ -151,5 +151,16 @@ struct command
     std::string response_url; // https://hooks.slack.com/commands/1234/5678
 };
 
+struct reaction
+{
+    reaction() = default;
+
+    template<class json>
+    reaction(const json &parsed_json);
+
+    std::string name;
+    int64_t count;
+    std::vector<user_id> users;
+};
 
 }
