@@ -240,8 +240,7 @@ TEST(rtm, test_failed_socket_connection_with_reconnect_timing)
     auto start_time = std::chrono::steady_clock::now();
     auto delta = std::chrono::milliseconds{10};
 
-    client.
-            on_connect = [&]() {
+    client.on_connect = [&]() {
         //This shouldn't happen!
         client.stop();
     };
@@ -279,9 +278,7 @@ TEST(rtm, test_failed_socket_connection_with_reconnect_timing)
 
     };
 
-    client.
-
-            start();
+    client.start();
 
     ASSERT_TRUE(error);
 }
