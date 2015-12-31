@@ -5,6 +5,7 @@
 #pragma once
 
 #include <slack/config.h>
+#include <slack/channel.h>
 #include <slack/types.h>
 #include <slack/attachment.h>
 #include <slack/incoming_webhook.h>

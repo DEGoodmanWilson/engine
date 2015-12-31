@@ -5,6 +5,7 @@
 #pragma once
 
 #include <slack/types.h>
+#include <slack/channel.h>
 #include <slack/set_option.h>
 #include <slack/base/response.h>
 #include <string>
@@ -46,7 +47,7 @@ public:
     };
 
     //response
-    std::experimental::optional<std::vector<::slack::channel>> channels;
+    std::experimental::optional<std::vector<channel>> channels;
 
     //parameter setters
     void set_option(const parameter::exclude_archived &exclude_archived)

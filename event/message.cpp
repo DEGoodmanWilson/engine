@@ -13,6 +13,8 @@ const std::string message::event_name{"message"};
 template<>
 message::message(const Json::Value &parsed_json)
 {
+    if (parsed_json.isNull()) return;
+
     if (parsed_json["channel"].isString()) channel = channel_id{parsed_json["channel"].asString()};
     if (parsed_json["user"].isString()) user = user_id{parsed_json["user"].asString()};
     if (parsed_json["text"].isString()) text = parsed_json["text"].asString();
@@ -22,7 +24,7 @@ message::message(const Json::Value &parsed_json)
     if (parsed_json["pinned_to"].isArray())
     {
         pinned_to = std::vector<channel_id>{};
-        for(auto p: parsed_json["pinned_to"])
+        for (auto p: parsed_json["pinned_to"])
         {
             pinned_to->emplace_back(channel_id{p.asString()});
         }
@@ -30,7 +32,7 @@ message::message(const Json::Value &parsed_json)
     if (parsed_json["reactions"].isArray())
     {
         reactions = std::vector<reaction>{};
-        for(auto r: parsed_json["reactions"])
+        for (auto r: parsed_json["reactions"])
         {
             reactions->emplace_back(reaction{r});
         }
