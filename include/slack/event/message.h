@@ -24,6 +24,14 @@ struct message : public base::event
     // We can create a message namespace, but then how do we name the message class
     // Is message a base class of the others? And if so, how can we namespace them cleanly?
 
+    // What I am going to try is this, and although it is a bit ugly, I just can't imagine the right way forward:
+    //   slack::event::channel_archive (class)
+    //   slack::event::message (class)
+    //   slack::event::message_subtype (namespace)
+    //   slack::event::message_subtype::channel_archive (class, inherits from event, not from message)
+    //
+    // I consider this pretty ugly. And perhaps I'll figure out an alternative. In the meantime, this will keep me coding.
+
     message() = default;
 
     template<class json>

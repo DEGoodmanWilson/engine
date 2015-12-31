@@ -183,7 +183,11 @@ void real_time_client::on_message_(const std::string &message)
         return;
     }
 
-    std::string type = result_ob["type"].asString();
+    auto type = result_ob["type"].asString();
+    if(result_ob["subtype"].isString())
+    {
+        type += "."+result_ob["subtype"].asString();
+    }
     auto event = slack_private::events_factory.create(type, result_ob);
 
     handle_event(event);

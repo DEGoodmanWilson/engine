@@ -40,6 +40,10 @@ void initialize_events(void)
     {
         return std::make_shared<pong>(root);
     });
+    slack_private::events_factory.register_type<pong>(message::event_name, [](const Json::Value& root)
+    {
+        return std::make_shared<message>(root);
+    });
 }
 
 }} //namespace events slack
