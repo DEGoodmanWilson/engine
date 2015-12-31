@@ -35,7 +35,7 @@ TEST_F(chat_env, chat_post_basic)
     ASSERT_TRUE(result);
     ASSERT_TRUE(static_cast<bool>(result.message));
     ASSERT_EQ(message, result.message->text);
-    ts = result.message->ts;
+    ts = *result.message->ts;
 }
 
 //this one is going to fail for now. Probably.

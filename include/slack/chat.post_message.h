@@ -8,6 +8,7 @@
 #include <slack/attachment.h>
 #include <slack/set_option.h>
 #include <slack/base/response.h>
+#include <slack/event/message.h>
 #include <string>
 #include <vector>
 #include <slack/optional.hpp>
@@ -66,7 +67,7 @@ public:
     // response
     std::experimental::optional<channel_id> channel;
     std::experimental::optional<ts> ts;
-    std::experimental::optional<message> message;
+    std::experimental::optional<event::message> message;
 
     // parameter setters //TODO can these be protected?
     void set_option(const parameter::username &username)
