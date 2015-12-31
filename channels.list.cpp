@@ -28,7 +28,7 @@ void list::initialize_()
     {
         if (!result_ob["channels"].isNull() && result_ob["channels"].isArray())
         {
-            channels = std::vector<::slack::channel>{};
+            channels = std::vector<channel>{};
             for (const auto channel_obj : result_ob["channels"])
             {
                 channels->emplace_back(channel_obj);
