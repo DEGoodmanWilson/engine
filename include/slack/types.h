@@ -79,6 +79,39 @@ MAKE_STRING_LIKE(token);
 
 MAKE_STRING_LIKE(scope);
 
+struct profile
+{
+    profile() = default;
+
+    template<class json>
+    profile(const json &parsed_json);
+
+    std::string first_name;
+    std::string last_name;
+    std::string real_name;
+    std::string email;
+    std::string skype;
+    std::string phone;
+    std::map<uint16_t, std::string> images;
+};
+
+struct user
+{
+    user() = default;
+
+    template<class json>
+    user(const json &parsed_json);
+
+    user_id id;
+    std::string name;
+    bool deleted;
+    std::string color; //TODO would be nice to have a color class!
+    profile profile;
+    bool is_admin;
+    bool is_onwer;
+    bool has_2fa;
+    bool has_files;
+};
 
 //This is the data type that is returned from a slash command
 struct command

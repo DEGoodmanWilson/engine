@@ -10,6 +10,38 @@
 namespace slack
 {
 
+template<>
+profile::profile(const Json::Value &parsed_json)
+{
+    //TODO Better error checking!!!
+    first_name = parsed_json["first_name"].asString();
+    last_name = parsed_json["last_name"].asString();
+    real_name = parsed_json["real_name"].asString();
+    email = parsed_json["email"].asString();
+    skype = parsed_json["skype"].asString();
+    phone = parsed_json["phone"].asString();
+    images[24] = parsed_json["image_24"].asString();
+    images[32] = parsed_json["image_24"].asString();
+    images[48] = parsed_json["image_24"].asString();
+    images[72] = parsed_json["image_24"].asString();
+    images[192] = parsed_json["image_24"].asString();
+}
+
+template<>
+user::user(const Json::Value &parsed_json)
+{
+    id = parsed_json["id"].asString();
+    name = parsed_json["name"].asString();
+    deleted = parsed_json["deleted"].asBool();
+    color = parsed_json["color"].asString();
+    profile = {parsed_json["profile"]};
+    is_admin = parsed_json["is_admin"].asBool();
+    is_onwer = parsed_json["is_onwer"].asBool();
+    has_2fa = parsed_json["has_2fa"].asBool();
+    has_files = parsed_json["has_files"].asBool();
+}
+
+
 command::command(const std::map<std::string, std::string> &params)
 {
     if (params.count("token")) token = UriDecode(params.at("token"));
