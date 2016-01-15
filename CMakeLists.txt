@@ -105,9 +105,15 @@ set(ENGINE_FILES
         event/message.cpp
         include/slack/event/channel_archive.h
         event/channel_archive.cpp
-        include/slack/event/message/channel_archive.h
-        event/message/channel_archive.cpp
-        include/slack/channel.h channel.cpp)
+        include/slack/event/message_channel_archive.h
+        event/message_channel_archive.cpp
+        include/slack/channel.h
+        include/slack/event/message_bot_message.h
+        event/message_bot_message.cpp
+        include/slack/event/message_me_message.h
+        event/message_me_message.cpp
+        channel.cpp
+        )
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 

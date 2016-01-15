@@ -37,15 +37,14 @@ struct message : public base::event
     template<class json>
     message(const json &parsed_json);
 
-    std::experimental::optional<channel_id> channel;
-    std::experimental::optional<user_id> user;
-    std::experimental::optional<std::string> text;
-    std::experimental::optional<ts> ts;
-    std::experimental::optional<bool> hidden;
+    channel_id channel;
+    user_id user;
+    std::string text;
+    ts ts;
 
-    std::experimental::optional<bool> is_starred;
-    std::experimental::optional<std::vector<channel_id>> pinned_to;
-    std::experimental::optional<std::vector<reaction>> reactions;
+    bool is_starred;
+    std::vector<channel_id> pinned_to;
+    std::vector<reaction> reactions;
 };
 
 

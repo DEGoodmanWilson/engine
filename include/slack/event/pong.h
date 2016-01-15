@@ -21,8 +21,8 @@ struct pong : public base::event
     template<class json>
     pong(const json &parsed_json);
 
-    std::experimental::optional<std::string> reply_to;
-    std::experimental::optional<std::string> time;
+    std::string reply_to;
+    std::string time;
 };
 
 }} //namespace event slack

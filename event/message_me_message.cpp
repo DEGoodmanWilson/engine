@@ -2,16 +2,16 @@
 // Copyright © 2015 D.E. Goodman-Wilson. All rights reserved.
 //
 
-#include "slack/event/message.h"
+#include "slack/event/message_me_message.h"
 #include <json/json.h>
 
 namespace slack { namespace event
 {
 
-const std::string message::event_name{"message"};
+const std::string message_me_message::event_name{"message.me_message"};
 
 template<>
-message::message(const Json::Value &parsed_json)
+message_me_message::message_me_message(const Json::Value &parsed_json)
 {
     if (parsed_json.isNull()) return;
 

@@ -5,24 +5,30 @@
 #pragma once
 
 #include <slack/types.h>
+#include <slack/event.h>
 #include <slack/base/event.h>
 #include <slack/optional.hpp>
+#include <vector>
 
 
 namespace slack { namespace event
 {
 
-struct user_typing : public base::event
+
+struct message_channel_archive : public base::event
 {
     static const std::string event_name;
 
-    user_typing() = default;
+    message_channel_archive() = default;
 
     template<class json>
-    user_typing(const json &parsed_json);
+    message_channel_archive(const json &parsed_json);
 
-    channel_id channel;
     user_id user;
+    std::string text;
+    ts ts;
+    std::vector<user_id> members;
 };
+
 
 }} //namespace event slack

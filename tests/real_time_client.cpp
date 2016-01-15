@@ -64,8 +64,8 @@ TEST(rtm, user_typing)
     slack::real_time_client client{slack::real_time_client::parameter::url{"none"}, socket};
     client.register_event_handler<slack::event::user_typing>([](std::shared_ptr<slack::event::user_typing> event) {
         ASSERT_TRUE(static_cast<bool>(event));
-        ASSERT_EQ("C02ELGNBH", *event->channel);
-        ASSERT_EQ("U024BE7LH", *event->user);
+        ASSERT_EQ("C02ELGNBH", event->channel);
+        ASSERT_EQ("U024BE7LH", event->user);
     });
     socket->receive_message(event_str);
 }

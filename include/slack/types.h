@@ -71,6 +71,8 @@ MAKE_STRING_LIKE(team_id);
 
 MAKE_STRING_LIKE(user_id);
 
+MAKE_STRING_LIKE(bot_id);
+
 MAKE_STRING_LIKE(ts);
 
 MAKE_STRING_LIKE(channel_id);

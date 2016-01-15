@@ -18,7 +18,7 @@ TEST(message, message_json_constructor)
     auto ok = result_ob["ok"].asBool();
     ASSERT_TRUE(ok);
     slack::event::message m{result_ob["message"]};
-    ASSERT_EQ(*m.text, "this is a api.test");
+    ASSERT_EQ(m.text, "this is a api.test");
 }
 
 TEST(incoming_webhooks, incoming_webhooks_basic)

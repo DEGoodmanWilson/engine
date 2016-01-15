@@ -2,23 +2,23 @@
 // Copyright © 2015 D.E. Goodman-Wilson. All rights reserved.
 //
 
-#include "slack/event/message.h"
+#include "slack/event/message_bot_message.h"
 #include <json/json.h>
 
 namespace slack { namespace event
 {
 
-const std::string message::event_name{"message"};
+const std::string message_bot_message::event_name{"message.bot_message"};
 
 template<>
-message::message(const Json::Value &parsed_json)
+message_bot_message::message_bot_message(const Json::Value &parsed_json) : is_starred{false}
 {
     if (parsed_json.isNull()) return;
 
     if (parsed_json["channel"].isString()) channel = channel_id{parsed_json["channel"].asString()};
-    if (parsed_json["user"].isString()) user = user_id{parsed_json["user"].asString()};
+    if (parsed_json["bot_id"].isString()) bot_id = user_id{parsed_json["bot_id"].asString()};
     if (parsed_json["text"].isString()) text = parsed_json["text"].asString();
-    if (parsed_json["ts"].isString()) ts = slack::ts{parsed_json["ts"].asString()};
+    if (parsed_json["ts"].isString()) ts = slack::ts{parsed_json["text"].asString()};
     if (parsed_json["is_starred"].isString()) is_starred = parsed_json["is_starred"].asBool();
     if (parsed_json["pinned_to"].isArray())
     {
