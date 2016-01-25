@@ -7,6 +7,7 @@
 namespace slack_config
 {
 
+std::string host_ = "slack.com";
 std::string token_ = "";
 
 std::shared_ptr<slack::http> http_;
@@ -16,7 +17,7 @@ std::shared_ptr<slack::http> http_;
 namespace slack
 {
 
-void set_token(std::string token)
+void set_token(const std::string& token)
 {
     ::slack_config::token_ = token;
 }
@@ -25,6 +26,16 @@ void set_token(std::string token)
 std::string get_token()
 {
     return ::slack_config::token_;
+}
+
+void set_host(const std::string& host)
+{
+    ::slack_config::host_ = host;
+}
+
+std::string get_host()
+{
+    return ::slack_config::host_;
 }
 
 

@@ -10,9 +10,11 @@
 namespace slack
 {
 
-void set_token(std::string token);
-
+void set_token(const std::string& token);
 std::string get_token();
+
+void set_host(const std::string& host);
+std::string get_host();
 
 void set_http(std::shared_ptr<http> http);
 std::shared_ptr<http> get_http();

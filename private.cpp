@@ -40,7 +40,10 @@ Json::Value parse(slack::base::response *obj, const std::string &json)
     return result_ob;
 }
 
-const std::string HOSTNAME = "https://slack.com/api/";
+std::string make_hostname()
+{
+    return "https://" + slack::get_host() + "/api/";
+}
 
 
 Json::Value get(slack::base::response *obj, std::string endpoint, slack::http::params params, bool auth)
@@ -58,7 +61,7 @@ Json::Value get(slack::base::response *obj, std::string endpoint, slack::http::p
         slack::set_http(std::make_shared<slack::simple_http>());
     }
 
-    auto response = slack::get_http()->get(HOSTNAME + endpoint, params);
+    auto response = slack::get_http()->get(make_hostname() + endpoint, params);
     if (response.status_code != 200)
     {
         //TODO do something!
