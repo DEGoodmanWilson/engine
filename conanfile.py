@@ -24,7 +24,7 @@ class LunaConan(ConanFile):
 
     def build(self):
         cmake = CMake(self.settings)
-        build_engine_tests = "-DBUILD_ENGINE_TESTS=ON" if self.options.build_engine_tests else ""
+        build_engine_tests = "-DBUILD_ENGINE_TESTS=OFF" if not self.options.build_engine_tests else ""
 
         self.run('cmake %s "%s/luna" %s' % (build_engine_tests, self.conanfile_directory, cmake.command_line))
         self.run('cmake --build . %s' % cmake.build_config)
