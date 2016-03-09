@@ -3,11 +3,28 @@ project(engine)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
+##### Options
+
+macro(engine_option OPTION_NAME OPTION_TEXT OPTION_DEFAULT)
+    option(${OPTION_NAME} ${OPTION_TEXT} ${OPTION_DEFAULT})
+    if(DEFINED ENV{${OPTION_NAME}})
+        # Allow setting the option through an environment variable
+        set(${OPTION_NAME} $ENV{${OPTION_NAME}})
+    endif()
+    if(${OPTION_NAME})
+        add_definitions(-D${OPTION_NAME})
+    endif()
+    message(STATUS "  ${OPTION_NAME}: ${${OPTION_NAME}}")
+endmacro()
+
+message(STATUS "Engine CMake Options")
+message(STATUS "=======================================================")
+engine_option(BUILD_ENGINE_TESTS    "Build the test suite"            ON)
+message(STATUS "=======================================================")
+
 #cpr
-set(BUILD_CPR_TESTS NO)
-set(USE_SYSTEM_CURL YES)
-add_subdirectory(cpr)
-include_directories(${CPR_INCLUDE_DIRS})
+include(conanbuildinfo.cmake)
+CONAN_BASIC_SETUP()
 
 #websockets
 #add_subdirectory(Simple-WebSocket-Server)
@@ -117,13 +134,15 @@ set(ENGINE_FILES
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 
-target_link_libraries(engine cpr ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES})
+target_link_libraries(engine cpr ${Boost_LIBRARIES} ${CONAN_LIBS})
 
 set(ENGINE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "")
 set(ENGINE_LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "")
 
 #tests
+message(ERROR "${BUILD_ENGINE_TESTS}")
 #TODO make this an option.
-if (ENGINE_MAKE_TESTS)
+if (BUILD_ENGINE_TESTS)
+    enable_testing()
     add_subdirectory(tests)
 endif ()

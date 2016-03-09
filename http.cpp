@@ -3,7 +3,7 @@
 //
 
 #include "slack/http.h"
-#include <cpr.h>
+#include <cpr/cpr.h>
 
 namespace slack {
 
