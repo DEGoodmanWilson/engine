@@ -25,7 +25,7 @@ void test::initialize_()
 
     auto result_ob = slack_private::get(this, "api.test", params, false);
 
-    if (!this->error_message || *this->error_message == *this->error_)
+    if (!this->error_message)
     {
         if (!result_ob["args"].isNull() && result_ob["args"].isObject())
         {
