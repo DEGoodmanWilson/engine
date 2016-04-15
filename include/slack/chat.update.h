@@ -62,8 +62,8 @@ public:
     };
 
     //response
-    std::experimental::optional<channel_id> channel;
-    std::experimental::optional<ts> ts;
+    std::experimental::optional<slack::channel_id> channel;
+    std::experimental::optional<slack::ts> ts;
     std::experimental::optional<std::string> text;
 
     //parameter setters
@@ -88,7 +88,7 @@ public:
 private:
     void initialize_();
 
-    class ts ts_;
+    slack::ts ts_;
 
     channel_id channel_;
     std::string text_;

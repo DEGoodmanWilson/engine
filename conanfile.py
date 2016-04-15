@@ -6,7 +6,7 @@ class LunaConan(ConanFile):
     url = "https://github.com/DEGoodmanWilson/luna.git"
     license = "Apache 2.0"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "cpr/1.2.0@cpr/testing"
+    requires = "cpr/1.2.0@local/testing"
     options = {"build_engine_tests":    [True, False]}
     default_options = "build_engine_tests=True"
     generators = "cmake"

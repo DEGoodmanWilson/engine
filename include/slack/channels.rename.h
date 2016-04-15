@@ -45,7 +45,7 @@ public:
     };
 
     //response
-    std::experimental::optional<channel> channel;
+    std::experimental::optional<slack::channel> channel;
 
     //parameter setters
 

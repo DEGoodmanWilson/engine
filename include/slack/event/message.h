@@ -37,10 +37,10 @@ struct message : public base::event
     template<class json>
     message(const json &parsed_json);
 
-    channel_id channel;
-    user_id user;
+    slack::channel_id channel;
+    slack::user_id user;
     std::string text;
-    ts ts;
+    slack::ts ts;
 
     bool is_starred;
     std::vector<channel_id> pinned_to;

@@ -24,16 +24,16 @@ struct message_bot_message : public base::event
     template<class json>
     message_bot_message(const json &parsed_json);
 
-    channel_id channel;
-    bot_id bot_id;
+    slack::channel_id channel;
+    slack::bot_id bot_id;
     std::string username;
     std::string text;
-    ts ts;
+    slack::ts ts;
     std::vector<std::string> icons;
 
     bool is_starred;
-    std::vector<channel_id> pinned_to;
-    std::vector<reaction> reactions;
+    std::vector<slack::channel_id> pinned_to;
+    std::vector<slack::reaction> reactions;
 };
 
 
