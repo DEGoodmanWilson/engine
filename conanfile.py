@@ -6,9 +6,9 @@ class EngineConan(ConanFile):
     url = "https://github.com/DEGoodmanWilson/engine.git"
     license = "Apache 2.0"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "cpr/1.2.0@DEGoodmanWilson/testing", "OpenSSL/1.0.2h@lasote/stable"
+    requires = "cpr/1.2.0@DEGoodmanWilson/testing", "OpenSSL/1.0.2h@lasote/stable", "Boost/1.60.0@lasote/stable"
     options = {"build_engine_tests":    [True, False]}
-    default_options = "build_engine_tests=True"
+    default_options = "build_engine_tests=True", "Boost:shared=False"
     generators = "cmake"
 
     def source(self):

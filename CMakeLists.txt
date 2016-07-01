@@ -30,17 +30,6 @@ CONAN_BASIC_SETUP()
 #add_subdirectory(Simple-WebSocket-Server)
 include_directories(Simple-WebSocket-Server)
 
-
-
-
-# Boost
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_COMPONENTS system regex filesystem thread)
-find_package(Boost 1.53 REQUIRED ${Boost_COMPONENTS})
-include_directories(${Boost_INCLUDE_DIR})
-
-
 #jsoncpp
 set(JSONCPP_INCLUDE_DIR jsoncpp)
 set(JSON_SOURCES jsoncpp/jsoncpp.cpp)
@@ -125,7 +114,7 @@ set(ENGINE_FILES
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 
-target_link_libraries(engine ${Boost_LIBRARIES} ${CONAN_LIBS})
+target_link_libraries(engine ${CONAN_LIBS})
 
 set(ENGINE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "")
 set(ENGINE_LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "")
