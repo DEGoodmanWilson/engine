@@ -37,8 +37,8 @@ public:
     std::experimental::optional<std::string> url;
     std::experimental::optional<std::string> teamname;
     std::experimental::optional<std::string> username;
-    std::experimental::optional<team_id> team_id;
-    std::experimental::optional<user_id> user_id;
+    std::experimental::optional<slack::team_id> team_id;
+    std::experimental::optional<slack::user_id> user_id;
 
 private:
 };
