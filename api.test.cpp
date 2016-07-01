@@ -25,16 +25,13 @@ void test::initialize_()
 
     auto result_ob = slack_private::get(this, "api.test", params, false);
 
-    if (!this->error_message)
+    if (!result_ob["args"].isNull() && result_ob["args"].isObject())
     {
-        if (!result_ob["args"].isNull() && result_ob["args"].isObject())
-        {
-            args = std::map<std::string, std::string>{};
+        args = std::map<std::string, std::string>{};
 
-            for (auto arg: result_ob["args"].getMemberNames())
-            {
-                args->emplace(arg, result_ob["args"][arg].asString());
-            }
+        for (auto arg: result_ob["args"].getMemberNames())
+        {
+            args->emplace(arg, result_ob["args"][arg].asString());
         }
     }
 }
