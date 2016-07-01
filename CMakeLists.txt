@@ -22,7 +22,7 @@ message(STATUS "=======================================================")
 engine_option(BUILD_ENGINE_TESTS    "Build the test suite"            ON)
 message(STATUS "=======================================================")
 
-#cpr
+# Conan
 include(conanbuildinfo.cmake)
 CONAN_BASIC_SETUP()
 
@@ -31,23 +31,14 @@ CONAN_BASIC_SETUP()
 include_directories(Simple-WebSocket-Server)
 
 
+
+
 # Boost
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_COMPONENTS system regex filesystem thread)
 find_package(Boost 1.53 REQUIRED ${Boost_COMPONENTS})
 include_directories(${Boost_INCLUDE_DIR})
-
-
-# OpenSSL
-#set(OPENSSL_ROOT_DIR /usr/local/Cellar/openssl/1.0.2d_1/)
-#find_package(OpenSSL 1.0.2 REQUIRED)
-# OpenSSL, because brew.
-set(OPENSSL_INCLUDE_DIR /usr/local/opt/openssl/include)
-set(OPENSSL_LIB_DIR /usr/local/opt/openssl/lib)
-set(OPENSSL_LIBRARIES ssl crypto)
-include_directories(${OPENSSL_INCLUDE_DIR})
-link_directories(${OPENSSL_LIB_DIR})
 
 
 #jsoncpp
@@ -134,7 +125,7 @@ set(ENGINE_FILES
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 
-target_link_libraries(engine cpr ${Boost_LIBRARIES} ${CONAN_LIBS})
+target_link_libraries(engine ${Boost_LIBRARIES} ${CONAN_LIBS})
 
 set(ENGINE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "")
 set(ENGINE_LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "")

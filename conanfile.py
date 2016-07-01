@@ -1,12 +1,12 @@
 from conans import ConanFile, CMake
 
-class LunaConan(ConanFile):
-    name = "luna"
-    version = "1.0.0-beta5"
-    url = "https://github.com/DEGoodmanWilson/luna.git"
+class EngineConan(ConanFile):
+    name = "engine"
+    version = "1.0.0-beta1"
+    url = "https://github.com/DEGoodmanWilson/engine.git"
     license = "Apache 2.0"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "cpr/1.2.0@cpr/testing"
+    requires = "cpr/1.2.0@DEGoodmanWilson/testing", "OpenSSL/1.0.2h@lasote/stable"
     options = {"build_engine_tests":    [True, False]}
     default_options = "build_engine_tests=True"
     generators = "cmake"
