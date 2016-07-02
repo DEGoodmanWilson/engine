@@ -5,6 +5,8 @@
 #include "slack/rtm.start.h"
 #include "private.h"
 
+#include <iostream>
+
 namespace slack { namespace rtm
 {
 
@@ -38,14 +40,15 @@ void start::initialize_()
     {
         if (result_ob["url"].isString()) url = result_ob["url"].asString();
 
-        if (!result_ob["channels"].isNull() && result_ob["channels"].isArray())
-        {
-            channels = std::vector<channel>{};
-            for (const auto channel_obj : result_ob["channels"])
-            {
-                channels->emplace_back(channel_obj);
-            }
-        }
+        // This functionality is mysteriously broken for the moment :( Just as well, I don't think this is the right way to do it anymore, anyway.
+//        if (!result_ob["channels"].isNull() && result_ob["channels"].isArray())
+//        {
+//            channels = std::vector<channel>{};
+//            for (const auto channel_obj : result_ob["channels"])
+//            {
+//                channels->emplace_back(channel_obj);
+//            }
+//        }
 
         //TODO: There is a lot of work left to be done here!
     }
