@@ -27,5 +27,10 @@
 *.out
 *.app
 
-IntelliJ
+# IntelliJ
 .idea
+
+# Conan
+conanbuildinfo.cmake
+conanfile.pyc
+conaninfo.txt

@@ -108,7 +108,7 @@ struct user
     std::string name;
     bool deleted;
     std::string color; //TODO would be nice to have a color class!
-    profile profile;
+    slack::profile profile;
     bool is_admin;
     bool is_onwer;
     bool has_2fa;
@@ -123,11 +123,11 @@ struct command
     command(const std::map<std::string, std::string> &params);
 
     std::string token; // gIkuvaNzQIHg97ATvDxqgjtO
-    team_id team_id; // T0001
+    slack::team_id team_id; // T0001
     std::string team_domain; // example
-    channel_id channel_id; // C2147483705
+    slack::channel_id channel_id; // C2147483705
     std::string channel_name; // test
-    user_id user_id; // U2147483697
+    slack::user_id user_id; // U2147483697
     std::string user_name; // Steve
     std::string command_name; // /weather
     std::string text; // 94070

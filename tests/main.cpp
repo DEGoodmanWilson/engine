@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 #include <slack/slack.h>
-#include <cpr.h>
+#include <cpr/cpr.h>
 
 class Environment :
         public ::testing::Environment

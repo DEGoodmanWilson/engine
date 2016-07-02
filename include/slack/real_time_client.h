@@ -12,6 +12,8 @@
 #include <functional>
 #include <thread>
 #include <mutex>
+#include <atomic>
+#include <condition_variable>
 #include "websocket.h"
 
 // We need to think very carefully about the threading model. Who owns the thread?
@@ -67,7 +69,7 @@ public:
 
         MAKE_LONG_LONG_LIKE(ping_interval);
 
-        using websocket = std::shared_ptr<websocket>;
+        using websocket = std::shared_ptr<slack::websocket>;
 
         struct reconnect_policy
         {

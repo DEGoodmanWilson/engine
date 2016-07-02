@@ -21,6 +21,7 @@ TEST(api, api_with_lvalue_parameters)
 
     auto result = slack::api::test(e, f);
     ASSERT_FALSE(static_cast<bool>(result));
+    ASSERT_TRUE(static_cast<bool>(result.args));
     ASSERT_EQ("bar", result.args.value()["foo"]);
     ASSERT_EQ("error", *result.error_message);
 }

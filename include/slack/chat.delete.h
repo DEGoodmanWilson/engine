@@ -40,8 +40,8 @@ public:
     };
 
     //response
-    std::experimental::optional<channel_id> channel;
-    std::experimental::optional<ts> ts;
+    std::experimental::optional<slack::channel_id> channel;
+    std::experimental::optional<slack::ts> ts;
 
     //parameter setters
 

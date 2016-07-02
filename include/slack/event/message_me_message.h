@@ -24,14 +24,14 @@ struct message_me_message : public base::event
     template<class json>
     message_me_message(const json &parsed_json);
 
-    channel_id channel;
-    user_id user;
+    slack::channel_id channel;
+    slack::user_id user;
     std::string text;
-    ts ts;
+    slack::ts ts;
 
     bool is_starred;
-    std::vector<channel_id> pinned_to;
-    std::vector<reaction> reactions;
+    std::vector<slack::channel_id> pinned_to;
+    std::vector<slack::reaction> reactions;
 };
 
 
