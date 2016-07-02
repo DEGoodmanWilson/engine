@@ -51,7 +51,7 @@ add_executable(engine_tests
         chat.cpp
         oauth.cpp
         rtm.cpp
-        real_time_client.cpp
+#        real_time_client.cpp
         )
 
 target_link_libraries(engine_tests

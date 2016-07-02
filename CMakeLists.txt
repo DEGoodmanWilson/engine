@@ -85,8 +85,8 @@ set(ENGINE_FILES
         include/slack/attachment.h
         incoming_webhook.cpp
         include/slack/incoming_webhook.h
-        real_time_client.cpp
-        include/slack/real_time_client.h
+#        real_time_client.cpp
+#        include/slack/real_time_client.h
         event.cpp
         include/slack/base/event.h
         include/slack/event/hello.h
