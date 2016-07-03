@@ -5,7 +5,7 @@
 #pragma once
 
 #include <string>
-#include <slack/impl/private.h>
+#include <slack/set_option.h>
 #include <slack/impl/chat__post_message.h>
 
 namespace engine
@@ -28,7 +28,7 @@ public:
     message postMessage(const channel_id &channel, const std::string &text, Os &&...os)
     {
         chat__post_message_ session; //{channel, text};
-        private_::set_option<decltype(session)>(session, SLACK_FWD(os)...);
+        set_option<decltype(session)>(session, SLACK_FWD(os)...);
         return session.execute();
     }
 };

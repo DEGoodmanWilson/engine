@@ -32,7 +32,7 @@ include_directories(SYSTEM
         ${PROJECT_SOURCE_DIR}
         )
 
-set(ENGINE_FILES slack/slack.h slack/slack.cpp slack/slack.h slack/impl/private.h slack/chat.cpp slack/chat.h slack/impl/chat__post_message.cpp slack/impl/chat__post_message.h slack/types.h)
+set(ENGINE_FILES slack/slack.h slack/slack.cpp slack/slack.h slack/set_option.h slack/chat.cpp slack/chat.h slack/impl/chat__post_message.cpp slack/impl/chat__post_message.h slack/types.h slack/fwd.h)
 
 add_library(engine STATIC ${ENGINE_FILES})
 
