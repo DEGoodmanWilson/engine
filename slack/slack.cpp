@@ -3,3 +3,14 @@
 //
 
 #include "slack.h"
+
+namespace engine
+{
+
+slack::slack(const std::string &token)
+{ }
+
+slack::slack(std::string &&token)
+{ }
+
+} //namespace

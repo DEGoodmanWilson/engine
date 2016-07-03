@@ -1,15 +1,22 @@
 //
-// Created by Donald Goodman-Wilson on 7/3/16.
+// Copyright © 2016 D.E. Goodman-Wilson.
 //
 
-#ifndef ENGINE_SLACK_H
-#define ENGINE_SLACK_H
+#pragma once
 
+#include <slack/types.h>
+#include <slack/chat.h>
+
+namespace engine
+{
 
 class slack
 {
+public:
+    slack(const std::string & token);
+    slack(std::string && token);
 
+    ::engine::endpoints::chat chat;
 };
 
-
-#endif //ENGINE_SLACK_H
+} //namespace engine
