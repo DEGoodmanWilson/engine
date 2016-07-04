@@ -31,6 +31,9 @@ CONAN_BASIC_SETUP()
 include_directories(SYSTEM
         ${PROJECT_SOURCE_DIR}
         )
+include_directories(
+        ${PROJECT_SOURCE_DIR}/private
+        )
 
 set(ENGINE_FILES
         slack/slack.h
@@ -39,13 +42,16 @@ set(ENGINE_FILES
         slack/set_option.h
         slack/chat.cpp
         slack/chat.h
-        slack/impl/chat__post_message.cpp
-        slack/impl/chat__post_message.h
+        slack/chat.postMessage.cpp
+        slack/chat.postMessage.h
         slack/types.h
         slack/fwd.h
         slack/optional.hpp
         slack/attachment.h
-)
+        slack/private/private.h
+        slack/message.h
+        slack/response.h
+        )
 
 add_library(engine STATIC ${ENGINE_FILES})
 

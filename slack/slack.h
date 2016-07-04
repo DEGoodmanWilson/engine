@@ -16,7 +16,7 @@ public:
     slack(const std::string & token);
     slack(std::string && token);
 
-    ::slack::endpoints::chat chat;
+    ::slack::containers::chat chat;
 };
 
 } //namespace slack

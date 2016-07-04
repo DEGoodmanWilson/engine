@@ -6,11 +6,11 @@
 
 #include <string>
 #include <slack/set_option.h>
-#include <slack/impl/chat__post_message.h>
+#include <slack/chat.postMessage.h>
 
 namespace slack
 {
-namespace endpoints
+namespace containers
 {
 class chat
 {
@@ -20,16 +20,13 @@ public:
     template<typename ...Os>
     message postMessage(const channel_id &channel, const std::string &text)
     {
-        chat__post_message_ session; //{channel, text};
-        return session.execute();
+        return std::unique_ptr<chat::post_message>(channel, text);
     }
 
     template<typename ...Os>
     message postMessage(const channel_id &channel, const std::string &text, Os &&...os)
     {
-        chat__post_message_ session; //{channel, text};
-        set_option<decltype(session)>(session, SLACK_FWD(os)...);
-        return session.execute();
+        return std::unique_ptr<chat::post_message>(channel, text, SLACK_FWD(os)...);
     }
 };
 } //namespace endpoints
