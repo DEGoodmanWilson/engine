@@ -7,7 +7,7 @@
 #include <slack/types.h>
 #include <slack/chat.h>
 
-namespace engine
+namespace slack
 {
 
 class slack
@@ -16,7 +16,7 @@ public:
     slack(const std::string & token);
     slack(std::string && token);
 
-    ::engine::endpoints::chat chat;
+    ::slack::endpoints::chat chat;
 };
 
-} //namespace engine
+} //namespace slack

@@ -4,7 +4,7 @@
 
 #include "slack.h"
 
-namespace engine
+namespace slack
 {
 
 slack::slack(const std::string &token)

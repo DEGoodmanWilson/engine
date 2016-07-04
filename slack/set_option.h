@@ -6,7 +6,7 @@
 
 #include <slack/fwd.h>
 
-namespace engine
+namespace slack
 {
 
 template<class S, typename T>

@@ -8,7 +8,7 @@
 #include <slack/set_option.h>
 #include <slack/impl/chat__post_message.h>
 
-namespace engine
+namespace slack
 {
 namespace endpoints
 {
@@ -33,4 +33,4 @@ public:
     }
 };
 } //namespace endpoints
-} //namespace engine
+} //namespace slack
