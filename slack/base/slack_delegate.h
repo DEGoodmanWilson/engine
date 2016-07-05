@@ -10,7 +10,7 @@ namespace slack
     class slack_delegate
     {
     public:
-        virtual std::string token() = 0;
+        virtual std::string token() const = 0;
     };
 
 } //namespace slack

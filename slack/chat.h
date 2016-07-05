@@ -17,10 +17,11 @@ namespace containers
 class chat
 {
 public:
-    chat(slack_delegate *delegate);
+    chat(slack_delegate *delegate) : delegate_{delegate}
+    { }
 
     template<typename ...Os>
-    std::unique_ptr<::slack::chat::postMessage> postMessage(const channel_id &channel, const std::string &text)
+    std::unique_ptr<::slack::chat::postMessage> postMessage(const channel_id &channel, const std::string &text) const
     {
         return std::make_unique<::slack::chat::postMessage>(delegate_->token(), channel, text);
     }
@@ -28,13 +29,13 @@ public:
     template<typename ...Os>
     std::unique_ptr<::slack::chat::postMessage> postMessage(const channel_id &channel,
                                                             const std::string &text,
-                                                            Os &&...os)
+                                                            Os &&...os) const
     {
         return std::make_unique<::slack::chat::postMessage>(delegate_->token(), channel, text, SLACK_FWD(os)...);
     }
 
 private:
-    slack_delegate *delegate_;
+    const slack_delegate *delegate_;
 };
 } //namespace endpoints
 } //namespace slack

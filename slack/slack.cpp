@@ -7,13 +7,13 @@
 namespace slack
 {
 
-slack::slack(const std::string &token) : token_{token}, chat{this}
+slack::slack(const std::string &token) : token_{token}, api{this}, chat{this}
 { }
 
-slack::slack(std::string &&token) : token_{std::move(token)}, chat{this}
+slack::slack(std::string &&token) : token_{std::move(token)}, api{this}, chat{this}
 { }
 
-std::string slack::token()
+std::string slack::token() const
 {
     return token_;
 }

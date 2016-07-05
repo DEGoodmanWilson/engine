@@ -5,6 +5,7 @@
 #pragma once
 
 #include <slack/types.h>
+#include <slack/api.h>
 #include <slack/chat.h>
 #include <slack/base/slack_delegate.h>
 
@@ -17,10 +18,11 @@ public:
     slack(const std::string &token);
     slack(std::string &&token);
 
-    std::string token();
-    ::slack::containers::chat chat;
+    std::string token() const;
+    const ::slack::containers::api api;
+    const ::slack::containers::chat chat;
 private:
-    std::string token_;
+    const std::string token_;
 };
 
 } //namespace slack

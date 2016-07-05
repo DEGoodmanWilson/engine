@@ -1,6 +1,15 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(ENGINE_TEST_FILES main.cpp main.cpp)
+set(ENGINE_TEST_FILES
+        main.cpp
+        types.cpp
+        api.cpp
+#        auth.cpp
+#        channels.cpp
+#        chat.cpp
+#        oauth.cpp
+#        rtm.cpp
+        environment.h)
 
 add_executable(engine_tests ${ENGINE_TEST_FILES})
 
