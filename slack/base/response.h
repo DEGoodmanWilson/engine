@@ -5,8 +5,9 @@
 #pragma once
 
 #include <slack/types.h>
-#include <string>
 #include <slack/optional.hpp>
+#include <slack/http.h>
+#include <string>
 #include <map>
 #include <memory>
 
@@ -29,9 +30,14 @@ struct error
 
 struct response
 {
-    response() {};
-    response(const std::string& token) : token_{token} {}
-    response(std::string&& token) : token_{std::move(token)} {}
+    response()
+    { };
+
+    response(const std::string &token) : token_{token}
+    { }
+
+    response(std::string &&token) : token_{std::move(token)}
+    { }
 
     std::string raw_json;
     std::experimental::optional<std::string> error_message;
@@ -39,6 +45,12 @@ struct response
     operator bool()
     {
         return !static_cast<bool>(error_message); //if error contains a value, return false
+    }
+
+    http::params default_params(http::params params) //TODO yes, we are making a copy. Let's optimize this later
+    {
+        params.emplace("token", token_);
+        return params;
     }
 
 protected:

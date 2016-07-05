@@ -13,7 +13,7 @@ const std::string test::error::INVALID_AUTH = std::string{"invalid_auth"};
 const std::string test::error::ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
 
-test::test()
+test::test(const std::string& token) : response{token}
 {
     auto result_ob = slack_private::get(this, "auth.test", {});
     if (!this->error_message)

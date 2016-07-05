@@ -18,7 +18,7 @@ class test :
 {
 public:
     // constructor
-    test();
+    test(const std::string& token);
 
     // parameters
     struct parameter

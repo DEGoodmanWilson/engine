@@ -9,13 +9,7 @@
 #include <json/json.h>
 #include <map>
 
-namespace slack
-{
-namespace http
-{
-using params = std::map<std::string, std::string>;
-}
-}
+
 
 namespace slack_private
 {
