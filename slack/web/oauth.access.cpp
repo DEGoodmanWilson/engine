@@ -18,11 +18,11 @@ const std::string access::error::BAD_REDIRECT_URI = std::string{"bad_redirect_ur
 
 void access::initialize_()
 {
-    http::params params{
+    auto params = default_params({
             {"client_id",     client_id_},
             {"client_secret", client_secret_},
             {"code",          code_}
-    };
+    });
 
     if (redirect_uri_)
     {

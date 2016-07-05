@@ -21,15 +21,15 @@ class update :
 public:
     //public interface
     template<typename ...Os>
-    update(const ts &ts, const channel_id &channel, const std::string &text)
-            : ts_{ts}, channel_{channel}, text_{text}
+    update(const std::string& token, const ts &ts, const channel_id &channel, const std::string &text)
+            : response{token}, ts_{ts}, channel_{channel}, text_{text}
     {
         initialize_();
     }
 
     template<typename ...Os>
-    update(const ts &ts, const channel_id &channel, const std::string &text, Os &&...os)
-            : ts_{ts}, channel_{channel}, text_{text}
+    update(const std::string& token, const ts &ts, const channel_id &channel, const std::string &text, Os &&...os)
+            : response{token}, ts_{ts}, channel_{channel}, text_{text}
     {
         slack::set_option<update>(*this, std::forward<Os>(os)...);
         initialize_();

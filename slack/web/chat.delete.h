@@ -18,7 +18,11 @@ class delete_it : public slack::base::response
 {
 public:
     //public interface
-    delete_it(const ts &ts, const channel_id &channel);
+    delete_it(const std::string &token, const ts &ts, const channel_id &channel) :
+            response{token}, ts_{ts}, channel_{channel}
+    {
+        initialize_();
+    }
 
     //parameters
     struct parameter

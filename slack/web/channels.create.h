@@ -20,7 +20,11 @@ class create :
 {
 public:
     //public interface
-    create(const std::string& name);
+    create(const std::string &token, const std::string &name) : response{token}, name_{name}
+    {
+        initialize_();
+    }
+
 
     //parameters
     struct parameter

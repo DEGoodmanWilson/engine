@@ -11,7 +11,7 @@ namespace slack { namespace api
 
 void test::initialize_()
 {
-    http::params params;
+    http::params params; //No need for auth tokens here.
 
     if (error_)
     {

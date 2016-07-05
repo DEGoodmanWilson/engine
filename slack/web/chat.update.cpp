@@ -19,11 +19,11 @@ const std::string update::error::ACCOUNT_INACTIVE = std::string{"account_inactiv
 
 void update::initialize_()
 {
-    http::params params{
+    auto params = default_params({
             {"ts",      ts_},
             {"channel", channel_},
             {"text",    text_}
-    };
+    });
 
     //optional parameters
     if (parse_)

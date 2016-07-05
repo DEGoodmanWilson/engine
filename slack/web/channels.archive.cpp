@@ -26,7 +26,7 @@ archive::archive(const channel_id &channel) : channel_{channel}
 
 void archive::initialize_()
 {
-    http::params params{{"channel", channel_}};
+    auto params = default_params({{"channel", channel_}});
 
     slack_private::get(this, "channels.archive", params);
 }

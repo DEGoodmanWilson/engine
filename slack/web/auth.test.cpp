@@ -15,7 +15,9 @@ const std::string test::error::ACCOUNT_INACTIVE = std::string{"account_inactive"
 
 test::test(const std::string& token) : response{token}
 {
-    auto result_ob = slack_private::get(this, "auth.test", {});
+    auto params = default_params({ });
+
+    auto result_ob = slack_private::get(this, "auth.test", params);
     if (!this->error_message)
     {
         if (result_ob["url"].isString()) url = result_ob["url"].asString();

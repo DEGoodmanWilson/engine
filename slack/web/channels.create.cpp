@@ -18,14 +18,9 @@ const auto USER_IS_BOT = std::string{"user_is_bot"};
 const auto USER_IS_RESTRICTED = std::string{"user_is_restricted"};
 
 
-create::create(const std::string &name)
-        : name_{name}
-{ }
-
-
 void create::initialize_()
 {
-    http::params params{{"name", name_}};
+    auto params = default_params({{"name", name_}});
 
     auto result_ob = slack_private::get(this, "channels.create", params);
     if (!this->error_message)

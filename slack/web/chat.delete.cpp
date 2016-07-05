@@ -18,16 +18,12 @@ const std::string delete_it::error::INVALID_AUTH = std::string{"invalid_auth"};
 const std::string delete_it::error::ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
 
-delete_it::delete_it(const class ts &ts, const channel_id &channel)
-        : ts_{ts}, channel_{channel}
-{ }
-
 void delete_it::initialize_()
 {
-    http::params params{
+    auto params = default_params({
             {"ts",      ts_},
             {"channel", channel_}
-    };
+    });
 
     auto result_ob = slack_private::get(this, "chat.delete", params);
 

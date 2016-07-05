@@ -19,15 +19,12 @@ const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
 const auto USER_IS_BOT = std::string{"user_is_bot"};
 const auto USER_IS_RESTRICTED = std::string{"user_is_restricted"};
 
-rename::rename(const channel_id &channel, const std::string &name) : channel_{channel}, name_{name}
-{ }
-
 void rename::initialize_()
 {
-    http::params params{
+    auto params = default_params({
             {"channel", channel_},
             {"name",    name_}
-    };
+    });
 
     auto result_ob = slack_private::get(this, "channels.rename", params);
 

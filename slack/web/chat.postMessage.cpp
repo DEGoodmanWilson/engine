@@ -20,7 +20,7 @@ const std::string postMessage::error::ACCOUNT_INACTIVE = std::string{"account_in
 
 void postMessage::initialize_()
 {
-    http::params params = default_params({
+    auto params = default_params({
             {"channel", channel_},
             {"text",    text_}
     });

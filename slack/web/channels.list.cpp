@@ -15,7 +15,7 @@ const std::string list::error::ACCOUNT_INACTIVE = std::string{"account_inactive"
 
 void list::initialize_()
 {
-    http::params params;
+    auto params = default_params({});
 
     if (exclude_archived_)
     {

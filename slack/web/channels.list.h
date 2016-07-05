@@ -20,13 +20,13 @@ class list : public slack::base::response
 public:
     //public interface
     template<typename ...Os>
-    list()
+    list(const std::string& token) : response{token}
     {
         initialize_();
     }
 
     template<typename ...Os>
-    list(Os &&...os)
+    list(const std::string& token, Os &&...os) : response{token}
     {
         slack::set_option<list>(*this, std::forward<Os>(os)...);
         initialize_();

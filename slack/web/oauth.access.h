@@ -21,15 +21,15 @@ public:
     //public interface
 
     template<typename ...Os>
-    access(const std::string &client_id, const std::string &client_secret, const std::string &code)
-            : client_id_{client_id}, client_secret_{client_secret}, code_{code}
+    access(const std::string& token, const std::string &client_id, const std::string &client_secret, const std::string &code)
+            : response{token}, client_id_{client_id}, client_secret_{client_secret}, code_{code}
     {
         initialize_();
     }
 
     template<typename ...Os>
-    access(const std::string &client_id, const std::string &client_secret, const std::string &code, Os &&...os)
-            : client_id_{client_id}, client_secret_{client_secret}, code_{code}
+    access(const std::string& token, const std::string &client_id, const std::string &client_secret, const std::string &code, Os &&...os)
+            : response{token}, client_id_{client_id}, client_secret_{client_secret}, code_{code}
     {
         slack::set_option<access>(*this, std::forward<Os>(os)...);
         initialize_();

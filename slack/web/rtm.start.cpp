@@ -18,7 +18,7 @@ const auto ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
 void start::initialize_()
 {
-    http::params params;
+    auto params = default_params({});
 
     //optional parameters
     if (simple_latest_)

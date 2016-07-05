@@ -20,7 +20,11 @@ class rename :
 {
 public:
     //public interface
-    rename(const channel_id &channel, const std::string &name);
+    rename(const std::string &token, const channel_id &channel, const std::string &name) :
+            response{token}, channel_{channel}, name_{name}
+    {
+        initialize_();
+    }
 
     //parameters
     struct parameter
