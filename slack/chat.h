@@ -6,7 +6,7 @@
 
 #include <string>
 #include <slack/set_option.h>
-#include <slack/chat.postMessage.h>
+#include <slack/web/chat.postMessage.h>
 #include <slack/base/slack_delegate.h>
 
 namespace slack

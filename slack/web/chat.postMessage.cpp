@@ -2,7 +2,7 @@
 // Copyright © 2015 D.E. Goodman-Wilson. All rights reserved.
 //
 
-#include "slack/chat.postMessage.h"
+#include "slack/web/chat.postMessage.h"
 #include "private.h"
 #include <json/json.h>
 

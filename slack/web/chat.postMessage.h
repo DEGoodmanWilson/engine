@@ -21,14 +21,14 @@ class postMessage : public slack::base::response
 public:
     template<typename ...Os>
     postMessage(const std::string& token, const channel_id& channel, const std::string& text)
-            : token_{token}, channel_{channel}, text_{text}
+            : response{token}, channel_{channel}, text_{text}
     {
         initialize_();
     }
 
     template<typename ...Os>
     postMessage(const std::string& token, const channel_id& channel, const std::string& text, Os &&...os)
-            : token_{token}, channel_{channel}, text_{text}
+            : response{token}, channel_{channel}, text_{text}
     {
         slack::set_option<postMessage>(*this, std::forward<Os>(os)...);
         initialize_();
@@ -127,7 +127,6 @@ public:
 private:
     void initialize_();
 
-    std::string token_;
     channel_id channel_;
     std::string text_;
     std::experimental::optional<parameter::username> username_;

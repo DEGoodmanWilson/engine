@@ -49,8 +49,28 @@ set(ENGINE_FILES
         slack/set_option.h
         slack/chat.cpp
         slack/chat.h
-        slack/chat.postMessage.cpp
-        slack/chat.postMessage.h
+        slack/web/api.test.cpp
+        slack/web/api.test.h
+        slack/web/channels.archive.cpp
+        slack/web/channels.archive.h
+        slack/web/channels.list.cpp
+        slack/web/channels.list.h
+        slack/web/chat.delete.cpp
+        slack/web/chat.delete.h
+        slack/web/chat.update.cpp
+        slack/web/chat.update.h
+        slack/web/rtm.start.cpp
+        slack/web/rtm.start.h
+        slack/web/auth.test.cpp
+        slack/web/auth.test.h
+        slack/web/channels.create.cpp
+        slack/web/channels.create.h
+        slack/web/channels.rename.cpp
+        slack/web/channels.rename.h
+        slack/web/chat.postMessage.cpp
+        slack/web/chat.postMessage.h
+        slack/web/oauth.access.cpp
+        slack/web/oauth.access.h
         slack/types.h
         slack/fwd.h
         slack/optional.hpp
@@ -77,7 +97,7 @@ set(ENGINE_FILES
         slack/event/message_bot_message.h
         slack/event/message_me_message.h
         slack/event/user_typing.h
-        slack/types.cpp slack/uricodec.cpp slack/uricodec.h slack/base/slack_delegate.h)
+        slack/types.cpp slack/uricodec.cpp slack/uricodec.h slack/base/slack_delegate.h slack/channel.cpp slack/channel.h)
 
 add_library(engine STATIC ${ENGINE_FILES})
 

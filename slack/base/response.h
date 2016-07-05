@@ -29,6 +29,10 @@ struct error
 
 struct response
 {
+    response() {};
+    response(const std::string& token) : token_{token} {}
+    response(std::string&& token) : token_{std::move(token)} {}
+
     std::string raw_json;
     std::experimental::optional<std::string> error_message;
 
@@ -36,6 +40,9 @@ struct response
     {
         return !static_cast<bool>(error_message); //if error contains a value, return false
     }
+
+protected:
+    std::string token_;
 };
 
 
