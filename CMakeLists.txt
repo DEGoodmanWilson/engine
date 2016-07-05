@@ -56,18 +56,28 @@ set(ENGINE_FILES
         slack/optional.hpp
         slack/attachment.h
         slack/private/private.h
+        slack/private/private.cpp
         slack/base/response.h
         slack/base/event.h
         slack/event.h
+        slack/attachment.cpp
+        slack/event/channel_archive.cpp
+        slack/event/message.cpp
+        slack/event/message_channel_archive.cpp
+        slack/event/pong.cpp
         slack/event/channel_archive.h
         slack/event/message.h
         slack/event/message_channel_archive.h
         slack/event/pong.h
+        slack/event/hello.cpp
+        slack/event/message_bot_message.cpp
+        slack/event/message_me_message.cpp
+        slack/event/user_typing.cpp
         slack/event/hello.h
         slack/event/message_bot_message.h
         slack/event/message_me_message.h
         slack/event/user_typing.h
-        slack/attachment.cpp)
+        slack/types.cpp slack/uricodec.cpp slack/uricodec.h)
 
 add_library(engine STATIC ${ENGINE_FILES})
 

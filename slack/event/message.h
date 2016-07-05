@@ -37,6 +37,10 @@ struct message : public base::event
     template<class json>
     message(const json &parsed_json);
 
+    //TODO we should implement these.
+//    template<class json>
+//    message(json &&parsed_json);
+
     slack::channel_id channel;
     slack::user_id user;
     std::string text;

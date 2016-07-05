@@ -4,12 +4,11 @@
 
 #pragma once
 
-
+#include <slack/fwd.h>
+#include <slack/set_option.h>
 #include <string>
 #include <vector>
 #include <map>
-#include <slack/fwd.h>
-#include <slack/set_option.h>
 #include <slack/optional.hpp>
 
 
