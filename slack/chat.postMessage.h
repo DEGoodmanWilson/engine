@@ -7,8 +7,8 @@
 #include <slack/types.h>
 #include <slack/attachment.h>
 #include <slack/set_option.h>
-#include <slack/response.h>
-#include <slack/message.h>
+#include <base/response.h>
+#include <slack/event/message.h>
 #include <string>
 #include <vector>
 #include <slack/optional.hpp>
@@ -16,21 +16,21 @@
 namespace slack { namespace chat
 {
 
-class post_message : public slack::base::response
+class postMessage : public slack::base::response
 {
 public:
     template<typename ...Os>
-    post_message(const channel_id& channel, const std::string& text)
+    postMessage(const channel_id& channel, const std::string& text)
             : channel_{channel}, text_{text}
     {
         initialize_();
     }
 
     template<typename ...Os>
-    post_message(const channel_id& channel, const std::string& text, Os &&...os)
+    postMessage(const channel_id& channel, const std::string& text, Os &&...os)
             : channel_{channel}, text_{text}
     {
-        slack::set_option<post_message>(*this, std::forward<Os>(os)...);
+        slack::set_option<postMessage>(*this, std::forward<Os>(os)...);
         initialize_();
     }
 

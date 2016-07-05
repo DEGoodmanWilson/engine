@@ -6,16 +6,26 @@
 
 #include "slack/base/response.h"
 #include "slack/base/event.h"
-#include "slack/config.h"
-#include "slack/http.h"
 #include <json/json.h>
+#include <map>
+
+namespace slack
+{
+namespace http
+{
+using params = std::map<std::string, std::string>;
+}
+}
 
 namespace slack_private
 {
 
 Json::Value parse(const std::string &json);
 
-Json::Value get(slack::base::response *obj, std::string endpoint, slack::http::params params, bool auth = true);
+Json::Value get(slack::base::response *obj,
+                const std::string &endpoint,
+                const slack::http::params &params,
+                bool auth = true);
 
 struct json_impl
 {

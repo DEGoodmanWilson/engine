@@ -9,17 +9,16 @@
 namespace slack { namespace chat
 {
 
-const std::string post_message::error::MESSAGE_NOT_FOUND = std::string{"message_not_found"};
-const std::string post_message::error::CHANNEL_NOT_FOUND = std::string{"channel_not_found"};
-const std::string post_message::error::CANT_DELETE_MESSAGE = std::string{"cant_delete_message"};
-const std::string post_message::error::COMPLIANCE_EXPORTS_PREVENT_DELETION = std::string{
-        "compliance_exports_prevent_deletion"};
-const std::string post_message::error::NOT_AUTHED = std::string{"not_authed"};
-const std::string post_message::error::INVALID_AUTH = std::string{"invalid_auth"};
-const std::string post_message::error::ACCOUNT_INACTIVE = std::string{"account_inactive"};
+const std::string postMessage::error::MESSAGE_NOT_FOUND = std::string{"message_not_found"};
+const std::string postMessage::error::CHANNEL_NOT_FOUND = std::string{"channel_not_found"};
+const std::string postMessage::error::CANT_DELETE_MESSAGE = std::string{"cant_delete_message"};
+const std::string postMessage::error::COMPLIANCE_EXPORTS_PREVENT_DELETION = std::string{"compliance_exports_prevent_deletion"};
+const std::string postMessage::error::NOT_AUTHED = std::string{"not_authed"};
+const std::string postMessage::error::INVALID_AUTH = std::string{"invalid_auth"};
+const std::string postMessage::error::ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
 
-void post_message::initialize_()
+void postMessage::initialize_()
 {
     http::params params{
             {"channel", channel_},

@@ -22,6 +22,11 @@ engine_option(BUILD_ENGINE_TESTS "Build the test suite" OFF)
 engine_option(BUILD_ENGINE_EXAMPLES "Build the examples" OFF)
 message(STATUS "=======================================================")
 
+##### JSONCPP
+
+set(JSONCPP_INCLUDE_DIR jsoncpp)
+set(JSON_SOURCES jsoncpp/jsoncpp.cpp)
+include_directories(SYSTEM ${JSONCPP_INCLUDE_DIR})
 
 ##### Engine
 
@@ -32,10 +37,12 @@ include_directories(SYSTEM
         ${PROJECT_SOURCE_DIR}
         )
 include_directories(
-        ${PROJECT_SOURCE_DIR}/private
+        ${PROJECT_SOURCE_DIR}/slack
+        ${PROJECT_SOURCE_DIR}/slack/private
         )
 
 set(ENGINE_FILES
+        ${JSON_SOURCES}
         slack/slack.h
         slack/slack.cpp
         slack/slack.h
@@ -49,9 +56,18 @@ set(ENGINE_FILES
         slack/optional.hpp
         slack/attachment.h
         slack/private/private.h
-        slack/message.h
-        slack/response.h
-        )
+        slack/base/response.h
+        slack/base/event.h
+        slack/event.h
+        slack/event/channel_archive.h
+        slack/event/message.h
+        slack/event/message_channel_archive.h
+        slack/event/pong.h
+        slack/event/hello.h
+        slack/event/message_bot_message.h
+        slack/event/message_me_message.h
+        slack/event/user_typing.h
+        slack/attachment.cpp)
 
 add_library(engine STATIC ${ENGINE_FILES})
 

@@ -18,15 +18,15 @@ public:
     using message = int;
 
     template<typename ...Os>
-    message postMessage(const channel_id &channel, const std::string &text)
+    std::unique_ptr<::slack::chat::postMessage> postMessage(const channel_id &channel, const std::string &text)
     {
-        return std::unique_ptr<chat::post_message>(channel, text);
+        return std::make_unique<::slack::chat::postMessage>(channel, text);
     }
 
     template<typename ...Os>
-    message postMessage(const channel_id &channel, const std::string &text, Os &&...os)
+    std::unique_ptr<::slack::chat::postMessage> postMessage(const channel_id &channel, const std::string &text, Os &&...os)
     {
-        return std::unique_ptr<chat::post_message>(channel, text, SLACK_FWD(os)...);
+        return std::make_unique<::slack::chat::postMessage>(channel, text, SLACK_FWD(os)...);
     }
 };
 } //namespace endpoints

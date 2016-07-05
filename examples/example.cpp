@@ -10,9 +10,9 @@ int main()
 
     //This is how it should go
     ::slack::slack s{"xoxp-1234"};
-    auto message = s.chat.postMessage("channel", "message");
+    auto response = s.chat.postMessage("channel", "message");
 
-    cout << message << endl;
+    cout << response->message->text << endl;
 
     return 0;
 }
