@@ -77,7 +77,7 @@ set(ENGINE_FILES
         slack/event/message_bot_message.h
         slack/event/message_me_message.h
         slack/event/user_typing.h
-        slack/types.cpp slack/uricodec.cpp slack/uricodec.h)
+        slack/types.cpp slack/uricodec.cpp slack/uricodec.h slack/base/slack_delegate.h)
 
 add_library(engine STATIC ${ENGINE_FILES})
 

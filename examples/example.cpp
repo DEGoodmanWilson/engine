@@ -6,11 +6,14 @@ using namespace slack;
 
 int main()
 {
-    cout << "Hello, World!" << endl;
+
+    std::string token{std::getenv("SLACK_TOKEN")};
+    std::string channel{std::getenv("SLACK_CHANNEL")};
+    std::string text{"This is a test!"};
 
     //This is how it should go
-    ::slack::slack s{"xoxp-1234"};
-    auto response = s.chat.postMessage("channel", "message");
+    ::slack::slack s{token};
+    auto response = s.chat.postMessage(channel, text);
 
     cout << response->message->text << endl;
 

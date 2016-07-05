@@ -6,17 +6,21 @@
 
 #include <slack/types.h>
 #include <slack/chat.h>
+#include <slack/base/slack_delegate.h>
 
 namespace slack
 {
 
-class slack
+class slack : slack_delegate
 {
 public:
-    slack(const std::string & token);
-    slack(std::string && token);
+    slack(const std::string &token);
+    slack(std::string &&token);
 
+    std::string token();
     ::slack::containers::chat chat;
+private:
+    std::string token_;
 };
 
 } //namespace slack

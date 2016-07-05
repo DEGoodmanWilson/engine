@@ -21,6 +21,7 @@ const std::string postMessage::error::ACCOUNT_INACTIVE = std::string{"account_in
 void postMessage::initialize_()
 {
     http::params params{
+            {"token", token_},
             {"channel", channel_},
             {"text",    text_}
     };
