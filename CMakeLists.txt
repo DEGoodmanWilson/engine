@@ -1,128 +1,117 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 2.8)
 project(engine)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 ##### Options
-
 macro(engine_option OPTION_NAME OPTION_TEXT OPTION_DEFAULT)
     option(${OPTION_NAME} ${OPTION_TEXT} ${OPTION_DEFAULT})
-    if(DEFINED ENV{${OPTION_NAME}})
+    if (DEFINED ENV{${OPTION_NAME}})
         # Allow setting the option through an environment variable
         set(${OPTION_NAME} $ENV{${OPTION_NAME}})
-    endif()
-    if(${OPTION_NAME})
+    endif ()
+    if (${OPTION_NAME})
         add_definitions(-D${OPTION_NAME})
-    endif()
+    endif ()
     message(STATUS "  ${OPTION_NAME}: ${${OPTION_NAME}}")
 endmacro()
 
 message(STATUS "Engine CMake Options")
 message(STATUS "=======================================================")
-engine_option(BUILD_ENGINE_TESTS    "Build the test suite"            ON)
+engine_option(BUILD_ENGINE_TESTS "Build the test suite" OFF)
+engine_option(BUILD_ENGINE_EXAMPLES "Build the examples" OFF)
 message(STATUS "=======================================================")
 
-# Conan
+##### JSONCPP
+
+set(JSONCPP_INCLUDE_DIR jsoncpp)
+set(JSON_SOURCES jsoncpp/jsoncpp.cpp)
+include_directories(SYSTEM ${JSONCPP_INCLUDE_DIR})
+
+##### Engine
+
 include(conanbuildinfo.cmake)
 CONAN_BASIC_SETUP()
 
-#websockets
-#add_subdirectory(Simple-WebSocket-Server)
-include_directories(Simple-WebSocket-Server)
-
-#jsoncpp
-set(JSONCPP_INCLUDE_DIR jsoncpp)
-set(JSON_SOURCES jsoncpp/jsoncpp.cpp)
-
-
 include_directories(SYSTEM
-        ${JSONCPP_INCLUDE_DIR}
-        include
-        .
+        ${PROJECT_SOURCE_DIR}
         )
-
+include_directories(
+        ${PROJECT_SOURCE_DIR}/slack
+        ${PROJECT_SOURCE_DIR}/slack/private
+        )
 
 set(ENGINE_FILES
-        uricodec.h
-        uricodec.cpp
-        include/slack/slack.h
-        types.cpp
-        include/slack/types.h
-        include/slack/config.h
-        config.h
-        config.cpp
-        base/response.cpp
-        include/slack/base/response.h
-        private.h
-        include/slack/http.h
-        http.cpp
-        include/slack/set_option.h
-        include/slack/api.test.h
-        api.test.cpp
-        include/slack/auth.test.h
-        auth.test.cpp
-        include/slack/channels.list.h
-        channels.list.cpp
-        include/slack/channels.create.h
-        channels.create.cpp
-        include/slack/channels.archive.h
-        channels.archive.cpp
-        include/slack/chat.delete.h
-        chat.delete.cpp
-        include/slack/chat.post_message.h
-        chat.post_message.cpp
-        include/slack/chat.update.h
-        chat.update.cpp
-        include/slack/rtm.start.h
-        rtm.start.cpp
-        include/slack/oauth.access.h
-        oauth.access.cpp
-        channels.rename.cpp
-        include/slack/channels.rename.h
-        private.cpp
-        include/slack/fwd.h
-        attachment.cpp
-        include/slack/attachment.h
-        incoming_webhook.cpp
-        include/slack/incoming_webhook.h
-#        real_time_client.cpp
-#        include/slack/real_time_client.h
-        event.cpp
-        include/slack/base/event.h
-        include/slack/event/hello.h
-        event/hello.cpp
-        event/user_typing.cpp
-        include/slack/event/user_typing.h
-        include/slack/event.h
-        include/slack/websocket.h
-        websocket.cpp
-        include/slack/event/pong.h
-        event/pong.cpp
-        include/slack/event/message.h
-        event/message.cpp
-        include/slack/event/channel_archive.h
-        event/channel_archive.cpp
-        include/slack/event/message_channel_archive.h
-        event/message_channel_archive.cpp
-        include/slack/channel.h
-        include/slack/event/message_bot_message.h
-        event/message_bot_message.cpp
-        include/slack/event/message_me_message.h
-        event/message_me_message.cpp
-        channel.cpp
-        )
+        ${JSON_SOURCES}
+        slack/slack.h
+        slack/slack.cpp
+        slack/slack.h
+        slack/set_option.h
+        slack/chat.h
+        slack/web/api.test.cpp
+        slack/web/api.test.h
+        slack/web/channels.archive.cpp
+        slack/web/channels.archive.h
+        slack/web/channels.list.cpp
+        slack/web/channels.list.h
+        slack/web/chat.delete.cpp
+        slack/web/chat.delete.h
+        slack/web/chat.update.cpp
+        slack/web/chat.update.h
+        slack/web/rtm.start.cpp
+        slack/web/rtm.start.h
+        slack/web/auth.test.cpp
+        slack/web/auth.test.h
+        slack/web/channels.create.cpp
+        slack/web/channels.create.h
+        slack/web/channels.rename.cpp
+        slack/web/channels.rename.h
+        slack/web/chat.postMessage.cpp
+        slack/web/chat.postMessage.h
+        slack/web/oauth.access.cpp
+        slack/web/oauth.access.h
+        slack/types.h
+        slack/fwd.h
+        slack/optional.hpp
+        slack/attachment.h
+        slack/private/private.h
+        slack/private/private.cpp
+        slack/base/response.h
+        slack/base/event.h
+        slack/event.h
+        slack/attachment.cpp
+        slack/event/channel_archive.cpp
+        slack/event/message.cpp
+        slack/event/message_channel_archive.cpp
+        slack/event/pong.cpp
+        slack/event/channel_archive.h
+        slack/event/message.h
+        slack/event/message_channel_archive.h
+        slack/event/pong.h
+        slack/event/hello.cpp
+        slack/event/message_bot_message.cpp
+        slack/event/message_me_message.cpp
+        slack/event/user_typing.cpp
+        slack/event/hello.h
+        slack/event/message_bot_message.h
+        slack/event/message_me_message.h
+        slack/event/user_typing.h
+        slack/types.cpp slack/uricodec.cpp slack/uricodec.h slack/base/slack_delegate.h slack/channel.cpp slack/channel.h slack/http.h slack/api.h)
 
-add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
+add_library(engine STATIC ${ENGINE_FILES})
 
 target_link_libraries(engine ${CONAN_LIBS})
 
-set(ENGINE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "")
-set(ENGINE_LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "")
 
-#tests
-message(ERROR "${BUILD_ENGINE_TESTS}")
-#TODO make this an option.
+##### Testing
 if (BUILD_ENGINE_TESTS)
     enable_testing()
     add_subdirectory(tests)
+endif ()
+
+
+
+##### Examples
+if (BUILD_ENGINE_EXAMPLES)
+    add_subdirectory(examples)
 endif ()
