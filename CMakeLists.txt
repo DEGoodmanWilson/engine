@@ -19,8 +19,16 @@ endmacro()
 message(STATUS "Engine CMake Options")
 message(STATUS "=======================================================")
 engine_option(BUILD_ENGINE_TESTS "Build the test suite" OFF)
+engine_option(BUILD_ENGINE_COVERAGE "Generate test coverage information"    OFF)
 engine_option(BUILD_ENGINE_EXAMPLES "Build the examples" OFF)
 message(STATUS "=======================================================")
+
+if (BUILD_ENGINE_COVERAGE)
+    set(BUILD_ENGINE_TESTS true) # need the tests if coverage is requested!
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/coveralls-cmake)
+    include(Coveralls)
+    coveralls_turn_on_coverage()
+endif()
 
 ##### JSONCPP
 
@@ -42,7 +50,6 @@ include_directories(
         )
 
 set(ENGINE_FILES
-        ${JSON_SOURCES}
         slack/slack.h
         slack/slack.cpp
         slack/slack.h
@@ -98,10 +105,23 @@ set(ENGINE_FILES
         slack/event/user_typing.h
         slack/types.cpp slack/uricodec.cpp slack/uricodec.h slack/base/slack_delegate.h slack/channel.cpp slack/channel.h slack/http.h slack/api.h)
 
-add_library(engine STATIC ${ENGINE_FILES})
+add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 
 target_link_libraries(engine ${CONAN_LIBS})
 
+##### COverage
+if (BUILD_ENGINE_COVERAGE)
+    message(STATUS "Building Engine with Coverage")
+
+    set(COVERAGE_SRCS ${ENGINE_FILES})
+
+    # Create the coveralls target.
+    coveralls_setup(
+            "${COVERAGE_SRCS}" # The source files.
+            OFF                 # If we should upload.
+            #            "${PROJECT_SOURCE_DIR}/CMakeModules/" # (Optional) Alternate project cmake module path.
+    )
+endif()
 
 ##### Testing
 if (BUILD_ENGINE_TESTS)

@@ -27,7 +27,7 @@ class EngineConan(ConanFile):
     def build(self):
         cmake = CMake(self.settings)
         build_engine_tests = "-DBUILD_ENGINE_TESTS=ON" if self.options.build_engine_tests else "-DBUILD_ENGINE_TESTS=OFF"
-        build_engine_coverage = "-DBUILD_ENGINE_COVERAGE=ON" if self.options.build_luna_coverage else "-DBUILD_ENGINE_COVERAGE=OFF"
+        build_engine_coverage = "-DBUILD_ENGINE_COVERAGE=ON" if self.options.build_engine_coverage else "-DBUILD_ENGINE_COVERAGE=OFF"
         build_engine_examples = "-DBUILD_ENGINE_EXAMPLES=ON" if self.options.build_engine_examples else "-DBUILD_ENGINE_EXAMPLES=OFF"
 
 
