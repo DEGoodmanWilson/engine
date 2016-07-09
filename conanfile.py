@@ -7,8 +7,10 @@ class EngineConan(ConanFile):
     license = "MIT"
     settings = "os", "compiler", "build_type", "arch"
     requires = "cpr/1.2.0@DEGoodmanWilson/testing"
-    options = {"build_engine_tests":    [True, False], "build_engine_examples":    [True, False]}
-    default_options = "build_engine_tests=False", "build_engine_examples=False"
+    options = {"build_engine_tests":    [True, False],
+               "build_engine_coverage": [True, False],
+               "build_engine_examples": [True, False]}
+    default_options = "build_engine_tests=False", "build_engine_coverage=False", "build_engine_examples=False", "cpr:use_system_curl=True"
     generators = "cmake"
 
     # def source(self):
@@ -25,11 +27,14 @@ class EngineConan(ConanFile):
     def build(self):
         cmake = CMake(self.settings)
         build_engine_tests = "-DBUILD_ENGINE_TESTS=ON" if self.options.build_engine_tests else "-DBUILD_ENGINE_TESTS=OFF"
+        build_engine_coverage = "-DBUILD_ENGINE_COVERAGE=ON" if self.options.build_luna_coverage else "-DBUILD_ENGINE_COVERAGE=OFF"
         build_engine_examples = "-DBUILD_ENGINE_EXAMPLES=ON" if self.options.build_engine_examples else "-DBUILD_ENGINE_EXAMPLES=OFF"
 
 
-        self.run('cmake %s %s %s' % (build_engine_tests, build_engine_examples, cmake.command_line))
+        self.run('cmake %s %s %s %s' % (build_engine_tests, build_engine_coverage, build_engine_examples, cmake.command_line))
         self.run('cmake --build . %s' % cmake.build_config)
+        if self.options.build_engine_coverage:
+            self.run('cmake --build . --target coveralls')
 
     def package(self):
         self.copy("*.h", dst="slack", src="slack")
