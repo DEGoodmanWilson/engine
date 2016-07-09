@@ -101,15 +101,15 @@ matrix:
             - curl
       env: COMPILER=clang++-3.8 RUN_TESTS=ON
 
-#    - compiler: gcc
-#      addons:
-#        apt:
-#          sources:
-#            *sources
-#          packages:
-#            - g++-5
-#            - python-pip
-#            - libssl-dev
-#            - curl
-#      env: GCC_VERSION=5 GENERATE_COVERAGE=ON
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            *sources
+          packages:
+            - g++-5
+            - python-pip
+            - libssl-dev
+            - curl
+      env: GCC_VERSION=5 GENERATE_COVERAGE=ON
 
