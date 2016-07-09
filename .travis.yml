@@ -49,8 +49,6 @@ matrix:
           packages:
             - g++-4.9
             - python-pip
-            - libmicrohttpd-dev
-            - libmicrohttpd10
             - libssl-dev
             - curl
       env: GCC_VERSION=4.9
@@ -63,8 +61,6 @@ matrix:
           packages:
             - g++-5
             - python-pip
-            - libmicrohttpd-dev
-            - libmicrohttpd10
             - libssl-dev
             - curl
       env: GCC_VERSION=5
@@ -77,8 +73,6 @@ matrix:
           packages:
             - clang-3.6
             - python-pip
-            - libmicrohttpd-dev
-            - libmicrohttpd10
             - libssl-dev
             - curl
       env: COMPILER=clang++-3.6
@@ -91,8 +85,6 @@ matrix:
           packages:
             - clang-3.7
             - python-pip
-            - libmicrohttpd-dev
-            - libmicrohttpd10
             - libssl-dev
             - curl
       env: COMPILER=clang++-3.7
@@ -105,8 +97,6 @@ matrix:
           packages:
             - clang-3.8
             - python-pip
-            - libmicrohttpd-dev
-            - libmicrohttpd10
             - libssl-dev
             - curl
       env: COMPILER=clang++-3.8 RUN_TESTS=ON
@@ -119,8 +109,6 @@ matrix:
 #          packages:
 #            - g++-5
 #            - python-pip
-#            - libmicrohttpd-dev
-#            - libmicrohttpd10
 #            - libssl-dev
 #            - curl
 #      env: GCC_VERSION=5 GENERATE_COVERAGE=ON
