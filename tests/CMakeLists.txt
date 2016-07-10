@@ -17,3 +17,5 @@ target_link_libraries(engine_tests
         ${CONAN_LIBS}
         engine
         )
+
+add_test(engine ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/engine_tests)
