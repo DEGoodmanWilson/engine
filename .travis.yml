@@ -31,7 +31,7 @@ after_success:
   - if [ "$GENERATE_COVERAGE" == "ON" ]; then find . -name "*engine#tests*gcov" -delete; fi
   - if [ "$GENERATE_COVERAGE" == "ON" ]; then find jsoncpp -name "*.gc*" -delete; fi
   - if [ "$GENERATE_COVERAGE" == "ON" ]; then find jsoncpp -name "*.o" -delete; fi
-  - if [ "$GENERATE_COVERAGE" == "ON" ]; then find . -name "*engine#jsoncpp*gcov" -delete; fi
+  - if [ "$GENERATE_COVERAGE" == "ON" ]; then find . -name "*jsoncpp*.gcov" -delete; fi
   - if [ "$GENERATE_COVERAGE" == "ON" ]; then bash <(curl -s https://codecov.io/bash); fi
 
 script:
