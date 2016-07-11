@@ -3,3 +3,4 @@ coverage:
     - examples/*
     - jsoncpp/*
     - tests/*
+    - slack/optional.hpp
