@@ -25,7 +25,7 @@ install:
 
 
 after_success:
-  - if [ "$GENERATE_COVERAGE" == "ON" ]; then ctest; bash <(curl -s https://codecov.io/bash); fi
+  - if [ "$GENERATE_COVERAGE" == "ON" ]; then ./bin/engine_tests; bash <(curl -s https://codecov.io/bash); fi
 
 script:
   - conan build
