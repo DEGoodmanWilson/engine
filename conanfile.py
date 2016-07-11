@@ -13,10 +13,10 @@ class EngineConan(ConanFile):
     default_options = "build_engine_tests=False", "build_engine_coverage=False", "build_engine_examples=False", "cpr:use_system_curl=True"
     generators = "cmake"
 
-    # def source(self):
-
-
     def config(self):
+        if self.options.build_engine_coverage:
+            self.options.build_engine_tests=True
+
         if self.options.build_engine_tests:
             self.requires.add("gtest/1.7.0@lasote/stable", private=False)
             self.options["gtest"].shared = False
@@ -33,8 +33,6 @@ class EngineConan(ConanFile):
 
         self.run('cmake %s %s %s %s' % (build_engine_tests, build_engine_coverage, build_engine_examples, cmake.command_line))
         self.run('cmake --build . %s' % cmake.build_config)
-        if self.options.build_engine_coverage:
-            self.run('cmake --build . --target coveralls')
 
     def package(self):
         self.copy("*.h", dst="slack", src="slack")

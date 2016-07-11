@@ -25,9 +25,18 @@ message(STATUS "=======================================================")
 
 if (BUILD_ENGINE_COVERAGE)
     set(BUILD_ENGINE_TESTS true) # need the tests if coverage is requested!
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/coveralls-cmake)
-    include(Coveralls)
-    coveralls_turn_on_coverage()
+
+    if(NOT (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+            AND (NOT "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang"))
+        message(FATAL_ERROR "Coveralls: Compiler ${CMAKE_C_COMPILER_ID} is not GNU gcc! Aborting... You can set this on the command line using CC=/usr/bin/gcc CXX=/usr/bin/g++ cmake <options> ..")
+    endif()
+
+    if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+        message(FATAL_ERROR "Coveralls: Code coverage results with an optimised (non-Debug) build may be misleading! Add -DCMAKE_BUILD_TYPE=Debug")
+    endif()
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
 endif()
 
 ##### JSONCPP
@@ -109,23 +118,8 @@ add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 
 target_link_libraries(engine ${CONAN_LIBS})
 
-##### COverage
-if (BUILD_ENGINE_COVERAGE)
-    message(STATUS "Building Engine with Coverage")
-
-    set(COVERAGE_SRCS ${ENGINE_FILES})
-
-    # Create the coveralls target.
-    coveralls_setup(
-            "${COVERAGE_SRCS}" # The source files.
-            OFF                 # If we should upload.
-            #            "${PROJECT_SOURCE_DIR}/CMakeModules/" # (Optional) Alternate project cmake module path.
-    )
-endif()
-
 ##### Testing
 if (BUILD_ENGINE_TESTS)
-    enable_testing()
     add_subdirectory(tests)
 endif ()
 

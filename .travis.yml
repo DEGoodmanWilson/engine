@@ -25,13 +25,7 @@ install:
 
 
 after_success:
-  - if [ "$GENERATE_COVERAGE" == "ON" ]; then echo Uploading coverage to codecov; fi
-  - if [ "$GENERATE_COVERAGE" == "ON" ]; then find tests -name "*.gc*" -delete; fi
-  - if [ "$GENERATE_COVERAGE" == "ON" ]; then find tests -name "*.o" -delete; fi
-  - if [ "$GENERATE_COVERAGE" == "ON" ]; then find . -name "*engine#tests*gcov" -delete; fi
-  - if [ "$GENERATE_COVERAGE" == "ON" ]; then find . -name "*jsoncpp*.gc*" -delete; fi
-  - if [ "$GENERATE_COVERAGE" == "ON" ]; then find . -name "jsoncpp*.o" -delete; fi
-  - if [ "$GENERATE_COVERAGE" == "ON" ]; then bash <(curl -s https://codecov.io/bash); fi
+  - if [ "$GENERATE_COVERAGE" == "ON" ]; then ctest; bash <(curl -s https://codecov.io/bash); fi
 
 script:
   - conan build
