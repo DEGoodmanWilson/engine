@@ -1,5 +1,6 @@
-A library for accessing the Slack API, in C++
+[![Build Status](https://travis-ci.org/DEGoodmanWilson/engine.svg)](https://travis-ci.org/DEGoodmanWilson/engine)
+[![Coverage Status](https://codecov.io/gh/DEGoodmanWilson/engine/branch/master/graph/badge.svg)](https://codecov.io/gh/DEGoodmanWilson/engine)
 
+# engine
 
-# TODO list
-* Test HTTP functions using a mock
+Build on the Slack Platform with modern C++
