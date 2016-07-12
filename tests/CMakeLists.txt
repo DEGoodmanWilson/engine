@@ -10,7 +10,7 @@ set(ENGINE_TEST_FILES
         channels.cpp
         chat.cpp
         oauth.cpp
-#        rtm.cpp
+        rtm.cpp
         environment.h)
 
 add_executable(engine_tests ${ENGINE_TEST_FILES})
