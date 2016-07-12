@@ -20,16 +20,30 @@ class access :
 public:
     //public interface
 
-    template<typename ...Os>
-    access(const std::string& token, const std::string &client_id, const std::string &client_secret, const std::string &code)
-            : response{token}, client_id_{client_id}, client_secret_{client_secret}, code_{code}
+    template<class TOKEN, class CLIENT_ID, class CLIENT_SECRET, class CODE, typename ...Os>
+    access(TOKEN &&token,
+           CLIENT_ID &&client_id,
+           CLIENT_SECRET &&client_secret,
+           CODE &&code) :
+            response{std::forward<TOKEN>(token)},
+            client_id_{std::forward<CLIENT_ID>(client_id)},
+            client_secret_{std::forward<CLIENT_SECRET>(client_secret)},
+            code_{std::forward<CODE>(code)}
     {
         initialize_();
     }
 
-    template<typename ...Os>
-    access(const std::string& token, const std::string &client_id, const std::string &client_secret, const std::string &code, Os &&...os)
-            : response{token}, client_id_{client_id}, client_secret_{client_secret}, code_{code}
+    template<class TOKEN, class CLIENT_ID, class CLIENT_SECRET, class CODE, typename ...Os>
+
+    access(TOKEN &&token,
+           CLIENT_ID &&client_id,
+           CLIENT_SECRET &&client_secret,
+           CODE &&code,
+           Os &&...os) :
+            response{std::forward<TOKEN>(token)},
+            client_id_{std::forward<CLIENT_ID>(client_id)},
+            client_secret_{std::forward<CLIENT_SECRET>(client_secret)},
+            code_{std::forward<CODE>(code)}
     {
         slack::set_option<access>(*this, std::forward<Os>(os)...);
         initialize_();
