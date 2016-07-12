@@ -6,8 +6,6 @@
 #include <slack/slack.h>
 #include "environment.h"
 
-extern std::string token;
-
 class chat_env : public ::testing::Test
 {
 public:

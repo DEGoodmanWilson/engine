@@ -9,7 +9,7 @@ set(ENGINE_TEST_FILES
         auth.cpp
         channels.cpp
         chat.cpp
-#        oauth.cpp
+        oauth.cpp
 #        rtm.cpp
         environment.h)
 

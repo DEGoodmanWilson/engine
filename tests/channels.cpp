@@ -7,8 +7,6 @@
 #include <random>
 #include "environment.h"
 
-extern std::string token;
-
 slack::channel_id id;
 
 TEST(channels, channels_list_basic)

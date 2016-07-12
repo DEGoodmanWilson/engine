@@ -6,8 +6,6 @@
 #include <slack/slack.h>
 #include "environment.h"
 
-extern std::string token;
-
 TEST(auth, auth_test_basic)
 {
     auto result = env->slack.auth.test();
