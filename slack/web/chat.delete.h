@@ -14,12 +14,14 @@
 namespace slack { namespace chat
 {
 
-class delete_it : public slack::base::response
+class delete_it :
+        public slack::base::response
 {
 public:
     //public interface
-    delete_it(const std::string &token, const ts &ts, const channel_id &channel) :
-            response{token}, ts_{ts}, channel_{channel}
+    template<class TOKEN, class TS, class CHANNEL>
+    delete_it(TOKEN &&token, TS &&ts, CHANNEL &&channel) :
+            response{std::forward<TOKEN>(token)}, ts_{std::forward<TS>(ts)}, channel_{std::forward<CHANNEL>(channel)}
     {
         initialize_();
     }
@@ -53,6 +55,7 @@ private:
     void initialize_();
 
     class ts ts_;
+
     channel_id channel_;
 };
 

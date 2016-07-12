@@ -19,7 +19,12 @@ class archive :
 {
 public:
     //public interface
-    archive(const channel_id &channel);
+    template<class TOKEN, class CHANNEL>
+    archive(TOKEN &&token, CHANNEL &&channel) :
+            response{std::forward<TOKEN>(token)}, channel_{std::forward<CHANNEL>(channel)}
+    {
+        initialize_();
+    }
 
     //parameters
     struct parameter
@@ -52,4 +57,4 @@ private:
     channel_id channel_;
 };
 
-} } //namespace channels slack
+}} //namespace channels slack

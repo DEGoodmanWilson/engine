@@ -20,7 +20,8 @@ class create :
 {
 public:
     //public interface
-    create(const std::string &token, const std::string &name) : response{token}, name_{name}
+    template<class TOKEN, class NAME>
+    create(TOKEN &&token, NAME &&name) : response{std::forward<TOKEN>(token)}, name_{std::forward<NAME>(name)}
     {
         initialize_();
     }
@@ -33,7 +34,8 @@ public:
     };
 
     //errors
-    struct error : slack::base::error
+    struct error :
+            slack::base::error
     {
         static const std::string NAME_TAKEN;
         static const std::string RESTRICTED_ACTION;

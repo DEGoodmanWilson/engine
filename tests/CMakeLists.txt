@@ -6,11 +6,11 @@ set(ENGINE_TEST_FILES
         main.cpp
         types.cpp
         api.cpp
-#        auth.cpp
-#        channels.cpp
-#        chat.cpp
-#        oauth.cpp
-#        rtm.cpp
+        auth.cpp
+        channels.cpp
+        chat.cpp
+        oauth.cpp
+        rtm.cpp
         environment.h)
 
 add_executable(engine_tests ${ENGINE_TEST_FILES})

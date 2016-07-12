@@ -4,21 +4,20 @@
 
 #include <gtest/gtest.h>
 #include <slack/slack.h>
-
-extern std::string token;
+#include "environment.h"
 
 TEST(auth, auth_test_basic)
 {
-    auto result = slack::auth::test();
-    ASSERT_TRUE(result);
+    auto result = env->slack.auth.test();
+    ASSERT_TRUE(*result);
 }
 
 TEST(auth, auth_test_fail)
 {
-    slack::set_token("BADTOKEN");
-    auto result = slack::auth::test();
-    ASSERT_FALSE(result);
-    ASSERT_EQ(slack::auth::test::error::INVALID_AUTH, result.error_message);
-    //need to reset token. Should do this RIAA style /shrug
-    slack::set_token(token);
+    auto token = env->slack.token();
+    env->slack.reset_token("nope");
+    auto result = env->slack.auth.test();
+    ASSERT_FALSE(*result);
+    ASSERT_EQ(slack::auth::test::error::INVALID_AUTH, result->error_message);
+    env->slack.reset_token(token);
 }

@@ -19,16 +19,16 @@ namespace slack { namespace chat
 class postMessage : public slack::base::response
 {
 public:
-    template<typename ...Os>
-    postMessage(const std::string& token, const channel_id& channel, const std::string& text)
-            : response{token}, channel_{channel}, text_{text}
+    template<class TOKEN, class CHANNEL, class TEXT, typename ...Os>
+    postMessage(TOKEN&& token, CHANNEL&& channel, TEXT&& text)
+            : response{std::forward<TOKEN>(token)}, channel_{std::forward<CHANNEL>(channel)}, text_{std::forward<TEXT>(text)}
     {
         initialize_();
     }
 
-    template<typename ...Os>
-    postMessage(const std::string& token, const channel_id& channel, const std::string& text, Os &&...os)
-            : response{token}, channel_{channel}, text_{text}
+    template<class TOKEN, class CHANNEL, class TEXT, typename ...Os>
+    postMessage(TOKEN&& token, CHANNEL&& channel, TEXT&& text, Os &&...os)
+            : response{std::forward<TOKEN>(token)}, channel_{std::forward<CHANNEL>(channel)}, text_{std::forward<TEXT>(text)}
     {
         slack::set_option<postMessage>(*this, std::forward<Os>(os)...);
         initialize_();

@@ -1,4 +1,5 @@
 //
+//
 // Copyright © 2015 D.E. Goodman-Wilson. All rights reserved.
 //
 
@@ -18,7 +19,11 @@ class test :
 {
 public:
     // constructor
-    test(const std::string& token);
+    template<class TOKEN>
+    test(TOKEN &&token) : response{std::forward<TOKEN>(token)}
+    {
+        initialize_();
+    }
 
     // parameters
     struct parameter
@@ -41,6 +46,7 @@ public:
     std::experimental::optional<slack::user_id> user_id;
 
 private:
+    void initialize_();
 };
 
 }} //namespace auth slack

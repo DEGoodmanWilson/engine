@@ -20,8 +20,11 @@ class rename :
 {
 public:
     //public interface
-    rename(const std::string &token, const channel_id &channel, const std::string &name) :
-            response{token}, channel_{channel}, name_{name}
+    template<class TOKEN, class CHANNEL, class NAME>
+    rename(TOKEN &&token, CHANNEL &&channel, NAME &&name) :
+            response{std::forward<TOKEN>(token)},
+            channel_{std::forward<CHANNEL>(channel)},
+            name_{std::forward<NAME>(name)}
     {
         initialize_();
     }

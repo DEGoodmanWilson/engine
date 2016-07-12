@@ -6,7 +6,11 @@
 
 #include <slack/types.h>
 #include <slack/api.h>
+#include <slack/auth.h>
+#include <slack/channels.h>
 #include <slack/chat.h>
+#include <slack/oauth.h>
+#include <slack/rtm.h>
 #include <slack/base/slack_delegate.h>
 
 namespace slack
@@ -19,10 +23,16 @@ public:
     slack(std::string &&token);
 
     std::string token() const;
+    void reset_token(const std::string &token);
+    void reset_token(std::string &&token);
     const ::slack::containers::api api;
+    const ::slack::containers::auth auth;
+    const ::slack::containers::channels channels;
     const ::slack::containers::chat chat;
+    const ::slack::containers::oauth oauth;
+    const ::slack::containers::rtm rtm;
 private:
-    const std::string token_;
+    std::string token_;
 };
 
 } //namespace slack

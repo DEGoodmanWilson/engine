@@ -20,14 +20,14 @@ class start :
 {
 public:
     //public interface
-    template<typename ...Os>
-    start(const std::string& token) : response{token}
+    template<class TOKEN, typename ...Os>
+    start(TOKEN &&token) : response{std::forward<TOKEN>(token)}
     {
         initialize_();
     }
 
-    template<typename ...Os>
-    start(const std::string& token, Os &&...os) : response{token}
+    template<class TOKEN, typename ...Os>
+    start(TOKEN &&token, Os &&...os) : response{std::forward<TOKEN>(token)}
     {
         slack::set_option<start>(*this, std::forward<Os>(os)...);
         initialize_();

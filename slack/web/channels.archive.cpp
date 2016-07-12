@@ -20,10 +20,6 @@ const std::string archive::error::USER_IS_BOT = std::string{"user_is_bot"};
 const std::string archive::error::USER_IS_RESTRICTED = std::string{"user_is_restricted"};
 
 
-archive::archive(const channel_id &channel) : channel_{channel}
-{ }
-
-
 void archive::initialize_()
 {
     auto params = default_params({{"channel", channel_}});
