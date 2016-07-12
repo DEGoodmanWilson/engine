@@ -7,7 +7,10 @@
 #include <slack/types.h>
 #include <slack/api.h>
 #include <slack/auth.h>
+//#include <slack/channels.h>
 #include <slack/chat.h>
+#include <slack/oauth.h>
+#include <slack/rtm.h>
 #include <slack/base/slack_delegate.h>
 
 namespace slack
@@ -24,7 +27,10 @@ public:
     void reset_token(std::string &&token);
     const ::slack::containers::api api;
     const ::slack::containers::auth auth;
+//    const ::slack::containers::channels channels;
     const ::slack::containers::chat chat;
+    const ::slack::containers::oauth oauth;
+    const ::slack::containers::rtm rtm;
 private:
     std::string token_;
 };

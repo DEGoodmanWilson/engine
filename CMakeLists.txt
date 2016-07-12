@@ -112,7 +112,18 @@ set(ENGINE_FILES
         slack/event/message_bot_message.h
         slack/event/message_me_message.h
         slack/event/user_typing.h
-        slack/types.cpp slack/uricodec.cpp slack/uricodec.h slack/base/slack_delegate.h slack/channel.cpp slack/channel.h slack/http.h slack/api.h slack/auth.h)
+        slack/types.cpp
+        slack/uricodec.cpp
+        slack/uricodec.h
+        slack/base/slack_delegate.h
+        slack/channel.cpp
+        slack/channel.h
+        slack/http.h
+        slack/api.h
+        slack/auth.h
+        slack/oauth.h
+        slack/rtm.h
+        )
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
 
