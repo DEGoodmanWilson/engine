@@ -6,7 +6,7 @@ set(ENGINE_TEST_FILES
         main.cpp
         types.cpp
         api.cpp
-#        auth.cpp
+        auth.cpp
 #        channels.cpp
 #        chat.cpp
 #        oauth.cpp
