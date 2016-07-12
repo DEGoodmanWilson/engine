@@ -15,18 +15,19 @@
 namespace slack { namespace channels
 {
 
-class list : public slack::base::response
+class list :
+        public slack::base::response
 {
 public:
     //public interface
-    template<typename ...Os>
-    list(const std::string& token) : response{token}
+    template<class TOKEN, typename ...Os>
+    list(TOKEN &&token) : response{std::forward<TOKEN>(token)}
     {
         initialize_();
     }
 
-    template<typename ...Os>
-    list(const std::string& token, Os &&...os) : response{token}
+    template<class TOKEN, typename ...Os>
+    list(TOKEN &&token, Os &&...os) : response{std::forward<TOKEN>(token)}
     {
         slack::set_option<list>(*this, std::forward<Os>(os)...);
         initialize_();
@@ -39,7 +40,8 @@ public:
     };
 
     //errors
-    struct error : slack::base::error
+    struct error :
+            slack::base::error
     {
         static const std::string NOT_AUTHED;
         static const std::string INVALID_AUTH;

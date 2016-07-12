@@ -123,6 +123,7 @@ set(ENGINE_FILES
         slack/auth.h
         slack/oauth.h
         slack/rtm.h
+        slack/channels.h
         )
 
 add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
