@@ -10,7 +10,7 @@ namespace slack
 slack::slack(const std::string &token) : token_{token},
                                          api{this},
                                          auth{this},
-//                                         channels{this},
+                                         channels{this},
                                          chat{this},
                                          oauth{this},
                                          rtm{this}
@@ -19,7 +19,7 @@ slack::slack(const std::string &token) : token_{token},
 slack::slack(std::string &&token) : token_{std::move(token)},
                                     api{this},
                                     auth{this},
-//                                    channels{this},
+                                    channels{this},
                                     chat{this},
                                     oauth{this},
                                     rtm{this}
