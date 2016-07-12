@@ -20,18 +20,16 @@ public:
     chat(slack_delegate *delegate) : delegate_{delegate}
     { }
 
-    template<typename ...Os>
-    std::unique_ptr<::slack::chat::postMessage> postMessage(const channel_id &channel, const std::string &text) const
+    template<class CHANNEL, class TEXT, typename ...Os>
+    std::unique_ptr<::slack::chat::postMessage> postMessage(CHANNEL &&channel, TEXT &&text) const
     {
-        return std::make_unique<::slack::chat::postMessage>(delegate_->token(), channel, text);
+        return std::make_unique<::slack::chat::postMessage>(delegate_->token(), std::forward<CHANNEL>(channel), std::forward<TEXT>(text));
     }
 
-    template<typename ...Os>
-    std::unique_ptr<::slack::chat::postMessage> postMessage(const channel_id &channel,
-                                                            const std::string &text,
-                                                            Os &&...os) const
+    template<class CHANNEL, class TEXT, typename ...Os>
+    std::unique_ptr<::slack::chat::postMessage> postMessage(CHANNEL &&channel, TEXT &&text, Os &&...os) const
     {
-        return std::make_unique<::slack::chat::postMessage>(delegate_->token(), channel, text, SLACK_FWD(os)...);
+        return std::make_unique<::slack::chat::postMessage>(delegate_->token(), std::forward<CHANNEL>(channel), std::forward<TEXT>(text), SLACK_FWD(os)...);
     }
 
 private:
