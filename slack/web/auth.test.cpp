@@ -13,7 +13,7 @@ const std::string test::error::INVALID_AUTH = std::string{"invalid_auth"};
 const std::string test::error::ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
 
-test::test(const std::string& token) : response{token}
+void test::initialize_()
 {
     auto params = default_params({ });
 
