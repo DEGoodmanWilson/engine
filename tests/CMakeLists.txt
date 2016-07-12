@@ -7,8 +7,8 @@ set(ENGINE_TEST_FILES
         types.cpp
         api.cpp
         auth.cpp
-#        channels.cpp
-#        chat.cpp
+        channels.cpp
+        chat.cpp
 #        oauth.cpp
 #        rtm.cpp
         environment.h)
