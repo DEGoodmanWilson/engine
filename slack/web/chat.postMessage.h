@@ -7,7 +7,7 @@
 #include <slack/types.h>
 #include <slack/attachment.h>
 #include <slack/set_option.h>
-#include <base/response.h>
+#include <slack/base/response.h>
 #include <slack/event/message.h>
 #include <string>
 #include <vector>

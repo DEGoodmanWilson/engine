@@ -37,6 +37,7 @@ class EngineConan(ConanFile):
 
     def package(self):
         self.copy("*.h", dst="include/slack", src="slack")
+        self.copy("*.hpp", dst="include/slack", src="slack")
         self.copy("*.lib", dst="lib", src="lib")
         self.copy("*.a", dst="lib", src="lib")
 
