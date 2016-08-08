@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 class EngineConan(ConanFile):
     name = "engine"
-    version = "1.0.0-beta2"
+    version = "1.0.0-beta6"
     url = "https://github.com/DEGoodmanWilson/engine.git"
     license = "MIT"
     settings = "os", "compiler", "build_type", "arch"
@@ -12,6 +12,7 @@ class EngineConan(ConanFile):
                "build_engine_examples": [True, False]}
     default_options = "build_engine_tests=False", "build_engine_coverage=False", "build_engine_examples=False", "cpr:use_system_curl=True"
     generators = "cmake"
+    exports = ["*"]
 
     def config(self):
         if self.options.build_engine_coverage:
@@ -35,7 +36,7 @@ class EngineConan(ConanFile):
         self.run('cmake --build . %s' % cmake.build_config)
 
     def package(self):
-        self.copy("*.h", dst="slack", src="slack")
+        self.copy("*.h", dst="include/slack", src="slack")
         self.copy("*.lib", dst="lib", src="lib")
         self.copy("*.a", dst="lib", src="lib")
 
