@@ -21,15 +21,15 @@ public:
     { }
 
     template<typename ...Os>
-    std::unique_ptr<::slack::rtm::start> start() const
+    ::slack::rtm::start start() const
     {
-        return std::make_unique<::slack::rtm::start>(delegate_->token());
+        return ::slack::rtm::start{delegate_->token()};
     }
 
     template<typename ...Os>
-    std::unique_ptr<::slack::rtm::start> start(Os &&...os) const
+    ::slack::rtm::start start(Os &&...os) const
     {
-        return std::make_unique<::slack::rtm::start>(delegate_->token(), SLACK_FWD(os)...);
+        return ::slack::rtm::start{delegate_->token(), SLACK_FWD(os)...};
     }
 
 private:

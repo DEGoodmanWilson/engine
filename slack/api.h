@@ -21,15 +21,15 @@ public:
     { }
 
     template<typename ...Os>
-    std::unique_ptr<::slack::api::test> test() const
+    ::slack::api::test test() const
     {
-        return std::make_unique<::slack::api::test>();
+        return ::slack::api::test{};
     }
 
     template<typename ...Os>
-    std::unique_ptr<::slack::api::test> test(Os &&...os) const
+    ::slack::api::test test(Os &&...os) const
     {
-        return std::make_unique<::slack::api::test>(SLACK_FWD(os)...);
+        return ::slack::api::test{SLACK_FWD(os)...};
     }
 
 private:

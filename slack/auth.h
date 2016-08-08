@@ -20,9 +20,9 @@ public:
     auth(slack_delegate *delegate) : delegate_{delegate}
     { }
 
-    std::unique_ptr<::slack::auth::test> test() const
+    ::slack::auth::test test() const
     {
-        return std::make_unique<::slack::auth::test>(delegate_->token());
+        return ::slack::auth::test{delegate_->token()};
     }
 
 private:

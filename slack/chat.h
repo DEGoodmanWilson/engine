@@ -20,40 +20,41 @@ class chat
 {
 public:
     chat(slack_delegate *delegate) : delegate_{delegate}
-    { }
+    {}
 
     template<class CHANNEL, class TEXT, typename ...Os>
-    std::unique_ptr<::slack::chat::postMessage> postMessage(CHANNEL &&channel, TEXT &&text) const
+    ::slack::chat::postMessage postMessage(CHANNEL &&channel, TEXT &&text) const
     {
-        return std::make_unique<::slack::chat::postMessage>(delegate_->token(), std::forward<CHANNEL>(channel), std::forward<TEXT>(text));
+        return ::slack::chat::postMessage{delegate_->token(), std::forward<CHANNEL>(channel), std::forward<TEXT>(text)};
     }
 
     template<class CHANNEL, class TEXT, typename ...Os>
-    std::unique_ptr<::slack::chat::postMessage> postMessage(CHANNEL &&channel, TEXT &&text, Os &&...os) const
+    ::slack::chat::postMessage postMessage(CHANNEL &&channel, TEXT &&text, Os &&...os) const
     {
-        return std::make_unique<::slack::chat::postMessage>(delegate_->token(), std::forward<CHANNEL>(channel), std::forward<TEXT>(text), SLACK_FWD(os)...);
+        return ::slack::chat::postMessage{delegate_->token(), std::forward<CHANNEL>(channel), std::forward<TEXT>(text),
+                                          SLACK_FWD(os)...};
     }
-
 
 
     template<class TS, class CHANNEL, class TEXT, typename ...Os>
-    std::unique_ptr<::slack::chat::update> update(TS &&ts, CHANNEL &&channel, TEXT &&text) const
+    ::slack::chat::update update(TS &&ts, CHANNEL &&channel, TEXT &&text) const
     {
-        return std::make_unique<::slack::chat::update>(delegate_->token(), std::forward<TS>(ts), std::forward<CHANNEL>(channel), std::forward<TEXT>(text));
+        return ::slack::chat::update{delegate_->token(), std::forward<TS>(ts), std::forward<CHANNEL>(channel),
+                                     std::forward<TEXT>(text)};
     }
 
     template<class TS, class CHANNEL, class TEXT, typename ...Os>
-    std::unique_ptr<::slack::chat::update> update(TS &&ts, CHANNEL &&channel, TEXT &&text, Os &&...os) const
+    ::slack::chat::update update(TS &&ts, CHANNEL &&channel, TEXT &&text, Os &&...os) const
     {
-        return std::make_unique<::slack::chat::update>(delegate_->token(), std::forward<TS>(ts), std::forward<CHANNEL>(channel), std::forward<TEXT>(text), SLACK_FWD(os)...);
+        return ::slack::chat::update{delegate_->token(), std::forward<TS>(ts), std::forward<CHANNEL>(channel),
+                                     std::forward<TEXT>(text), SLACK_FWD(os)...};
     }
-
 
 
     template<class TS, class CHANNEL>
-    std::unique_ptr<::slack::chat::delete_it> delete_it(TS &&ts, CHANNEL &&channel) const
+    ::slack::chat::delete_it delete_it(TS &&ts, CHANNEL &&channel) const
     {
-        return std::make_unique<::slack::chat::delete_it>(delegate_->token(), std::forward<TS>(ts), std::forward<CHANNEL>(channel));
+        return ::slack::chat::delete_it{delegate_->token(), std::forward<TS>(ts), std::forward<CHANNEL>(channel)};
     }
 
 private:

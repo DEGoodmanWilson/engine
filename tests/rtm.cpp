@@ -9,6 +9,6 @@
 TEST(rtm_start, rtm_start_basic)
 {
     auto result = env->slack.rtm.start();
-    ASSERT_TRUE(*result);
-    ASSERT_GT(result->url->length(), 0);
+    ASSERT_TRUE(result);
+    ASSERT_GT(result.url->length(), 0);
 }
