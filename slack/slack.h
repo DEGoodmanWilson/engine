@@ -19,6 +19,7 @@ namespace slack
 class slack : slack_delegate
 {
 public:
+    slack();
     slack(const std::string &token);
     slack(std::string &&token);
 
