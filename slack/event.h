@@ -15,6 +15,7 @@
 #include <slack/event/channel_archive.h>
 #include <slack/event/message.h>
 #include <slack/event/message_channel_archive.h>
+#include <slack/event/unknown.h>
 
 namespace slack { namespace event
 {
@@ -43,18 +44,22 @@ private:
 class event_handler
 {
 public:
+    event_handler();
     virtual ~event_handler() = default;
 
-    void handle_event(std::shared_ptr<slack::base::event> event);
+    void handle_event(const std::string& event);
 
     template<class EventT>
-    void register_event_handler(std::function<void(std::shared_ptr<EventT>)>);
+    void register_event_handler(std::function<void(std::shared_ptr<EventT>)> handler);
     template<class EventT>
     void deregister_event_handler();
+    void register_error_handler(std::function<void(std::string &&message, const std::string received)> handler);
+    void deregister_error_handler();
 
 private:
     using handler_map = std::map<std::type_index, std::unique_ptr<base::event_handler_callback>>; //TODO make unique_ptr!
     handler_map handlers_;
+    std::function<void(std::string &&message, const std::string received)> error_handler_;
 };
 
 

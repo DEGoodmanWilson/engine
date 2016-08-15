@@ -8,7 +8,7 @@
 namespace slack { namespace event
 {
 
-const std::string pong::event_name{"pong"};
+const std::string pong::name{"pong"};
 
 template<>
 pong::pong(const Json::Value &parsed_json)

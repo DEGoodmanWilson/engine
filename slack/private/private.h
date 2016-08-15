@@ -62,6 +62,7 @@ private:
     std::map<const std::string, factory_func> create_funcs_;
 };
 
+// TODO should this be static instead?
 extern factory<slack::base::event> events_factory;
 
 } //namespace slack_private

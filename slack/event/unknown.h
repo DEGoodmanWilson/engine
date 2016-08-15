@@ -14,10 +14,13 @@ namespace slack { namespace event
 {
 
 
-struct hello :
+struct unknown :
         public base::event
 {
-    static const std::string name;
+    unknown(const std::string& name) : name{name} {}
+    unknown(std::string&& name) : name{std::move(name)} {}
+
+    const std::string name; //this one isn't static, because it will hold new events we don't recognize
 };
 
 

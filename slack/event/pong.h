@@ -14,7 +14,7 @@ namespace slack { namespace event
 
 struct pong : public base::event
 {
-    static const std::string event_name;
+    static const std::string name;
 
     pong() = default;
 

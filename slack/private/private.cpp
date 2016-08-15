@@ -62,6 +62,7 @@ Json::Value get(slack::base::response *obj, const std::string &endpoint, const s
     return parse(obj, response.text);
 }
 
+// TODO should this be static instead of a singleton?
 factory<slack::base::event> events_factory;
 
 } //namespace slack_private

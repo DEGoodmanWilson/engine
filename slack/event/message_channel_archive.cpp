@@ -8,7 +8,7 @@
 namespace slack { namespace event
 {
 
-const std::string message_channel_archive::event_name{"message.channel_archive"};
+const std::string message_channel_archive::name{"message.channel_archive"};
 
 template<>
 message_channel_archive::message_channel_archive(const Json::Value &parsed_json)

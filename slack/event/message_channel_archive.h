@@ -17,7 +17,7 @@ namespace slack { namespace event
 
 struct message_channel_archive : public base::event
 {
-    static const std::string event_name;
+    static const std::string name;
 
     message_channel_archive() = default;
 

@@ -8,7 +8,7 @@
 namespace slack { namespace event
 {
 
-const std::string message_bot_message::event_name{"message.bot_message"};
+const std::string message_bot_message::name{"message.bot_message"};
 
 template<>
 message_bot_message::message_bot_message(const Json::Value &parsed_json) : is_starred{false}
