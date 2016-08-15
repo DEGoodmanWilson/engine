@@ -17,7 +17,7 @@ namespace slack { namespace event
 struct unknown :
         public base::event
 {
-    std::string name; //this one isn't static, because it will hold new events we don't recognize
+    std::string type; //this one isn't static, because it will hold new events we don't recognize
 
     unknown() = default;
 

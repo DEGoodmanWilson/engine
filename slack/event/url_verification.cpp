@@ -8,7 +8,7 @@
 namespace slack { namespace event
 {
 
-const std::string url_verification::name{"url_verification"};
+const std::string url_verification::type{"url_verification"};
 
 template<>
 url_verification::url_verification(const Json::Value &parsed_json) : event{parsed_json}

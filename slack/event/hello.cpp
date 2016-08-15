@@ -8,7 +8,7 @@
 namespace slack { namespace event
 {
 
-const std::string hello::name{"hello"};
+const std::string hello::type{"hello"};
 
 
 }} //namespace event slack

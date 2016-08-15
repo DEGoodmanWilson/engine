@@ -19,7 +19,7 @@ namespace slack { namespace event
 struct hello :
         public base::event
 {
-    static const std::string name;
+    static const std::string type;
 
     hello() = default;
 

@@ -17,7 +17,7 @@ namespace slack { namespace event
 
 struct message : public base::event
 {
-    static const std::string name;
+    static const std::string type;
 
     //TODO how to deal with subtypes, _e.g_ message.channel_archive (which is not the same as channel_archive)
     // Would be nice to namespace them somehow! What's the right way to do this.

@@ -8,7 +8,7 @@
 namespace slack { namespace event
 {
 
-const std::string message::name{"message"};
+const std::string message::type{"message"};
 
 template<>
 message::message(const Json::Value &parsed_json) : event{parsed_json}

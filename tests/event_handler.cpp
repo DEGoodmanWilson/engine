@@ -39,18 +39,18 @@ TEST(event_handler, unknown_event)
     slack::event::event_handler handler;
 
     bool received = false;
-    std::string name = "";
+    std::string type = "";
 
     handler.register_event_handler<slack::event::unknown>([&](std::shared_ptr<slack::event::unknown> event) {
             EXPECT_TRUE(static_cast<bool>(event));
             received = true;
-            name = event->name;
+            type = event->type;
         });
 
     handler.handle_event(event_str);
 
     ASSERT_TRUE(received);
-    ASSERT_EQ("WATWAT", name);
+    ASSERT_EQ("WATWAT", type);
 }
 
 TEST(event_handler, non_event)

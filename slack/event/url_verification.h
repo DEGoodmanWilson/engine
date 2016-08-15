@@ -17,7 +17,7 @@ namespace slack { namespace event
 struct url_verification :
         public base::event
 {
-    static const std::string name;
+    static const std::string type;
 
 
     url_verification() = default;
