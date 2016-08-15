@@ -40,10 +40,10 @@ if (BUILD_ENGINE_COVERAGE)
 endif()
 
 ##### JSONCPP
-
-set(JSONCPP_INCLUDE_DIR jsoncpp)
-set(JSON_SOURCES jsoncpp/jsoncpp.cpp)
-include_directories(SYSTEM ${JSONCPP_INCLUDE_DIR})
+#
+#set(JSONCPP_INCLUDE_DIR jsoncpp)
+#set(JSON_SOURCES jsoncpp/jsoncpp.cpp)
+#include_directories(SYSTEM ${JSONCPP_INCLUDE_DIR})
 
 ##### Engine
 
@@ -126,7 +126,7 @@ set(ENGINE_FILES
         slack/channels.h
         slack/event.cpp slack/private/events_private.h slack/event/unknown.cpp slack/event/unknown.h)
 
-add_library(engine STATIC ${JSON_SOURCES} ${ENGINE_FILES})
+add_library(engine STATIC ${ENGINE_FILES})
 
 target_link_libraries(engine ${CONAN_LIBS})
 

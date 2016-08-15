@@ -4,6 +4,7 @@
 
 #include "slack/web/chat.update.h"
 #include "private.h"
+#include <sstream>
 
 namespace slack { namespace chat
 {

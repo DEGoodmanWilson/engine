@@ -4,7 +4,8 @@
 
 #include "slack/web/chat.postMessage.h"
 #include "private.h"
-#include <json/json.h>
+#include <sstream>
+
 
 namespace slack { namespace chat
 {

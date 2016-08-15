@@ -6,7 +6,7 @@ class EngineConan(ConanFile):
     url = "https://github.com/DEGoodmanWilson/engine.git"
     license = "MIT"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "cpr/1.2.0@DEGoodmanWilson/testing"
+    requires = "cpr/1.2.0@DEGoodmanWilson/testing", "jsoncpp/1.7.3@theirix/stable"
     options = {"build_engine_tests":    [True, False],
                "build_engine_coverage": [True, False],
                "build_engine_examples": [True, False]}
