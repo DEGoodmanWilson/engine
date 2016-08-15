@@ -46,16 +46,12 @@ public:
 
     std::shared_ptr<T> create(const std::string &name, const Json::Value &root)
     {
-        try
+        if(create_funcs_.count(name))
         {
             auto it = create_funcs_.at(name);
-
             return it(root);
         }
-        catch (std::out_of_range e)
-        {
-            return nullptr;
-        }
+        return nullptr;
     }
 
 private:

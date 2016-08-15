@@ -11,7 +11,7 @@ namespace slack { namespace event
 const std::string pong::name{"pong"};
 
 template<>
-pong::pong(const Json::Value &parsed_json)
+pong::pong(const Json::Value &parsed_json) : event{parsed_json}
 {
     if (parsed_json["reply_to"].isString()) reply_to = {parsed_json["reply_to"].asString()};
     if (parsed_json["time"].isString()) time = {parsed_json["time"].asString()};

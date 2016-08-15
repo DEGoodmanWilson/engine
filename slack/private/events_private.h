@@ -19,10 +19,9 @@ namespace slack { namespace event
 void initialize_events(void)
 {
     //This is the tedious bit
-    //TODO do we need this?
 
     slack_private::events_factory.register_type<hello>(hello::name, [](const Json::Value &root) {
-        return std::make_shared<hello>();
+        return std::make_shared<hello>(root);
     });
 
     slack_private::events_factory.register_type<user_typing>(user_typing::name, [](const Json::Value &root) {
@@ -32,6 +31,7 @@ void initialize_events(void)
     slack_private::events_factory.register_type<pong>(pong::name, [](const Json::Value &root) {
         return std::make_shared<pong>(root);
     });
+
     slack_private::events_factory.register_type<pong>(message::name, [](const Json::Value &root) {
         return std::make_shared<message>(root);
     });

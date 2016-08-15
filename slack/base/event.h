@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <functional>
+#include <optional.hpp>
 
 namespace slack { namespace base
 {
@@ -15,6 +16,11 @@ struct event
     //This space left intentionally blank
     event() = default;
     virtual ~event() = default;
+
+    template<class json>
+    event(const json &parsed_json);
+
+    std::experimental::optional<std::string> token; //tokens only come through events API
 };
 
 /***

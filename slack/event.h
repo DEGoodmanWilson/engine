@@ -45,6 +45,9 @@ class event_handler
 {
 public:
     event_handler();
+    event_handler(std::string &&token);
+    event_handler(const std::string &token);
+
     virtual ~event_handler() = default;
 
     void handle_event(const std::string& event);
@@ -53,13 +56,14 @@ public:
     void register_event_handler(std::function<void(std::shared_ptr<EventT>)> handler);
     template<class EventT>
     void deregister_event_handler();
-    void register_error_handler(std::function<void(std::string &&message, const std::string received)> handler);
+    void register_error_handler(std::function<void(std::string message, std::string received)> handler);
     void deregister_error_handler();
 
 private:
     using handler_map = std::map<std::type_index, std::unique_ptr<base::event_handler_callback>>; //TODO make unique_ptr!
     handler_map handlers_;
-    std::function<void(std::string &&message, const std::string received)> error_handler_;
+    std::function<void(std::string message, std::string received)> error_handler_;
+    std::string token_;
 };
 
 

@@ -1,5 +1,5 @@
 //
-// Copyright © 2015 D.E. Goodman-Wilson. All rights reserved.
+// Copyright © 2016 D.E. Goodman-Wilson. All rights reserved.
 //
 
 #pragma once
@@ -9,23 +9,24 @@
 #include <slack/base/event.h>
 #include <slack/optional.hpp>
 
-#include <iostream>
-
 
 namespace slack { namespace event
 {
 
 
-struct hello :
+struct url_verification :
         public base::event
 {
     static const std::string name;
 
-    hello() = default;
+
+    url_verification() = default;
+    ~url_verification() = default;
 
     template<class json>
-    hello(const json &parsed_json) : event{parsed_json}
-    {}
+    url_verification(const json &parsed_json);
+
+    std::string challenge;
 };
 
 

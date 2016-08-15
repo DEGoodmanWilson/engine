@@ -11,8 +11,17 @@
 namespace slack { namespace event
 {
 
-
 event_handler::event_handler()
+{
+    event::initialize_events();
+}
+
+event_handler::event_handler(const std::string &token) : token_{token}
+{
+    event::initialize_events();
+}
+
+event_handler::event_handler(std::string &&token) : token_{token}
 {
     event::initialize_events();
 }
@@ -45,6 +54,18 @@ void event_handler::handle_event(const std::string &event_str)
         return;
     }
 
+    //Check the token
+    if(!token_.empty() && result_ob["token"].isString() && (token_ != result_ob["token"].asString()))
+    {
+        // a token was specified, and it doesn't match what we got on the wire
+        //TODO log it
+        if(error_handler_)
+        {
+            error_handler_("Invalid token on event", event_str);
+        }
+        return;
+    }
+
     auto type = result_ob["type"].asString();
     if(result_ob["subtype"].isString())
     {
@@ -53,7 +74,10 @@ void event_handler::handle_event(const std::string &event_str)
     auto event = slack_private::events_factory.create(type, result_ob);
 
     // we didn't recognize this event, create an unknown event
-    if(!event) event = std::make_shared<event::unknown>(type);
+    if(!event)
+    {
+        event = std::make_shared<event::unknown>(result_ob);
+    }
 
     // dispatch the event object to all registered event handlers
     auto it = handlers_.find(std::type_index{typeid(*event)});
@@ -63,7 +87,7 @@ void event_handler::handle_event(const std::string &event_str)
     }
 }
 
-void event_handler::register_error_handler(std::function<void(std::string &&message, const std::string received)> handler)
+void event_handler::register_error_handler(std::function<void(std::string message, std::string received)> handler)
 {
     error_handler_ = handler;
 }

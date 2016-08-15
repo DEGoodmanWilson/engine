@@ -8,10 +8,10 @@
 namespace slack { namespace event
 {
 
-const std::string channel_archive::event_name{"channel_archive"};
+const std::string channel_archive::name{"channel_archive"};
 
 template<>
-channel_archive::channel_archive(const Json::Value &parsed_json)
+channel_archive::channel_archive(const Json::Value &parsed_json) : event{parsed_json}
 {
     if (parsed_json["channel"].isString()) channel = channel_id{parsed_json["channel"].asString()};
     if (parsed_json["user"].isString()) user = user_id{parsed_json["user"].asString()};

@@ -17,10 +17,12 @@ namespace slack { namespace event
 struct unknown :
         public base::event
 {
-    unknown(const std::string& name) : name{name} {}
-    unknown(std::string&& name) : name{std::move(name)} {}
+    std::string name; //this one isn't static, because it will hold new events we don't recognize
 
-    const std::string name; //this one isn't static, because it will hold new events we don't recognize
+    unknown() = default;
+
+    template<class json>
+    unknown(const json &parsed_json);
 };
 
 

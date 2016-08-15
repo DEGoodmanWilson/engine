@@ -11,7 +11,7 @@ namespace slack { namespace event
 const std::string message_channel_archive::name{"message.channel_archive"};
 
 template<>
-message_channel_archive::message_channel_archive(const Json::Value &parsed_json)
+message_channel_archive::message_channel_archive(const Json::Value &parsed_json) : event{parsed_json}
 {
     if (parsed_json["user"].isString()) user = user_id{parsed_json["user"].asString()};
     if (parsed_json["text"].isString()) text = parsed_json["text"].asString();

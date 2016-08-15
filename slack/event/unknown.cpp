@@ -7,5 +7,10 @@
 
 namespace slack { namespace event
 {
+template<>
+unknown::unknown(const Json::Value &parsed_json) : event{parsed_json}
+{
+    if (parsed_json["type"].isString()) name = parsed_json["type"].asString();
+}
 
 }} //namespace event slack
