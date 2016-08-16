@@ -11,7 +11,8 @@
 #include <slack/chat.h>
 #include <slack/oauth.h>
 #include <slack/rtm.h>
-#include <slack/event.h>
+#include <slack/rtm_event_client.h>
+#include <slack/http_event_client.h>
 #include <slack/base/slack_delegate.h>
 
 namespace slack

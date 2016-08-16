@@ -5,7 +5,6 @@
 #pragma once
 
 #include <slack/types.h>
-#include <slack/event.h>
 #include <slack/base/event.h>
 #include <slack/optional.hpp>
 #include <vector>
@@ -15,7 +14,8 @@ namespace slack { namespace event
 {
 
 
-struct channel_archive : public base::event
+struct channel_archive :
+        public base::event
 {
     static const std::string type;
 

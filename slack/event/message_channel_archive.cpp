@@ -2,7 +2,7 @@
 // Copyright © 2015 D.E. Goodman-Wilson. All rights reserved.
 //
 
-#include "slack/event/message.h"
+#include "slack/event/message_channel_archive.h"
 #include <json/json.h>
 
 namespace slack { namespace event

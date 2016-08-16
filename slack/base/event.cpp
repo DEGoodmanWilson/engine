@@ -8,11 +8,4 @@
 namespace slack { namespace base
 {
 
-template<>
-event::event(const Json::Value &parsed_json)
-{
-    if (parsed_json.isNull()) return;
-    if (parsed_json["token"].isString()) token = parsed_json["token"].asString();
-};
-
 }} //namespace base slack

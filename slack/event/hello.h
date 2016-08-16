@@ -5,10 +5,8 @@
 #pragma once
 
 #include <slack/types.h>
-#include <slack/event.h>
 #include <slack/base/event.h>
 #include <slack/optional.hpp>
-
 #include <iostream>
 
 

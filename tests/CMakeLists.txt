@@ -11,7 +11,8 @@ set(ENGINE_TEST_FILES
 #        chat.cpp
 #        oauth.cpp
 #        rtm.cpp
-        event_handler.cpp
+        http_client.cpp
+        rtm_client.cpp
         environment.h)
 
 add_executable(engine_tests ${ENGINE_TEST_FILES})

@@ -94,7 +94,6 @@ set(ENGINE_FILES
         slack/private/private.cpp
         slack/base/response.h
         slack/base/event.h
-        slack/event.h
         slack/attachment.cpp
         slack/event/channel_archive.cpp
         slack/event/message.cpp
@@ -124,7 +123,18 @@ set(ENGINE_FILES
         slack/oauth.h
         slack/rtm.h
         slack/channels.h
-        slack/event.cpp slack/private/events_private.h slack/event/unknown.cpp slack/event/unknown.h slack/event/url_verification.cpp slack/event/url_verification.h slack/base/event.cpp slack/event/events.h)
+        slack/private/events_private.h
+        slack/event/unknown.cpp
+        slack/event/unknown.h
+        slack/event/url_verification.cpp
+        slack/event/url_verification.h
+        slack/base/event.cpp
+        slack/event/events.h
+        slack/http_event_client.cpp
+        slack/http_event_client.h
+        slack/rtm_event_client.cpp
+        slack/rtm_event_client.h
+        slack/private/events_private.cpp)
 
 add_library(engine STATIC ${ENGINE_FILES})
 
