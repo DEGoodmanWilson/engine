@@ -38,16 +38,16 @@ public:
     struct parameter
     {
         MAKE_STRING_LIKE(username);
-        MAKE_BOOL_LIKE(as_user);
+        SLACK_MAKE_BOOL_LIKE(as_user);
         enum class parse
         {
             none = 0,
             full,
         };
-        MAKE_BOOL_LIKE(link_names);
+        SLACK_MAKE_BOOL_LIKE(link_names);
         using attachments = std::vector<slack::attachment>;
-        MAKE_BOOL_LIKE(unfurl_links);
-        MAKE_BOOL_LIKE(unfurl_media);
+        SLACK_MAKE_BOOL_LIKE(unfurl_links);
+        SLACK_MAKE_BOOL_LIKE(unfurl_media);
         MAKE_STRING_LIKE(icon_url);
         MAKE_STRING_LIKE(icon_emoji);
     };

@@ -45,7 +45,7 @@ public:
             full,
         };
 
-        MAKE_BOOL_LIKE(link_names);
+        SLACK_MAKE_BOOL_LIKE(link_names);
     };
 
     //errors

@@ -18,10 +18,11 @@ TEST(event_handler, hello)
 
     bool received = false;
 
-    handler.register_event_handler<slack::event::hello>([&](std::shared_ptr<slack::event::hello> event) {
-        EXPECT_TRUE(static_cast<bool>(event));
-        received = true;
-    });
+    handler.register_event_handler<slack::event::hello>([&](std::shared_ptr<slack::event::hello> event)
+                                                            {
+                                                                EXPECT_TRUE(static_cast<bool>(event));
+                                                                received = true;
+                                                            });
 
     handler.handle_event(event_str);
 
@@ -41,11 +42,12 @@ TEST(event_handler, unknown_event)
     bool received = false;
     std::string type = "";
 
-    handler.register_event_handler<slack::event::unknown>([&](std::shared_ptr<slack::event::unknown> event) {
-            EXPECT_TRUE(static_cast<bool>(event));
-            received = true;
-            type = event->type;
-        });
+    handler.register_event_handler<slack::event::unknown>([&](std::shared_ptr<slack::event::unknown> event)
+                                       {
+                                           EXPECT_TRUE(static_cast<bool>(event));
+                                           received = true;
+                                           type = event->type;
+                                       });
 
     handler.handle_event(event_str);
 
@@ -68,11 +70,13 @@ TEST(event_handler, non_event)
     bool received = false;
     std::string whatwegot = "";
 
-    handler.register_error_handler([&](std::string &&message, const std::string received_json) {
-            received = true;
-            whatwegot = received_json;
-            EXPECT_EQ("Invalid event JSON", message);
-        });
+    handler.register_error_handler([&](std::string &&message,
+                                       const std::string received_json)
+                                       {
+                                           received = true;
+                                           whatwegot = received_json;
+                                           EXPECT_EQ("Invalid event JSON", message);
+                                       });
 
     handler.handle_event(event_str);
 
@@ -91,11 +95,13 @@ TEST(event_handler, non_json)
     bool received = false;
     std::string whatwegot = "";
 
-    handler.register_error_handler([&](std::string &&message, const std::string received_json) {
-            received = true;
-            whatwegot = received_json;
-            EXPECT_EQ("JSON parse error", message);
-        });
+    handler.register_error_handler([&](std::string &&message,
+                                       const std::string received_json)
+                                       {
+                                           received = true;
+                                           whatwegot = received_json;
+                                           EXPECT_EQ("JSON parse error", message);
+                                       });
 
     handler.handle_event(event_str);
 
@@ -116,12 +122,13 @@ TEST(event_handler, token_match)
 
     bool received = false;
 
-    handler.register_event_handler<slack::event::hello>([&](std::shared_ptr<slack::event::hello> event) {
-            EXPECT_TRUE(static_cast<bool>(event));
-            EXPECT_TRUE(static_cast<bool>(event->token));
-            EXPECT_EQ("whyyes", *(event->token));
-            received = ("whyyes" == *event->token);
-        });
+    handler.register_event_handler<slack::event::hello>([&](std::shared_ptr<slack::event::hello> event)
+                                                            {
+                                                                EXPECT_TRUE(static_cast<bool>(event));
+                                                                EXPECT_TRUE(static_cast<bool>(event->token));
+                                                                EXPECT_EQ("whyyes", *(event->token));
+                                                                received = ("whyyes" == *event->token);
+                                                            });
 
     handler.handle_event(event_str);
 
@@ -142,13 +149,15 @@ TEST(event_handler, token_mismatch)
     bool received = false;
     bool handled = false;
 
-    handler.register_event_handler<slack::event::hello>([&](std::shared_ptr<slack::event::hello> event) {
-            received = true;
-        });
-    handler.register_error_handler([&](std::string &&message, const std::string received_json) {
-            EXPECT_EQ("Invalid token on event", message);
-            handled = true;
-        });
+    handler.register_event_handler<slack::event::hello>([&](std::shared_ptr<slack::event::hello> event)
+                                                            {
+                                                                received = true;
+                                                            });
+    handler.register_error_handler([&](std::string &&message, const std::string received_json)
+                                       {
+                                           EXPECT_EQ("Invalid token on event", message);
+                                           handled = true;
+                                       });
 
 
     handler.handle_event(event_str);

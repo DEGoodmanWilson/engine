@@ -26,7 +26,7 @@ public:
 
     struct parameter
     {
-        MAKE_BOOL_LIKE(is_short);  //because "short" is a keyword
+        SLACK_MAKE_BOOL_LIKE(is_short);  //because "short" is a keyword
     };
 
     template<class Json>

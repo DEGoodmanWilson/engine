@@ -79,12 +79,15 @@ void event_handler::handle_event(const std::string &event_str)
         event = std::make_shared<event::unknown>(result_ob);
     }
 
-    // dispatch the event object to all registered event handlers
+    // dispatch the event object to the registered event handler, if there is one
     auto it = handlers_.find(std::type_index{typeid(*event)});
     if(it != handlers_.end())
     {
         it->second->exec(event);
+        return;
     }
+
+    //TODO log failure to find matching handler
 }
 
 void event_handler::register_error_handler(std::function<void(std::string message, std::string received)> handler)

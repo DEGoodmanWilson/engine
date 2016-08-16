@@ -36,7 +36,7 @@ public:
     //parameters
     struct parameter
     {
-        MAKE_BOOL_LIKE(exclude_archived);
+        SLACK_MAKE_BOOL_LIKE(exclude_archived);
     };
 
     //errors

@@ -36,11 +36,11 @@ public:
     //parameters
     struct parameter
     {
-        MAKE_BOOL_LIKE(simple_latest);
+        SLACK_MAKE_BOOL_LIKE(simple_latest);
 
-        MAKE_BOOL_LIKE(no_unreads);
+        SLACK_MAKE_BOOL_LIKE(no_unreads);
 
-        MAKE_BOOL_LIKE(mpim_aware);
+        SLACK_MAKE_BOOL_LIKE(mpim_aware);
     };
 
     //errors

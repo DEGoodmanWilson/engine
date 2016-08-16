@@ -6,7 +6,7 @@
 
 #include <memory>
 #include <functional>
-#include <optional.hpp>
+#include <slack/optional.hpp>
 
 namespace slack { namespace base
 {
@@ -22,22 +22,5 @@ struct event
 
     std::experimental::optional<std::string> token; //tokens only come through events API
 };
-
-/***
- * Adapted from http://www.gamedev.net/page/resources/_/technical/game-programming/effective-event-handling-in-c-r2459
- */
-
-class event_handler_callback
-{
-public:
-    virtual ~event_handler_callback() = default;
-    void exec(std::shared_ptr<slack::base::event> event) {call(event);}
-
-private:
-    virtual void call(std::shared_ptr<slack::base::event>) = 0;
-};
-
-
-
 
 }} //namespace base slack

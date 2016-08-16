@@ -32,7 +32,7 @@ public: \
         : std::string(first, last) {} \
 }
 
-#define MAKE_BOOL_LIKE(x) class x \
+#define SLACK_MAKE_BOOL_LIKE(x) class x \
 { \
 public: \
     x() = default; \
@@ -41,7 +41,8 @@ public: \
     x &operator=(const x &rhs) = default; \
     x &operator=(x &&rhs) = default; \
     x(bool new_val) : value{new_val} {} \
-    x & operator=(bool && new_value) {value = new_value;} \
+    x & operator=(bool && new_value) {std::swap(value, new_value); return *this;} \
+    x & operator=(const bool & new_value) {value = new_value; return *this;} \
     explicit operator bool() {return value;} \
 private: \
     bool value; \
