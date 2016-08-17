@@ -126,8 +126,6 @@ set(ENGINE_FILES
         slack/private/events_private.h
         slack/event/unknown.cpp
         slack/event/unknown.h
-        slack/event/url_verification.cpp
-        slack/event/url_verification.h
         slack/base/event.cpp
         slack/event/events.h
         slack/http_event_client.cpp

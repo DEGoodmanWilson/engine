@@ -10,5 +10,4 @@
 #include <slack/event/channel_archive.h>
 #include <slack/event/message.h>
 #include <slack/event/message_channel_archive.h>
-#include <slack/event/url_verification.h>
 #include <slack/event/unknown.h>
