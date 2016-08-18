@@ -16,7 +16,7 @@ namespace slack
 struct http_event_envelope
 {
     std::string token;
-    team_id team_id;
+    slack::team_id team_id;
     std::string api_app_id;
     ts event_ts;
     std::vector<user_id> authed_users;
