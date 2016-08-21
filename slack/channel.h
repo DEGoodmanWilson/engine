@@ -43,7 +43,7 @@ struct channel
     purpose purpose;
     bool is_member;
     ts last_read;
-    event::message latest;
+    slack::message latest;
     int64_t unread_count;
     int64_t unread_display_count;
 };

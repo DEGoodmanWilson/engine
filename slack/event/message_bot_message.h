@@ -21,7 +21,7 @@ struct message_bot_message : public base::event
     message_bot_message() = default;
 
     template<class json>
-    message_bot_message(const json &parsed_json);
+    message_bot_message(const slack::team_id &team_id, const json &parsed_json);
 
     slack::channel_id channel;
     slack::bot_id bot_id;

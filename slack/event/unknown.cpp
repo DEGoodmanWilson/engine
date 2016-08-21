@@ -8,7 +8,7 @@
 namespace slack { namespace event
 {
 template<>
-unknown::unknown(const Json::Value &parsed_json) : event{parsed_json}
+unknown::unknown(const slack::team_id &team_id, const Json::Value &parsed_json) : event{team_id, parsed_json}
 {
     if (parsed_json["type"].isString()) type = parsed_json["type"].asString();
 }

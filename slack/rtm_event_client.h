@@ -46,11 +46,7 @@ private:
 class rtm_event_client
 {
 public:
-    rtm_event_client();
-
-    rtm_event_client(std::string &&token);
-
-    rtm_event_client(const std::string &token);
+    rtm_event_client(const std::string &token, const slack::team_id &team_id);
 
     virtual ~rtm_event_client() = default;
 
@@ -66,7 +62,9 @@ public:
 
     void deregister_error_handler();
 
-protected:
+private:
+    std::string token_;
+    slack::team_id team_id_;
     using handler_map = std::map<std::type_index, std::unique_ptr<rtm_event_handler_callback>>;
     handler_map handlers_;
     std::function<void(std::string message, std::string received)> error_handler_;

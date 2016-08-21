@@ -3,14 +3,14 @@ cmake_minimum_required(VERSION 2.8)
 enable_testing()
 
 set(ENGINE_TEST_FILES
-#        main.cpp
-#        types.cpp
-#        api.cpp
-#        auth.cpp
-#        channels.cpp
-#        chat.cpp
-#        oauth.cpp
-#        rtm.cpp
+        main.cpp
+        types.cpp
+        api.cpp
+        auth.cpp
+        channels.cpp
+        chat.cpp
+        oauth.cpp
+        rtm.cpp
         http_client.cpp
         rtm_client.cpp
         environment.h)

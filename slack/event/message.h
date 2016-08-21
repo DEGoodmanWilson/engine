@@ -34,7 +34,7 @@ struct message : public base::event
     message() = default;
 
     template<class json>
-    message(const json &parsed_json);
+    message(const slack::team_id &team_id, const json &parsed_json);
 
     //TODO we should implement these.
 //    template<class json>

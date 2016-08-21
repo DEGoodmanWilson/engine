@@ -14,7 +14,7 @@ TEST(rtm_event_client, hello)
     }
     )";
 
-    slack::rtm_event_client handler;
+    slack::rtm_event_client handler{"T123", "xoxp-foobar"};
 
     bool received = false;
 
@@ -37,7 +37,7 @@ TEST(rtm_event_client, unknown_event)
     }
     )";
 
-    slack::rtm_event_client handler;
+    slack::rtm_event_client handler{"T123", "xoxp-foobar"};
 
     bool received = false;
     std::string type = "";
@@ -65,7 +65,7 @@ TEST(rtm_event_client, non_event)
     ]
     )";
 
-    slack::rtm_event_client handler;
+    slack::rtm_event_client handler{"T123", "xoxp-foobar"};
 
     bool received = false;
     std::string whatwegot = "";
@@ -90,7 +90,7 @@ TEST(rtm_event_client, non_json)
     [ { fdsjk 234 ]] "why no
     )";
 
-    slack::rtm_event_client handler;
+    slack::rtm_event_client handler{"T123", "xoxp-foobar"};
 
     bool received = false;
     std::string whatwegot = "";

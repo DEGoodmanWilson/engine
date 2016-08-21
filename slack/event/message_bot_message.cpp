@@ -11,7 +11,7 @@ namespace slack { namespace event
 const std::string message_bot_message::type{"message.bot_message"};
 
 template<>
-message_bot_message::message_bot_message(const Json::Value &parsed_json) : event{parsed_json}, is_starred{false}
+message_bot_message::message_bot_message(const slack::team_id &team_id, const Json::Value &parsed_json) : event{team_id, parsed_json}, is_starred{false}
 {
     if (parsed_json.isNull()) return;
 

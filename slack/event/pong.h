@@ -19,7 +19,7 @@ struct pong : public base::event
     pong() = default;
 
     template<class json>
-    pong(const json &parsed_json);
+    pong(const slack::team_id &team_id, const json &parsed_json);
 
     std::string reply_to;
     std::string time;

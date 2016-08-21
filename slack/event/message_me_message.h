@@ -21,7 +21,7 @@ struct message_me_message : public base::event
     message_me_message() = default;
 
     template<class json>
-    message_me_message(const json &parsed_json);
+    message_me_message(const slack::team_id &team_id, const json &parsed_json);
 
     slack::channel_id channel;
     slack::user_id user;

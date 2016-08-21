@@ -67,7 +67,7 @@ public:
     // response
     std::experimental::optional<slack::channel_id> channel;
     std::experimental::optional<slack::ts> ts;
-    std::experimental::optional<slack::event::message> message;
+    std::experimental::optional<slack::message> message;
 
     // parameter setters //TODO can these be protected?
     void set_option(const parameter::username &username)

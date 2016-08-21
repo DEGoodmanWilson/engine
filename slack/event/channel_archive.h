@@ -22,7 +22,7 @@ struct channel_archive :
     channel_archive() = default;
 
     template<class json>
-    channel_archive(const json &parsed_json);
+    channel_archive(const slack::team_id &team_id, const json &parsed_json);
 
     std::experimental::optional<channel_id> channel;
     std::experimental::optional<user_id> user;

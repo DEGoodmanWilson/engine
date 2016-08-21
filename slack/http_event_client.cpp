@@ -10,17 +10,12 @@
 namespace slack
 {
 
-http_event_client::http_event_client()
+http_event_client::http_event_client(const std::string &verification_token) : verification_token_{verification_token}
 {
     event::initialize_events();
 }
 
-http_event_client::http_event_client(const std::string &token) : token_{token}
-{
-    event::initialize_events();
-}
-
-http_event_client::http_event_client(std::string &&token) : token_{std::move(token)}
+http_event_client::http_event_client(std::string &&verification_token) : verification_token_{std::move(verification_token)}
 {
     event::initialize_events();
 }
@@ -54,7 +49,7 @@ std::string http_event_client::handle_event(const std::string &event_str)
     }
 
     //Check the token
-    if (!token_.empty() && envelope_obj["token"].isString() && (token_ != envelope_obj["token"].asString()))
+    if (!verification_token_.empty() && envelope_obj["token"].isString() && (verification_token_ != envelope_obj["token"].asString()))
     {
         // a token was specified, and it doesn't match what we got on the wire
         //TODO log it
@@ -91,7 +86,6 @@ std::string http_event_client::handle_event(const std::string &event_str)
     // TODO make sure the envelope has the other properties!
     http_event_envelope envelope{
             envelope_obj["token"].asString(),
-            {envelope_obj["team_id"].asString()},
             envelope_obj["api_app_id"].asString(),
             envelope_obj["event_ts"].asString(),
             {}
@@ -125,12 +119,16 @@ std::string http_event_client::handle_event(const std::string &event_str)
     {
         type += "." + result_obj["subtype"].asString();
     }
-    auto event = slack_private::events_factory.create(type, result_obj);
+
+    //TODO make this more elegant
+    slack::team_id team_id{envelope_obj["team_id"].asString()};
+
+    auto event = slack_private::events_factory.create(type, team_id, result_obj);
 
     // we didn't recognize this event, create an unknown event
     if (!event)
     {
-        event = std::make_shared<event::unknown>(result_obj);
+        event = std::make_shared<event::unknown>(team_id, result_obj);
     }
 
     // dispatch the event object to the registered event handler, if there is one

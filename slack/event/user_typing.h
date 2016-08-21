@@ -19,7 +19,7 @@ struct user_typing : public base::event
     user_typing() = default;
 
     template<class json>
-    user_typing(const json &parsed_json);
+    user_typing(const slack::team_id &team_id, const json &parsed_json);
 
     channel_id channel;
     user_id user;

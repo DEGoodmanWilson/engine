@@ -147,4 +147,21 @@ struct reaction
     std::vector<user_id> users;
 };
 
+struct message
+{
+    message() = default;
+
+    template<class json>
+    message(const json &parsed_json);
+
+    slack::channel_id channel;
+    slack::user_id user;
+    std::string text;
+    slack::ts ts;
+
+    bool is_starred;
+    std::vector<channel_id> pinned_to;
+    std::vector<reaction> reactions;
+};
+
 }

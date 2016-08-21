@@ -32,7 +32,7 @@ TEST(http_event_client, hello)
     }
     )";
 
-    slack::http_event_client handler;
+    slack::http_event_client handler{"abcdefg"};
 
     bool received = false;
 
@@ -66,7 +66,7 @@ TEST(http_event_client, unknown_event)
     }
     )";
 
-    slack::http_event_client handler;
+    slack::http_event_client handler{"abcdefg"};
 
     bool received = false;
     std::string type = "";
@@ -95,7 +95,7 @@ TEST(http_event_client, non_event)
     ]
     )";
 
-    slack::http_event_client handler;
+    slack::http_event_client handler{"abcdefg"};
 
     bool received = false;
     std::string whatwegot = "";
@@ -120,7 +120,7 @@ TEST(http_event_client, non_json)
     [ { fdsjk 234 ]] "why no
     )";
 
-    slack::http_event_client handler;
+    slack::http_event_client handler{"abcdefg"};
 
     bool received = false;
     std::string whatwegot = "";

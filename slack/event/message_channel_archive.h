@@ -21,7 +21,7 @@ struct message_channel_archive : public base::event
     message_channel_archive() = default;
 
     template<class json>
-    message_channel_archive(const json &parsed_json);
+    message_channel_archive(const slack::team_id &team_id, const json &parsed_json);
 
     slack::user_id user;
     std::string text;

@@ -10,7 +10,7 @@
 namespace slack
 {
 
-rtm_event_client::rtm_event_client()
+rtm_event_client::rtm_event_client(const std::string &token, const slack::team_id &team_id) : token_{token}, team_id_{team_id}
 {
     event::initialize_events();
 }
@@ -48,12 +48,12 @@ void rtm_event_client::handle_event(const std::string &event_str)
     {
         type += "." + result_obj["subtype"].asString();
     }
-    auto event = slack_private::events_factory.create(type, result_obj);
+    auto event = slack_private::events_factory.create(type, team_id_, result_obj);
 
     // we didn't recognize this event, create an unknown event
     if (!event)
     {
-        event = std::make_shared<event::unknown>(result_obj);
+        event = std::make_shared<event::unknown>(team_id_, result_obj);
     }
 
     // dispatch the event object to the registered event handler, if there is one

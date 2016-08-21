@@ -34,7 +34,7 @@ template<typename T>
 class factory
 {
 public:
-    using factory_func = std::function<std::shared_ptr<T>(const Json::Value &)>;
+    using factory_func = std::function<std::shared_ptr<T>(const slack::team_id &, const Json::Value &)>;
 
     template<typename TDerived>
     void register_type(const std::string &name, factory_func constructor)
@@ -44,12 +44,12 @@ public:
         create_funcs_[name] = constructor;
     }
 
-    std::shared_ptr<T> create(const std::string &name, const Json::Value &root)
+    std::shared_ptr<T> create(const std::string &name, const slack::team_id &team_id, const Json::Value &root)
     {
         if(create_funcs_.count(name))
         {
             auto it = create_funcs_.at(name);
-            return it(root);
+            return it(team_id, root);
         }
         return nullptr;
     }

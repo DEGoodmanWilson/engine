@@ -21,7 +21,7 @@ struct unknown :
     unknown() = default;
 
     template<class json>
-    unknown(const json &parsed_json);
+    unknown(const slack::team_id &team_id, const json &parsed_json);
 };
 
 

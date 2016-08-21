@@ -57,11 +57,9 @@ private:
 class http_event_client
 {
 public:
-    http_event_client();
+    http_event_client(std::string &&verification_token);
 
-    http_event_client(std::string &&token);
-
-    http_event_client(const std::string &token);
+    http_event_client(const std::string &verification_token);
 
     virtual ~http_event_client() = default;
 
@@ -77,11 +75,11 @@ public:
 
     void deregister_error_handler();
 
-protected:
+private:
+    std::string verification_token_;
     using handler_map = std::map<std::type_index, std::unique_ptr<http_event_handler_callback>>;
     handler_map handlers_;
     std::function<void(std::string message, std::string received)> error_handler_;
-    std::string token_;
 };
 
 
