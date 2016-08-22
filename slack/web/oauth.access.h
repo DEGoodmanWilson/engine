@@ -66,10 +66,18 @@ public:
     };
 
     //response
-    std::experimental::optional<slack::token> access_token;
-    std::experimental::optional<std::vector<slack::scope>> scopes;
-    std::experimental::optional<std::string> team_name;
-    std::experimental::optional<slack::team_id> team_id;
+    struct bot
+    {
+        slack::user_id bot_user_id;
+        slack::token bot_access_token;
+    };
+
+    slack::token access_token;
+    std::vector<slack::scope> scope;
+    slack::user_id user_id;
+    std::string team_name;
+    slack::team_id team_id;
+    std::experimental::optional<struct bot> bot;
 
     //parameter setters
     void set_option(const parameter::redirect_uri &redirect_uri)

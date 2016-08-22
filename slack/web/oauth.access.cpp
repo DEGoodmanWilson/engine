@@ -19,10 +19,10 @@ const std::string access::error::BAD_REDIRECT_URI = std::string{"bad_redirect_ur
 void access::initialize_()
 {
     auto params = default_params({
-            {"client_id",     client_id_},
-            {"client_secret", client_secret_},
-            {"code",          code_}
-    });
+                                         {"client_id",     client_id_},
+                                         {"client_secret", client_secret_},
+                                         {"code",          code_}
+                                 });
 
     if (redirect_uri_)
     {
@@ -35,15 +35,23 @@ void access::initialize_()
         if (result_ob["access_token"].isString()) access_token = {result_ob["access_token"].asString()};
         if (result_ob["scope"].isString())
         {
-            scopes = std::vector<scope>{};
             std::string s;
             std::istringstream f{result_ob["scope"].asString()};
-            while (std::getline(f, s, ',')) {
-                scopes->push_back(s);
+            while (std::getline(f, s, ','))
+            {
+                scope.push_back(s);
             }
         }
+        if (result_ob["user_id"].isString()) user_id = {result_ob["user_id"].asString()};
         if (result_ob["team_name"].isString()) team_name = {result_ob["team_name"].asString()};
         if (result_ob["team_id"].isString()) team_id = {result_ob["team_id"].asString()};
+
+        if (result_ob["bot"].isObject())
+        {
+            bot = slack::oauth::access::bot;
+            bot->bot_user_id = result_ob["bot"]["bot_user_id"].asString();
+            bot->bot_access_token = result_ob["bot"]["bot_access_token"].asString();
+        }
     }
 }
 
