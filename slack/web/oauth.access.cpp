@@ -48,9 +48,7 @@ void access::initialize_()
 
         if (result_ob["bot"].isObject())
         {
-            bot = slack::oauth::access::bot;
-            bot->bot_user_id = result_ob["bot"]["bot_user_id"].asString();
-            bot->bot_access_token = result_ob["bot"]["bot_access_token"].asString();
+            bot = bot_info{result_ob["bot"]["bot_user_id"].asString(), result_ob["bot"]["bot_access_token"].asString()};
         }
     }
 }

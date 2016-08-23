@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 class EngineConan(ConanFile):
     name = "engine"
-    version = "1.0-beta11"
+    version = "1.0-beta12"
     url = "https://github.com/DEGoodmanWilson/engine.git"
     license = "MIT"
     settings = "os", "compiler", "build_type", "arch"
@@ -21,9 +21,12 @@ class EngineConan(ConanFile):
         if self.options.build_engine_tests:
             self.requires.add("gtest/1.7.0@lasote/stable", private=False)
             self.options["gtest"].shared = False
+            self.requires.add("luna/2.1@DEGoodmanWilson/stable", private=False)
         else:
             if "gtest" in self.requires:
                 del self.requires["gtest"]
+            if "luna" in self.requires:
+                del self.require["luna"]
 
     def build(self):
         cmake = CMake(self.settings)

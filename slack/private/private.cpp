@@ -3,6 +3,7 @@
 //
 
 #include "private.h"
+#include "slack.h"
 #include <cpr/cpr.h>
 
 namespace slack_private
@@ -50,7 +51,7 @@ Json::Value get(slack::base::response *obj, const std::string &endpoint, const s
         p.AddParameter({kv.first, kv.second});
     }
 
-    auto response = cpr::Get(cpr::Url{"https://slack.com/api/" + endpoint}, p);
+    auto response = cpr::Get(cpr::Url{slack::slack::get_uri() + endpoint}, p);
 
     if (response.status_code != 200)
     {

@@ -7,6 +7,10 @@
 namespace slack
 {
 
+
+
+std::string slack::uri_ = "https://slack.com/api/";
+
 slack::slack() : token_{""},
                  api{this},
                  auth{this},
@@ -33,6 +37,16 @@ slack::slack(std::string &&token) : token_{std::move(token)},
                                     oauth{this},
                                     rtm{this}
 { }
+
+void slack::set_uri(const std::string &uri)
+{
+    uri_ = uri;
+}
+
+std::string slack::get_uri()
+{
+    return uri_;
+}
 
 std::string slack::token() const
 {

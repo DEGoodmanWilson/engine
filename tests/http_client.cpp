@@ -18,7 +18,7 @@ TEST(http_event_client, hello)
 {
     std::string event_str = R"(
     {
-            "token": "WHYNO",
+            "token": "WHYYES",
             "team_id": "T123",
             "api_app_id": "A123",
             "event": {
@@ -32,7 +32,7 @@ TEST(http_event_client, hello)
     }
     )";
 
-    slack::http_event_client handler{"abcdefg"};
+    slack::http_event_client handler{"WHYYES"};
 
     bool received = false;
 
@@ -52,7 +52,7 @@ TEST(http_event_client, unknown_event)
 {
     std::string event_str = R"(
     {
-            "token": "WHYNO",
+            "token": "WHYYES",
             "team_id": "T123",
             "api_app_id": "A123",
             "event": {
@@ -66,7 +66,7 @@ TEST(http_event_client, unknown_event)
     }
     )";
 
-    slack::http_event_client handler{"abcdefg"};
+    slack::http_event_client handler{"WHYYES"};
 
     bool received = false;
     std::string type = "";

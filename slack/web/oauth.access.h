@@ -66,7 +66,7 @@ public:
     };
 
     //response
-    struct bot
+    struct bot_info
     {
         slack::user_id bot_user_id;
         slack::token bot_access_token;
@@ -77,7 +77,7 @@ public:
     slack::user_id user_id;
     std::string team_name;
     slack::team_id team_id;
-    std::experimental::optional<struct bot> bot;
+    std::experimental::optional<struct bot_info> bot;
 
     //parameter setters
     void set_option(const parameter::redirect_uri &redirect_uri)

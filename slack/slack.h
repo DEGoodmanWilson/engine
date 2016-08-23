@@ -25,6 +25,8 @@ public:
     slack(const std::string &token);
     slack(std::string &&token);
 
+    static void set_uri(const std::string &uri);
+    static std::string get_uri();
     std::string token() const;
     void reset_token(const std::string &token);
     void reset_token(std::string &&token);
@@ -36,6 +38,7 @@ public:
     const ::slack::containers::rtm rtm;
 private:
     std::string token_;
+    static std::string uri_;
 };
 
 } //namespace slack
