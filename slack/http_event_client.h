@@ -9,6 +9,9 @@
 #include <typeindex>
 #include <string>
 #include <vector>
+#include <regex>
+#include <utility>
+
 
 namespace slack
 {
@@ -18,7 +21,6 @@ struct http_event_envelope
     std::string token;
     slack::team_id team_id;
     std::string api_app_id;
-    ts event_ts;
     std::vector<user_id> authed_users;
 };
 
@@ -57,34 +59,59 @@ private:
 class http_event_client
 {
 public:
-    http_event_client(std::string &&verification_token);
+    using token_lookup_delegate = std::function<std::string(const std::string &)>;
 
-    http_event_client(const std::string &verification_token);
+    http_event_client(token_lookup_delegate delegate, std::string &&verification_token);
+
+    http_event_client(token_lookup_delegate delegate, const std::string &verification_token);
 
     virtual ~http_event_client() = default;
 
     virtual std::string handle_event(const std::string &event);
 
+    // event handlers
     template<class EventT>
-    void register_event_handler(std::function<void(std::shared_ptr<EventT>, const http_event_envelope& envelope)> handler);
-
+    void on(std::function<void(std::shared_ptr<EventT>, const http_event_envelope &envelope)> handler);
     template<class EventT>
-    void deregister_event_handler();
+    void remove_on();
+    void on_error(std::function<void(std::string message, std::string received)> handler);
+    void remove_on_error();
 
-    void register_error_handler(std::function<void(std::string message, std::string received)> handler);
+    // message handlers
+    struct message
+    {
+        std::string text;
+        user_id from_user_id;
+        channel_id channel_id;
 
-    void deregister_error_handler();
+        void reply(std::string text) const;
+
+        std::string token;
+        struct team_id team_id;
+    };
+    using hears_cb = std::function<void(const struct message &message)>;
+    template<typename T>
+    void hears(T &&message, hears_cb callback)
+    {
+        callbacks_.emplace_back(std::regex{std::forward<T>(message)}, callback);
+    }
 
 private:
     std::string verification_token_;
     using handler_map = std::map<std::type_index, std::unique_ptr<http_event_handler_callback>>;
     handler_map handlers_;
     std::function<void(std::string message, std::string received)> error_handler_;
+    //let's just brute force this for now
+    std::vector<std::pair<std::regex, hears_cb>> callbacks_;
+    token_lookup_delegate token_lookup_;
+
+    template <class Event>
+    bool route_message_(const Event &message);
 };
 
 
 template<class EventT>
-void http_event_client::register_event_handler(std::function<void(std::shared_ptr<EventT>, const http_event_envelope& envelope)> func)
+void http_event_client::on(std::function<void(std::shared_ptr<EventT>, const http_event_envelope &envelope)> func)
 {
     handlers_[std::type_index{typeid(EventT)}] = std::unique_ptr<http_event_handler_callback>{
             new http_event_handler_callback_template<EventT>(func)};
@@ -92,7 +119,7 @@ void http_event_client::register_event_handler(std::function<void(std::shared_pt
 
 //This feels...hackish? But it should work.
 template<class EventT>
-void http_event_client::deregister_event_handler()
+void http_event_client::remove_on()
 {
     handlers_.erase(std::type_index{typeid(EventT)});
 }

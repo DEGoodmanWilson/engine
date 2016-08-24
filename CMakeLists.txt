@@ -131,7 +131,7 @@ set(ENGINE_FILES
         slack/http_event_client.h
         slack/rtm_event_client.cpp
         slack/rtm_event_client.h
-        slack/private/events_private.cpp slack/message_router.cpp slack/message_router.h)
+        slack/private/events_private.cpp)
 
 add_library(engine STATIC ${ENGINE_FILES})
 
