@@ -86,6 +86,7 @@ std::string http_event_client::handle_event(const std::string &event_str)
     // TODO make sure the envelope has the other properties!
     http_event_envelope envelope{
             envelope_obj["token"].asString(),
+            envelope_obj["team_id"].asString(),
             envelope_obj["api_app_id"].asString(),
             envelope_obj["event_ts"].asString(),
             {}

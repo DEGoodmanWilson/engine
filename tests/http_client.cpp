@@ -40,7 +40,12 @@ TEST(http_event_client, hello)
                                                             const slack::http_event_envelope &envelope)
                                                             {
                                                                 EXPECT_TRUE(static_cast<bool>(event));
-                                                                received = true;
+                                                                received = ((envelope.token == "WHYYES")
+                                                                && (envelope.team_id == "T123")
+                                                                && (envelope.api_app_id == "A123")
+                                                                && (envelope.event_ts == "1234567890.123456")
+                                                                && (envelope.authed_users.size() == 1)
+                                                                && (envelope.authed_users[0] == "U123"));
                                                             });
 
     handler.handle_event(event_str);
