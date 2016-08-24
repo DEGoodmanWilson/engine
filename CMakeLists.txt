@@ -116,7 +116,6 @@ set(ENGINE_FILES
         slack/uricodec.h
         slack/base/slack_delegate.h
         slack/channel.cpp
-        slack/channel.h
         slack/http.h
         slack/api.h
         slack/auth.h
@@ -132,7 +131,7 @@ set(ENGINE_FILES
         slack/http_event_client.h
         slack/rtm_event_client.cpp
         slack/rtm_event_client.h
-        slack/private/events_private.cpp)
+        slack/private/events_private.cpp slack/message_router.cpp slack/message_router.h)
 
 add_library(engine STATIC ${ENGINE_FILES})
 

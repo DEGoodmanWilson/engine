@@ -5,7 +5,6 @@
 #pragma once
 
 #include <slack/types.h>
-#include <slack/channel.h>
 #include <slack/set_option.h>
 #include <slack/base/response.h>
 #include <string>
