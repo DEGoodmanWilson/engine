@@ -14,7 +14,7 @@ namespace slack
 
 void http_event_client::message::reply(std::string text) const
 {
-    slack::slack c{token};
+    slack c{token};
     c.chat.postMessage(channel_id, text);
 }
 

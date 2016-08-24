@@ -12,7 +12,7 @@ addons: &addons
       - llvm-toolchain-precise-3.8
 
 before_install:
-  - if [ -n "$GCC_VERSION" ]; then export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}"; fi
+  - if [ -n "$GCC_VERSION" ]; then export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}" COMPILER="gcc" LIBCXX="libstdc++11"; else export COMPILER="clang" LIBXX="libc++; fi
 
 install:
   # Download conan
@@ -21,7 +21,7 @@ install:
   - rm conan.deb
 
   # Automatic detection of your arch, compiler, etc
-  - if [ "$GENERATE_COVERAGE" == "ON" ]; then conan install --options build_engine_tests=True --options build_engine_coverage=True -s build_type=Debug --build=missing; else conan install --options build_engine_tests=True --build=missing; fi
+  - if [ "$GENERATE_COVERAGE" == "ON" ]; then conan install -s compiler=$COMPILER -s compiler.libcxx=$LIBCXX --options build_engine_tests=True --options build_engine_coverage=True -s build_type=Debug --build=missing; else conan install -s compiler=$COMPILER -s compiler.libcxx=$LIBCXX --options build_engine_tests=True --build=missing; fi
 
 
 after_success:
@@ -44,6 +44,7 @@ matrix:
             - python-pip
             - libssl-dev
             - curl
+            - libmicrohttpd-dev
       env: GCC_VERSION=4.9
 
     - compiler: gcc
@@ -56,6 +57,7 @@ matrix:
             - python-pip
             - libssl-dev
             - curl
+            - libmicrohttpd-dev
       env: GCC_VERSION=5
 
     - compiler: clang
@@ -68,6 +70,7 @@ matrix:
             - python-pip
             - libssl-dev
             - curl
+            - libmicrohttpd-dev
       env: COMPILER=clang++-3.6
 
     - compiler: clang
@@ -80,6 +83,7 @@ matrix:
             - python-pip
             - libssl-dev
             - curl
+            - libmicrohttpd-dev
       env: COMPILER=clang++-3.7
 
     - compiler: clang
@@ -92,6 +96,7 @@ matrix:
             - python-pip
             - libssl-dev
             - curl
+            - libmicrohttpd-dev
       env: COMPILER=clang++-3.8 RUN_TESTS=ON
 
     - compiler: gcc
@@ -104,5 +109,6 @@ matrix:
             - python-pip
             - libssl-dev
             - curl
+            - libmicrohttpd-dev
       env: GCC_VERSION=5 GENERATE_COVERAGE=ON
 

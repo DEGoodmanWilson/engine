@@ -82,7 +82,7 @@ public:
     {
         std::string text;
         user_id from_user_id;
-        channel_id channel_id;
+        struct channel_id channel_id;
 
         void reply(std::string text) const;
 
