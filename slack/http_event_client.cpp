@@ -1,5 +1,7 @@
 //
-// Created by D.E. Goodman-Wilson on 8/16/16.
+// engine
+//
+// Copyright © 2016 D.E. Goodman-Wilson. All rights reserved.
 //
 
 #include "http_event_client.h"

@@ -1,5 +1,7 @@
 //
-// Created by D.E. Goodman-Wilson on 12/8/15.
+// engine
+//
+// Copyright © 2015–2016 D.E. Goodman-Wilson. All rights reserved.
 //
 
 #include "private.h"
