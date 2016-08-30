@@ -4,11 +4,36 @@
 
 #pragma once
 
-#include "slack/base/response.h"
-#include "slack/base/event.h"
+#include "config.h"
+#include "base/response.h"
+#include "base/event.h"
 #include <json/json.h>
 #include <map>
 
+#define LOG(level, mesg) if (logger_) \
+{ \
+    logger_(level, mesg); \
+}
+
+#define LOG_FATAL(mesg) if (logger_) \
+{ \
+    logger_(log_level::FATAL, mesg); \
+}
+
+#define LOG_ERROR(mesg) if (logger_) \
+{ \
+    logger_(log_level::ERROR, mesg); \
+}
+
+#define LOG_INFO(mesg) if (logger_) \
+{ \
+    logger_(log_level::INFO, mesg); \
+}
+
+#define LOG_DEBUG(mesg) if (logger_) \
+{ \
+    logger_(log_level::DEBUG, mesg); \
+}
 
 
 namespace slack_private

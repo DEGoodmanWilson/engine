@@ -11,6 +11,8 @@
 namespace slack
 {
 
+extern logger_cb logger_;
+
 
 void http_event_client::message::reply(std::string text) const
 {
@@ -43,11 +45,13 @@ bool http_event_client::route_message_(const event::message &message)
             //we found it, let's construct a proper message_reply object
             struct message mesg{message.text, message.user, message.channel, token_lookup_(message.team_id), message.team_id};
 
+            LOG_DEBUG("Calling handler for message " + message.text);
             callback(mesg); //TODO or we could return the retval from the callback, have it return true if handled and false if it chose not to
             return true;
         }
     }
 
+    LOG_DEBUG("Failed to find handler for message " + message.text);
     return false;
 }
 
@@ -60,7 +64,7 @@ std::string http_event_client::handle_event(const std::string &event_str)
     bool parsed_success = reader.parse(event_str, envelope_obj, false);
     if (!parsed_success)
     {
-        // TODO should log this
+        LOG_ERROR(std::string{"JSON parse error: "} + event_str);
         if (error_handler_)
         {
             error_handler_("JSON parse error", event_str);
@@ -71,7 +75,8 @@ std::string http_event_client::handle_event(const std::string &event_str)
     // make sure we have an actual event
     if (!envelope_obj.isObject() || !envelope_obj["type"].isString())
     {
-        //we don't. TODO log it?
+        //we don't.
+        LOG_ERROR(std::string{"Invalid event JSON: "} + event_str);
         if (error_handler_)
         {
             error_handler_("Invalid event JSON", event_str);
@@ -83,7 +88,7 @@ std::string http_event_client::handle_event(const std::string &event_str)
     if (!verification_token_.empty() && envelope_obj["token"].isString() && (verification_token_ != envelope_obj["token"].asString()))
     {
         // a token was specified, and it doesn't match what we got on the wire
-        //TODO log it
+        LOG_ERROR(std::string{"Invalid token on event: "} + event_str);
         if (error_handler_)
         {
             error_handler_("Invalid token on event", event_str);
@@ -105,7 +110,7 @@ std::string http_event_client::handle_event(const std::string &event_str)
     else if(envelope_type != "event_callback")
     {
         // a token was specified, and it doesn't match what we got on the wire
-        //TODO log it
+        LOG_ERROR(std::string{"Unknown event envelope: "} + event_str);
         if (error_handler_)
         {
             error_handler_("Unknown event envelope", event_str);
@@ -137,7 +142,8 @@ std::string http_event_client::handle_event(const std::string &event_str)
     // make sure we have an actual event
     if (!result_obj.isObject() || !result_obj["type"].isString())
     {
-        //we don't. TODO log it?
+        //we don't.
+        LOG_ERROR(std::string{"Invalid event JSON: "} + event_str);
         if (error_handler_)
         {
             error_handler_("Invalid event JSON", event_str);
@@ -150,6 +156,8 @@ std::string http_event_client::handle_event(const std::string &event_str)
     {
         type += "." + result_obj["subtype"].asString();
     }
+
+    LOG_DEBUG("Received event " + type);
 
     //TODO make this more elegant
     struct team_id team_id{envelope_obj["team_id"].asString()};
@@ -166,6 +174,7 @@ std::string http_event_client::handle_event(const std::string &event_str)
     auto it = handlers_.find(std::type_index{typeid(*event)});
     if (it != handlers_.end())
     {
+        LOG_DEBUG("Found handler for event of type " + type);
         it->second->exec(event, envelope);
     }
 
@@ -175,7 +184,6 @@ std::string http_event_client::handle_event(const std::string &event_str)
         route_message_(dynamic_cast<event::message &>(*event));
     }
 
-    //TODO log failure to find matching handler
     return "";
 }
 
