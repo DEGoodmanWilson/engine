@@ -43,9 +43,9 @@ public:
     //parameters
     struct parameter
     {
-        MAKE_STRING_LIKE(error);
+        SLACK_MAKE_STRING_LIKE(error);
 
-        MAKE_STRING_LIKE(foo);
+        SLACK_MAKE_STRING_LIKE(foo);
     };
 
     //errors

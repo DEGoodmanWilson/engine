@@ -11,5 +11,6 @@
 #include <slack/event/pong.h>
 #include <slack/event/channel_archive.h>
 #include <slack/event/message.h>
+#include <slack/event/message_bot_message.h>
 #include <slack/event/message_channel_archive.h>
 #include <slack/event/unknown.h>

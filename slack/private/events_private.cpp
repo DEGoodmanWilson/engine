@@ -33,6 +33,11 @@ void initialize_events(void)
         {
             return std::make_shared<message>(team_id, root);
         });
+
+    slack_private::events_factory.register_type<pong>(message_bot_message::type, [](const slack::team_id &team_id, const Json::Value &root)
+    {
+        return std::make_shared<message_bot_message>(team_id, root);
+    });
 }
 
 }} //namespace events slack

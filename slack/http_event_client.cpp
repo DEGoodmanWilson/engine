@@ -57,6 +57,31 @@ bool http_event_client::route_message_(const event::message &message)
     return false;
 }
 
+template <>
+bool http_event_client::route_message_(const event::message_bot_message &message)
+{
+    //TODO I am not super happy with this, and I don't really have a good clue how to improve it.
+    for (const auto &handler_pair : callbacks_)
+    {
+        std::smatch pieces_match;
+        auto message_regex = std::get<std::regex>(handler_pair);
+
+        auto callback = std::get<hears_cb>(handler_pair);
+        if (std::regex_search(message.text, pieces_match, message_regex))
+        {
+            //we found it, let's construct a proper message_reply object
+            struct message mesg{message.text, message.bot_id, message.channel, token_lookup_(message.team_id), message.team_id};
+
+            LOG_DEBUG("Calling handler for message_bot_message " + message.text);
+            callback(mesg); //TODO or we could return the retval from the callback, have it return true if handled and false if it chose not to
+            return true;
+        }
+    }
+
+    LOG_DEBUG("Failed to find handler for message_bot_message " + message.text);
+    return false;
+}
+
 //TODO I'm not awfully fond of returning a string here, but unsure what else to do!
 std::string http_event_client::handle_event(const std::string &event_str)
 {
@@ -184,6 +209,10 @@ std::string http_event_client::handle_event(const std::string &event_str)
     if(typeid(*event) == typeid(event::message))
     {
         route_message_(dynamic_cast<event::message &>(*event));
+    }
+    else if(typeid(*event) == typeid(event::message_bot_message))
+    {
+        route_message_(dynamic_cast<event::message_bot_message &>(*event));
     }
 
     return "";

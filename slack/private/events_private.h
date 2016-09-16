@@ -12,6 +12,7 @@
 #include "event/pong.h"
 #include "event/channel_archive.h"
 #include "event/message.h"
+#include "event/message_bot_message.h"
 #include "event/message_channel_archive.h"
 #include "event/unknown.h"
 

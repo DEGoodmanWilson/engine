@@ -286,3 +286,50 @@ TEST(http_event_client, message_handle_success)
     ASSERT_TRUE(received);
     ASSERT_TRUE(handled);
 }
+
+TEST(http_event_client, bot_message_handle_success)
+{
+    std::string event_str = R"(
+    {
+            "token": "WHYYES",
+            "team_id": "T123",
+            "api_app_id": "A123",
+            "event": {
+                "type": "message",
+                "subtype": "bot_message",
+                "bot_id": "B123",
+                "username": "bot",
+                "icons": {},
+                "text": "More!",
+                "ts": "1472014386.000092",
+                "channel": "C123",
+                "event_ts": "1472014386.000092"
+            },
+            "type": "event_callback",
+            "authed_users": [
+                    "B123"
+            ]
+    }
+    )";
+
+    slack::http_event_client handler{[](const auto &id)
+                                     { return "xoxb-123"; }, "WHYYES"};
+
+    bool received = false;
+    bool handled = false;
+
+    handler.on<slack::event::message_bot_message>([&](auto event, auto envelope)
+                                      {
+                                          received = true;
+                                      });
+    handler.hears("More!", [&](auto message)
+    {
+        handled = true;
+    });
+
+
+    handler.handle_event(event_str);
+
+    ASSERT_TRUE(received);
+    ASSERT_TRUE(handled);
+}

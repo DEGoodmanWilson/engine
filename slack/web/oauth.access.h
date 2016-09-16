@@ -54,7 +54,7 @@ public:
     //parameters
     struct parameter
     {
-        MAKE_STRING_LIKE(redirect_uri);
+        SLACK_MAKE_STRING_LIKE(redirect_uri);
     };
 
     //errors

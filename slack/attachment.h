@@ -74,23 +74,23 @@ public:
 
     struct parameter
     {
-        MAKE_STRING_LIKE(fallback);
+        SLACK_MAKE_STRING_LIKE(fallback);
 
-        MAKE_STRING_LIKE(color);
+        SLACK_MAKE_STRING_LIKE(color);
 
-        MAKE_STRING_LIKE(pretext);
+        SLACK_MAKE_STRING_LIKE(pretext);
 
-        MAKE_STRING_LIKE(author_name);
+        SLACK_MAKE_STRING_LIKE(author_name);
 
-        MAKE_STRING_LIKE(author_link);
+        SLACK_MAKE_STRING_LIKE(author_link);
 
-        MAKE_STRING_LIKE(author_icon);
+        SLACK_MAKE_STRING_LIKE(author_icon);
 
-        MAKE_STRING_LIKE(title);
+        SLACK_MAKE_STRING_LIKE(title);
 
-        MAKE_STRING_LIKE(title_link);
+        SLACK_MAKE_STRING_LIKE(title_link);
 
-        MAKE_STRING_LIKE(text);
+        SLACK_MAKE_STRING_LIKE(text);
 
         using fields = std::vector<field>;
         enum class mrkdwn_in_fields
@@ -101,9 +101,9 @@ public:
         };
         using mrkdwn_in = std::vector<mrkdwn_in_fields>;
 
-        MAKE_STRING_LIKE(image_url);
+        SLACK_MAKE_STRING_LIKE(image_url);
 
-        MAKE_STRING_LIKE(thumb_url);
+        SLACK_MAKE_STRING_LIKE(thumb_url);
     };
 
     void set_option(const parameter::fallback &fallback)

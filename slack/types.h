@@ -14,7 +14,7 @@
 #include <slack/optional.hpp>
 
 
-#define MAKE_STRING_LIKE(x) class x : public std::string \
+#define SLACK_MAKE_STRING_LIKE(x) class x : public std::string \
 { \
 public: \
     x() = default; \
@@ -70,19 +70,19 @@ namespace slack
 
 //TODO NONE of these things should be just strings.
 
-MAKE_STRING_LIKE(team_id);
+SLACK_MAKE_STRING_LIKE(team_id);
 
-MAKE_STRING_LIKE(user_id);
+SLACK_MAKE_STRING_LIKE(user_id);
 
-MAKE_STRING_LIKE(bot_id);
+SLACK_MAKE_STRING_LIKE(bot_id);
 
-MAKE_STRING_LIKE(ts);
+SLACK_MAKE_STRING_LIKE(ts);
 
-MAKE_STRING_LIKE(channel_id);
+SLACK_MAKE_STRING_LIKE(channel_id);
 
-MAKE_STRING_LIKE(token);
+SLACK_MAKE_STRING_LIKE(token);
 
-MAKE_STRING_LIKE(scope);
+SLACK_MAKE_STRING_LIKE(scope);
 
 struct profile
 {

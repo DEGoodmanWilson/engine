@@ -39,7 +39,7 @@ public:
     // parameters
     struct parameter
     {
-        MAKE_STRING_LIKE(username);
+        SLACK_MAKE_STRING_LIKE(username);
         SLACK_MAKE_BOOL_LIKE(as_user);
         enum class parse
         {
@@ -50,8 +50,8 @@ public:
         using attachments = std::vector<slack::attachment>;
         SLACK_MAKE_BOOL_LIKE(unfurl_links);
         SLACK_MAKE_BOOL_LIKE(unfurl_media);
-        MAKE_STRING_LIKE(icon_url);
-        MAKE_STRING_LIKE(icon_emoji);
+        SLACK_MAKE_STRING_LIKE(icon_url);
+        SLACK_MAKE_STRING_LIKE(icon_emoji);
     };
 
     // errors
