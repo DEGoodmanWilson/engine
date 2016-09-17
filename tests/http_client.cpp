@@ -35,8 +35,7 @@ TEST(http_event_client, hello)
     }
     )";
 
-    slack::http_event_client handler{[](const auto &id)
-                                         { return "xoxb-123"; }, "WHYYES"};
+    slack::http_event_client handler{"WHYYES"};
 
     bool received = false;
 
@@ -44,14 +43,20 @@ TEST(http_event_client, hello)
                                         const slack::http_event_envelope &envelope)
                                         {
                                             EXPECT_TRUE(static_cast<bool>(event));
-                                            received = ((envelope.token == "WHYYES")
-                                                        && (envelope.team_id == "T123")
+                                            received = ((envelope.verification_token == "WHYYES")
+                                                        && (envelope.token.team_id == "T123")
                                                         && (envelope.api_app_id == "A123")
                                                         && (envelope.authed_users.size() == 1)
                                                         && (envelope.authed_users[0] == "U123"));
                                         });
 
-    handler.handle_event(event_str);
+    handler.handle_event(event_str, {
+            "T123",
+            "xoxp-123",
+            "U123",
+            "xoxb-123",
+            "B123",
+    });
 
     ASSERT_TRUE(received);
 }
@@ -73,8 +78,7 @@ TEST(http_event_client, unknown_event)
     }
     )";
 
-    slack::http_event_client handler{[](const auto &id)
-                                         { return "xoxb-123"; }, "WHYYES"};
+    slack::http_event_client handler{"WHYYES"};
 
     bool received = false;
     std::string type = "";
@@ -87,7 +91,13 @@ TEST(http_event_client, unknown_event)
                                               type = event->type;
                                           });
 
-    handler.handle_event(event_str);
+    handler.handle_event(event_str, {
+            "T123",
+            "xoxp-123",
+            "U123",
+            "xoxb-123",
+            "B123",
+    });
 
     ASSERT_TRUE(received);
     ASSERT_EQ("WATWAT", type);
@@ -103,8 +113,7 @@ TEST(http_event_client, non_event)
     ]
     )";
 
-    slack::http_event_client handler{[](const auto &id)
-                                         { return "xoxb-123"; }, "abcdefg"};
+    slack::http_event_client handler{"WHYYES"};
 
     bool received = false;
     std::string whatwegot = "";
@@ -117,7 +126,13 @@ TEST(http_event_client, non_event)
                              EXPECT_EQ("Invalid event JSON", message);
                          });
 
-    handler.handle_event(event_str);
+    handler.handle_event(event_str, {
+            "T123",
+            "xoxp-123",
+            "U123",
+            "xoxb-123",
+            "B123",
+    });
 
     ASSERT_TRUE(received);
     ASSERT_EQ(event_str, whatwegot);
@@ -129,8 +144,7 @@ TEST(http_event_client, non_json)
     [ { fdsjk 234 ]] "why no
     )";
 
-    slack::http_event_client handler{[](const auto &id)
-                                         { return "xoxb-123"; }, "abcdefg"};
+    slack::http_event_client handler{"WHYYES"};
 
     bool received = false;
     std::string whatwegot = "";
@@ -143,7 +157,13 @@ TEST(http_event_client, non_json)
                              EXPECT_EQ("JSON parse error", message);
                          });
 
-    handler.handle_event(event_str);
+    handler.handle_event(event_str, {
+            "T123",
+            "xoxp-123",
+            "U123",
+            "xoxb-123",
+            "B123",
+    });
 
     ASSERT_TRUE(received);
     ASSERT_EQ(event_str, whatwegot);
@@ -159,10 +179,15 @@ TEST(http_event_client, url_verification)
     }
     )";
 
-    slack::http_event_client handler{[](const auto &id)
-                                         { return "xoxb-123"; }, "WHYYES"};
+    slack::http_event_client handler{"WHYYES"};
 
-    auto response = handler.handle_event(event_str);
+    auto response = handler.handle_event(event_str, {
+            "T123",
+            "xoxp-123",
+            "U123",
+            "xoxb-123",
+            "B123",
+    });
 
     ASSERT_EQ("foobar", response);
 }
@@ -184,8 +209,7 @@ TEST(http_event_client, token_match)
     }
     )";
 
-    slack::http_event_client handler{[](const auto &id)
-                                         { return "xoxb-123"; }, "WHYYES"};
+    slack::http_event_client handler{"WHYYES"};
 
     bool received = false;
 
@@ -193,11 +217,17 @@ TEST(http_event_client, token_match)
                                         const slack::http_event_envelope &envelope)
                                         {
                                             EXPECT_TRUE(static_cast<bool>(event));
-                                            EXPECT_EQ("WHYYES", envelope.token);
-                                            received = ("WHYYES" == envelope.token);
+                                            EXPECT_EQ("WHYYES", envelope.verification_token);
+                                            received = ("WHYYES" == envelope.verification_token);
                                         });
 
-    handler.handle_event(event_str);
+    handler.handle_event(event_str, {
+            "T123",
+            "xoxp-123",
+            "U123",
+            "xoxb-123",
+            "B123",
+    });
 
     ASSERT_TRUE(received);
 }
@@ -219,8 +249,7 @@ TEST(http_event_client, token_mismatch)
     }
     )";
 
-    slack::http_event_client handler{[](const auto &id)
-                                         { return "xoxb-123"; }, "WHYYES"};
+    slack::http_event_client handler{"WHYYES"};
 
     bool received = false;
     bool handled = false;
@@ -237,7 +266,13 @@ TEST(http_event_client, token_mismatch)
                          });
 
 
-    handler.handle_event(event_str);
+    handler.handle_event(event_str, {
+            "T123",
+            "xoxp-123",
+            "U123",
+            "xoxb-123",
+            "B123",
+    });
 
     ASSERT_FALSE(received);
     ASSERT_TRUE(handled);
@@ -265,8 +300,7 @@ TEST(http_event_client, message_handle_success)
     }
     )";
 
-    slack::http_event_client handler{[](const auto &id)
-                                         { return "xoxb-123"; }, "WHYYES"};
+    slack::http_event_client handler{"WHYYES"};
 
     bool received = false;
     bool handled = false;
@@ -281,7 +315,13 @@ TEST(http_event_client, message_handle_success)
         });
 
 
-    handler.handle_event(event_str);
+    handler.handle_event(event_str, {
+            "T123",
+            "xoxp-123",
+            "U123",
+            "xoxb-123",
+            "B123",
+    });
 
     ASSERT_TRUE(received);
     ASSERT_TRUE(handled);
@@ -312,8 +352,7 @@ TEST(http_event_client, bot_message_handle_success)
     }
     )";
 
-    slack::http_event_client handler{[](const auto &id)
-                                     { return "xoxb-123"; }, "WHYYES"};
+    slack::http_event_client handler{"WHYYES"};
 
     bool received = false;
     bool handled = false;
@@ -328,7 +367,13 @@ TEST(http_event_client, bot_message_handle_success)
     });
 
 
-    handler.handle_event(event_str);
+    handler.handle_event(event_str, {
+            "T123",
+            "xoxp-123",
+            "U123",
+            "xoxb-123",
+            "B123",
+    });
 
     ASSERT_TRUE(received);
     ASSERT_TRUE(handled);

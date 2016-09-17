@@ -10,6 +10,12 @@
 #include "slack.h"
 #include <json/json.h>
 
+/***
+ * TODO
+ * 1) make receiving message.bot_message in hears handler optional
+ * 2) filter out messages from ourselves, making listening for those optional
+ */
+
 namespace slack
 {
 
@@ -18,22 +24,22 @@ extern logger_cb logger_;
 
 void http_event_client::message::reply(std::string text) const
 {
-    slack c{token};
+    slack c{token.bot_token}; //TODO always the bot token? Maybe allow to pick?
     c.chat.postMessage(channel_id, text);
 }
 
-http_event_client::http_event_client(token_lookup_delegate delegate, const std::string &verification_token) : verification_token_{verification_token}, token_lookup_{delegate}
+http_event_client::http_event_client(const verification_token &verification_token) : verification_token_{verification_token}
 {
     event::initialize_events();
 }
 
-http_event_client::http_event_client(token_lookup_delegate delegate, std::string &&verification_token) : verification_token_{std::move(verification_token)}, token_lookup_{delegate}
+http_event_client::http_event_client(verification_token &&verification_token) : verification_token_{std::move(verification_token)}
 {
     event::initialize_events();
 }
 
 template <>
-bool http_event_client::route_message_(const event::message &message)
+bool http_event_client::route_message_(const event::message &message, const token &token)
 {
     //TODO I am not super happy with this, and I don't really have a good clue how to improve it.
     for (const auto &handler_pair : callbacks_)
@@ -45,7 +51,7 @@ bool http_event_client::route_message_(const event::message &message)
         if (std::regex_search(message.text, pieces_match, message_regex))
         {
             //we found it, let's construct a proper message_reply object
-            struct message mesg{message.text, message.user, message.channel, token_lookup_(message.team_id), message.team_id};
+            struct message mesg{message.text, message.user, message.channel, token};
 
             LOG_DEBUG("Calling handler for message " + message.text);
             callback(mesg); //TODO or we could return the retval from the callback, have it return true if handled and false if it chose not to
@@ -58,7 +64,7 @@ bool http_event_client::route_message_(const event::message &message)
 }
 
 template <>
-bool http_event_client::route_message_(const event::message_bot_message &message)
+bool http_event_client::route_message_(const event::message_bot_message &message, const token &token)
 {
     //TODO I am not super happy with this, and I don't really have a good clue how to improve it.
     for (const auto &handler_pair : callbacks_)
@@ -70,7 +76,7 @@ bool http_event_client::route_message_(const event::message_bot_message &message
         if (std::regex_search(message.text, pieces_match, message_regex))
         {
             //we found it, let's construct a proper message_reply object
-            struct message mesg{message.text, message.bot_id, message.channel, token_lookup_(message.team_id), message.team_id};
+            struct message mesg{message.text, message.bot_id, message.channel, token};
 
             LOG_DEBUG("Calling handler for message_bot_message " + message.text);
             callback(mesg); //TODO or we could return the retval from the callback, have it return true if handled and false if it chose not to
@@ -83,7 +89,7 @@ bool http_event_client::route_message_(const event::message_bot_message &message
 }
 
 //TODO I'm not awfully fond of returning a string here, but unsure what else to do!
-std::string http_event_client::handle_event(const std::string &event_str)
+std::string http_event_client::handle_event(const std::string &event_str, const token &token)
 {
     // turn the string into an event object TODO DRY this up!!
     Json::Value envelope_obj;
@@ -148,11 +154,12 @@ std::string http_event_client::handle_event(const std::string &event_str)
     // construct envelope object. TODO it should know how to construct itself like any other event.
     // TODO make sure the envelope has the other properties!
     http_event_envelope envelope{
-            envelope_obj["token"].asString(),
-            envelope_obj["team_id"].asString(),
-            envelope_obj["api_app_id"].asString(),
+            envelope_obj["token"].asString(), //verification_token
+            token, //token
+            envelope_obj["api_app_id"].asString(), //api_app_id
             {}
     };
+    envelope.token.team_id = envelope_obj["team_id"].asString();
 
     if (!envelope_obj["authed_users"].isNull() && envelope_obj["authed_users"].isArray())
     {
@@ -208,11 +215,11 @@ std::string http_event_client::handle_event(const std::string &event_str)
     // if this was a message, hand it off to the message handlers
     if(typeid(*event) == typeid(event::message))
     {
-        route_message_(dynamic_cast<event::message &>(*event));
+        route_message_(dynamic_cast<event::message &>(*event), token);
     }
     else if(typeid(*event) == typeid(event::message_bot_message))
     {
-        route_message_(dynamic_cast<event::message_bot_message &>(*event));
+        route_message_(dynamic_cast<event::message_bot_message &>(*event), token);
     }
 
     return "";

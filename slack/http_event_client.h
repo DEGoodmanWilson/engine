@@ -20,8 +20,8 @@ namespace slack
 
 struct http_event_envelope
 {
-    std::string token;
-    slack::team_id team_id;
+    slack::verification_token verification_token;
+    struct token token;
     std::string api_app_id;
     std::vector<user_id> authed_users;
 };
@@ -61,15 +61,13 @@ private:
 class http_event_client
 {
 public:
-    using token_lookup_delegate = std::function<std::string(const std::string &)>;
+    http_event_client(verification_token &&verification_token);
 
-    http_event_client(token_lookup_delegate delegate, std::string &&verification_token);
-
-    http_event_client(token_lookup_delegate delegate, const std::string &verification_token);
+    http_event_client(const verification_token &verification_token);
 
     virtual ~http_event_client() = default;
 
-    virtual std::string handle_event(const std::string &event);
+    virtual std::string handle_event(const std::string &event, const token &token);
 
     // event handlers
     template<class EventT>
@@ -85,11 +83,9 @@ public:
         std::string text;
         user_id from_user_id;
         struct channel_id channel_id;
+        struct token token;
 
         void reply(std::string text) const;
-
-        std::string token;
-        struct team_id team_id;
     };
     using hears_cb = std::function<void(const struct message &message)>;
     template<typename T>
@@ -99,16 +95,15 @@ public:
     }
 
 private:
-    std::string verification_token_;
+    verification_token verification_token_;
     using handler_map = std::map<std::type_index, std::unique_ptr<http_event_handler_callback>>;
     handler_map handlers_;
     std::function<void(std::string message, std::string received)> error_handler_;
     //let's just brute force this for now
     std::vector<std::pair<std::regex, hears_cb>> callbacks_;
-    token_lookup_delegate token_lookup_;
 
     template <class Event>
-    bool route_message_(const Event &message);
+    bool route_message_(const Event &message, const token &token);
 };
 
 

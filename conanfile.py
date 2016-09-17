@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 class EngineConan(ConanFile):
     name = "engine"
-    version = "1.0-beta17"
+    version = "1.0-beta18"
     url = "https://github.com/DEGoodmanWilson/engine.git"
     license = "MIT"
     settings = "os", "compiler", "build_type", "arch"

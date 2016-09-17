@@ -80,7 +80,9 @@ SLACK_MAKE_STRING_LIKE(ts);
 
 SLACK_MAKE_STRING_LIKE(channel_id);
 
-SLACK_MAKE_STRING_LIKE(token);
+SLACK_MAKE_STRING_LIKE(verification_token);
+
+SLACK_MAKE_STRING_LIKE(access_token);
 
 SLACK_MAKE_STRING_LIKE(scope);
 
@@ -202,6 +204,15 @@ struct channel
     slack::message latest;
     int64_t unread_count;
     int64_t unread_display_count;
+};
+
+struct token
+{
+    slack::team_id team_id;
+    slack::access_token access_token;
+    slack::user_id user_id;
+    slack::access_token bot_token;
+    slack::user_id bot_id;
 };
 
 }
