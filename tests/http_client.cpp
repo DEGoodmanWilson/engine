@@ -103,6 +103,49 @@ TEST(http_event_client, unknown_event)
     ASSERT_EQ("WATWAT", type);
 }
 
+TEST(http_event_client, unknown_event_subtype)
+{
+    std::string event_str = R"(
+    {
+            "token": "WHYYES",
+            "team_id": "T123",
+            "api_app_id": "A123",
+            "event": {
+                    "type": "message",
+                    "subtype": "nope"
+            },
+            "type": "event_callback",
+            "authed_users": [
+                    "U123"
+            ]
+    }
+    )";
+
+    slack::http_event_client handler{"WHYYES"};
+
+    bool received = false;
+    std::string type = "";
+
+    handler.on<slack::event::unknown>([&](std::shared_ptr<slack::event::unknown> event,
+                                          const slack::http_event_envelope &envelope)
+                                      {
+                                          EXPECT_TRUE(static_cast<bool>(event));
+                                          received = true;
+                                          type = event->type;
+                                      });
+
+    handler.handle_event(event_str, {
+            "T123",
+            "xoxp-123",
+            "U123",
+            "xoxb-123",
+            "B123",
+    });
+
+    ASSERT_TRUE(received);
+    ASSERT_EQ("message.nope", type);
+}
+
 TEST(http_event_client, non_event)
 {
     std::string event_str = R"(

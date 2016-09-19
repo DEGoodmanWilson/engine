@@ -119,8 +119,11 @@ struct user
     slack::profile profile;
     bool is_admin;
     bool is_onwer;
+    bool is_primary_owner;
+    bool is_restricted;
+    bool is_ultra_restricted;
+    bool is_bot;
     bool has_2fa;
-    bool has_files;
 };
 
 //This is the data type that is returned from a slash command

@@ -137,7 +137,9 @@ set(ENGINE_FILES
         slack/private/events_private.cpp
         slack/config.cpp
         slack/config.h
-        slack/web/users.list.cpp slack/web/users.list.h)
+        slack/web/users.list.cpp
+        slack/web/users.list.h
+        )
 
 add_library(engine STATIC ${ENGINE_FILES})
 

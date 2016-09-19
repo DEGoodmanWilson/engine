@@ -47,9 +47,10 @@ user::user(const Json::Value &parsed_json)
     profile = {parsed_json["profile"]};
     is_admin = parsed_json["is_admin"].asBool();
     is_onwer = parsed_json["is_onwer"].asBool();
+    is_restricted = parsed_json["is_restricted"].asBool();
+    is_ultra_restricted = parsed_json["is_ultra_restricted"].asBool();
+    is_bot = parsed_json["is_bot"].asBool();
     has_2fa = parsed_json["has_2fa"].asBool();
-    has_files = parsed_json["has_files"].asBool();
-
 }
 
 

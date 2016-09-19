@@ -19,6 +19,7 @@ struct unknown :
         public base::event
 {
     std::string type; //this one isn't static, because it will hold new events we don't recognize
+    std::string raw_event;
 
     unknown() = default;
 
