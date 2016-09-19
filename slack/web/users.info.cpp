@@ -31,4 +31,4 @@ void info::initialize_()
     }
 }
 
-}} //namespace channel slack
+}} //namespace users slack
