@@ -17,6 +17,7 @@ slack::slack() : token_{""},
                  channels{this},
                  chat{this},
                  oauth{this},
+                 users{this},
                  rtm{this}
 {}
 
@@ -26,6 +27,7 @@ slack::slack(const std::string &token) : token_{token},
                                          channels{this},
                                          chat{this},
                                          oauth{this},
+                                         users{this},
                                          rtm{this}
 { }
 
@@ -35,6 +37,7 @@ slack::slack(std::string &&token) : token_{std::move(token)},
                                     channels{this},
                                     chat{this},
                                     oauth{this},
+                                    users{this},
                                     rtm{this}
 { }
 

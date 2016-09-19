@@ -64,6 +64,7 @@ set(ENGINE_FILES
         slack/slack.h
         slack/set_option.h
         slack/chat.h
+        slack/users.h
         slack/web/api.test.cpp
         slack/web/api.test.h
         slack/web/channels.archive.cpp
@@ -86,7 +87,10 @@ set(ENGINE_FILES
         slack/web/chat.postMessage.h
         slack/web/oauth.access.cpp
         slack/web/oauth.access.h
+        slack/web/users.info.cpp
+        slack/web/users.info.h
         slack/types.h
+        slack/types.cpp
         slack/fwd.h
         slack/optional.hpp
         slack/attachment.h
@@ -111,7 +115,6 @@ set(ENGINE_FILES
         slack/event/message_bot_message.h
         slack/event/message_me_message.h
         slack/event/user_typing.h
-        slack/types.cpp
         slack/uricodec.cpp
         slack/uricodec.h
         slack/base/slack_delegate.h
@@ -133,7 +136,8 @@ set(ENGINE_FILES
         slack/rtm_event_client.h
         slack/private/events_private.cpp
         slack/config.cpp
-        slack/config.h )
+        slack/config.h
+        )
 
 add_library(engine STATIC ${ENGINE_FILES})
 

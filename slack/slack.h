@@ -14,6 +14,7 @@
 #include <slack/chat.h>
 #include <slack/oauth.h>
 #include <slack/rtm.h>
+#include <slack/users.h>
 #include <slack/rtm_event_client.h>
 #include <slack/http_event_client.h>
 #include <slack/base/slack_delegate.h>
@@ -38,6 +39,7 @@ public:
     const ::slack::containers::channels channels;
     const ::slack::containers::chat chat;
     const ::slack::containers::oauth oauth;
+    const ::slack::containers::users users;
     const ::slack::containers::rtm rtm;
 private:
     std::string token_;
