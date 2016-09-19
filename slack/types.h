@@ -101,7 +101,7 @@ struct profile
     std::string skype;
     std::string phone;
     std::map<uint16_t, std::string> images;
-    std::experimental::optional<bot_id> bot_id;
+    std::experimental::optional<struct bot_id> bot_id;
     std::experimental::optional<app_id> api_app_id;
 };
 
