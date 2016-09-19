@@ -27,6 +27,14 @@ profile::profile(const Json::Value &parsed_json)
     images[48] = parsed_json["image_24"].asString();
     images[72] = parsed_json["image_24"].asString();
     images[192] = parsed_json["image_24"].asString();
+    if(parsed_json["bot_id"].isString())
+    {
+        bot_id = {parsed_json["bot_id"].asString()};
+    }
+    if(parsed_json["api_app_id"].isString())
+    {
+        api_app_id = {parsed_json["api_app_id"].asString()};
+    }
 }
 
 template<>
@@ -41,6 +49,7 @@ user::user(const Json::Value &parsed_json)
     is_onwer = parsed_json["is_onwer"].asBool();
     has_2fa = parsed_json["has_2fa"].asBool();
     has_files = parsed_json["has_files"].asBool();
+
 }
 
 

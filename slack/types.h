@@ -76,6 +76,8 @@ SLACK_MAKE_STRING_LIKE(user_id);
 
 SLACK_MAKE_STRING_LIKE(bot_id);
 
+SLACK_MAKE_STRING_LIKE(app_id);
+
 SLACK_MAKE_STRING_LIKE(ts);
 
 SLACK_MAKE_STRING_LIKE(channel_id);
@@ -92,7 +94,6 @@ struct profile
 
     template<class json>
     profile(const json &parsed_json);
-
     std::string first_name;
     std::string last_name;
     std::string real_name;
@@ -100,6 +101,8 @@ struct profile
     std::string skype;
     std::string phone;
     std::map<uint16_t, std::string> images;
+    std::experimental::optional<bot_id> bot_id;
+    std::experimental::optional<app_id> api_app_id;
 };
 
 struct user
