@@ -14,6 +14,7 @@
 #include "event/message.h"
 #include "event/message_bot_message.h"
 #include "event/message_channel_archive.h"
+#include "event/message_channel_join.h"
 #include "event/unknown.h"
 
 namespace slack { namespace event

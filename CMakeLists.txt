@@ -139,7 +139,7 @@ set(ENGINE_FILES
         slack/config.h
         slack/web/users.list.cpp
         slack/web/users.list.h
-        )
+        slack/event/message_channel_join.cpp slack/event/message_channel_join.h)
 
 add_library(engine STATIC ${ENGINE_FILES})
 
