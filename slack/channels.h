@@ -12,6 +12,7 @@
 #include <slack/web/channels.archive.h>
 #include <slack/web/channels.rename.h>
 #include <slack/web/channels.list.h>
+#include <slack/web/channels.info.h>
 #include <slack/base/slack_delegate.h>
 
 namespace slack
@@ -63,6 +64,12 @@ public:
     {
         return ::slack::channels::rename{delegate_->token(), std::forward<CHANNEL>(channel), std::forward<NAME>(name)};
     };
+
+    template <class CHANNEL>
+    ::slack::channels::info info(CHANNEL &&channel) const
+    {
+        return ::slack::channels::info{delegate_->token(), std::forward<CHANNEL>(channel)};
+    }
 
 
 private:
