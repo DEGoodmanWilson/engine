@@ -1,4 +1,5 @@
 from conans import ConanFile, CMake
+from conans.tools import os_info
 
 class EngineConan(ConanFile):
     name = "engine"
@@ -46,3 +47,5 @@ class EngineConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = ["engine"]
+        if os_info.is_linux:
+            self.cpp_info.libs.append("pthread")
