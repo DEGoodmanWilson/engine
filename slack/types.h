@@ -219,7 +219,8 @@ struct token
     slack::access_token access_token;
     slack::user_id user_id;
     slack::access_token bot_token;
-    slack::user_id bot_id;
+    slack::user_id bot_user_id;
+    slack::bot_id bot_id;
 };
 
 }
