@@ -18,6 +18,11 @@ struct user_typing : public base::event
 {
     static const std::string type;
 
+    virtual std::string str()
+    {
+        return type;
+    }
+
     user_typing() = default;
 
     template<class json>

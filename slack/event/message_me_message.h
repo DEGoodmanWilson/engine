@@ -20,6 +20,11 @@ struct message_me_message : public base::event
 {
     static const std::string type;
 
+    virtual std::string str()
+    {
+        return type;
+    }
+
     message_me_message() = default;
 
     template<class json>

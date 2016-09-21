@@ -19,6 +19,12 @@ struct unknown :
         public base::event
 {
     std::string type; //this one isn't static, because it will hold new events we don't recognize
+
+    virtual std::string str()
+    {
+        return type;
+    }
+
     std::string raw_event;
 
     unknown() = default;

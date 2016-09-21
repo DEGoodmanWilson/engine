@@ -20,6 +20,11 @@ struct message_channel_join : public base::event
 {
     static const std::string type;
 
+    virtual std::string str()
+    {
+        return type;
+    }
+
     message_channel_join() = default;
 
     template<class json>

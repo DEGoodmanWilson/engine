@@ -18,6 +18,11 @@ struct pong : public base::event
 {
     static const std::string type;
 
+    virtual std::string str()
+    {
+        return type;
+    }
+
     pong() = default;
 
     template<class json>

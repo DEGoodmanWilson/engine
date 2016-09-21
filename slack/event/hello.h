@@ -21,6 +21,11 @@ struct hello :
 {
     static const std::string type;
 
+    virtual std::string str()
+    {
+        return type;
+    }
+
     hello() = default;
 
     template<class json>

@@ -1,16 +1,6 @@
 //
 // engine
 //
-// Copyright © 2016 D.E. Goodman-Wilson. All rights reserved.
-//
-
-#include <gtest/gtest.h>
-#include <slack/slack.h>
-#include <chrono>
-
-//
-// engine
-//
 // Copyright © 2015–2016 D.E. Goodman-Wilson. All rights reserved.
 //
 
@@ -18,7 +8,7 @@
 #include <slack/slack.h>
 #include <chrono>
 
-TEST(http_event_client, hello)
+TEST(http_event_client, hello_threaded)
 {
     std::string event_str = R"(
     {
@@ -35,20 +25,74 @@ TEST(http_event_client, hello)
     }
     )";
 
-    slack::http_event_client handler{"WHYYES"};
+    slack::http_event_client handler{"WHYYES", slack::http_event_client::parameter::thread_timeout{10ms}};
 
     bool received = false;
+    std::mutex m;
+    std::condition_variable cv;
 
     handler.on<slack::event::hello>([&](std::shared_ptr<slack::event::hello> event,
                                         const slack::http_event_envelope &envelope)
-                                        {
-                                            EXPECT_TRUE(static_cast<bool>(event));
-                                            received = ((envelope.verification_token == "WHYYES")
-                                                        && (envelope.token.team_id == "T123")
-                                                        && (envelope.api_app_id == "A123")
-                                                        && (envelope.authed_users.size() == 1)
-                                                        && (envelope.authed_users[0] == "U123"));
-                                        });
+                                    {
+                                        std::unique_lock<std::mutex> l(m);
+
+                                        EXPECT_TRUE(static_cast<bool>(event));
+                                        received = ((envelope.verification_token == "WHYYES")
+                                                    && (envelope.token.team_id == "T123")
+                                                    && (envelope.api_app_id == "A123")
+                                                    && (envelope.authed_users.size() == 1)
+                                                    && (envelope.authed_users[0] == "U123"));
+
+                                        l.unlock();
+                                        cv.notify_one();
+                                    });
+
+    handler.handle_event(event_str, {
+            "T123",
+            "xoxp-123",
+            "U123",
+            "xoxb-123",
+            "B123",
+    });
+
+    std::unique_lock<std::mutex> l(m);
+    cv.wait(l, [&](){return received;});
+    ASSERT_TRUE(received);
+}
+
+TEST(http_event_client, hello_unthreaded)
+{
+    std::string event_str = R"(
+    {
+            "token": "WHYYES",
+            "team_id": "T123",
+            "api_app_id": "A123",
+            "event": {
+                    "type": "hello"
+            },
+            "type": "event_callback",
+            "authed_users": [
+                    "U123"
+            ]
+    }
+    )";
+
+    slack::http_event_client handler{"WHYYES", slack::http_event_client::parameter::thread_count{0}};
+
+    bool received = false;
+    auto thread_id = std::this_thread::get_id();
+
+    handler.on<slack::event::hello>([&](std::shared_ptr<slack::event::hello> event,
+                                        const slack::http_event_envelope &envelope)
+                                    {
+                                        EXPECT_TRUE(static_cast<bool>(event));
+                                        received = ((envelope.verification_token == "WHYYES")
+                                                    && (envelope.token.team_id == "T123")
+                                                    && (envelope.api_app_id == "A123")
+                                                    && (envelope.authed_users.size() == 1)
+                                                    && (envelope.authed_users[0] == "U123")
+                                                    && (thread_id == std::this_thread::get_id()));
+                                    });
 
     handler.handle_event(event_str, {
             "T123",
@@ -78,18 +122,25 @@ TEST(http_event_client, unknown_event)
     }
     )";
 
-    slack::http_event_client handler{"WHYYES"};
+    slack::http_event_client handler{"WHYYES", slack::http_event_client::parameter::thread_timeout{10ms}};
 
     bool received = false;
     std::string type = "";
+    std::mutex m;
+    std::condition_variable cv;
 
     handler.on<slack::event::unknown>([&](std::shared_ptr<slack::event::unknown> event,
                                           const slack::http_event_envelope &envelope)
-                                          {
-                                              EXPECT_TRUE(static_cast<bool>(event));
-                                              received = true;
-                                              type = event->type;
-                                          });
+                                      {
+                                          std::unique_lock<std::mutex> l(m);
+
+                                          EXPECT_TRUE(static_cast<bool>(event));
+                                          received = true;
+                                          type = event->type;
+
+                                          l.unlock();
+                                          cv.notify_one();
+                                      });
 
     handler.handle_event(event_str, {
             "T123",
@@ -99,6 +150,8 @@ TEST(http_event_client, unknown_event)
             "B123",
     });
 
+    std::unique_lock<std::mutex> l(m);
+    cv.wait(l, [&](){return received;});
     ASSERT_TRUE(received);
     ASSERT_EQ("WATWAT", type);
 }
@@ -121,17 +174,24 @@ TEST(http_event_client, unknown_event_subtype)
     }
     )";
 
-    slack::http_event_client handler{"WHYYES"};
+    slack::http_event_client handler{"WHYYES", slack::http_event_client::parameter::thread_timeout{10ms}};
 
     bool received = false;
     std::string type = "";
+    std::mutex m;
+    std::condition_variable cv;
 
     handler.on<slack::event::unknown>([&](std::shared_ptr<slack::event::unknown> event,
                                           const slack::http_event_envelope &envelope)
                                       {
+                                          std::unique_lock<std::mutex> l(m);
+
                                           EXPECT_TRUE(static_cast<bool>(event));
                                           received = true;
                                           type = event->type;
+
+                                          l.unlock();
+                                          cv.notify_one();
                                       });
 
     handler.handle_event(event_str, {
@@ -142,6 +202,8 @@ TEST(http_event_client, unknown_event_subtype)
             "B123",
     });
 
+    std::unique_lock<std::mutex> l(m);
+    cv.wait(l, [&](){return received;});
     ASSERT_TRUE(received);
     ASSERT_EQ("message.nope", type);
 }
@@ -156,18 +218,25 @@ TEST(http_event_client, non_event)
     ]
     )";
 
-    slack::http_event_client handler{"WHYYES"};
+    slack::http_event_client handler{"WHYYES", slack::http_event_client::parameter::thread_timeout{10ms}};
 
     bool received = false;
     std::string whatwegot = "";
+    std::mutex m;
+    std::condition_variable cv;
 
     handler.on_error([&](std::string &&message,
                          const std::string received_json)
-                         {
-                             received = true;
-                             whatwegot = received_json;
-                             EXPECT_EQ("Invalid event JSON", message);
-                         });
+                     {
+                         std::unique_lock<std::mutex> l(m);
+
+                         received = true;
+                         whatwegot = received_json;
+                         EXPECT_EQ("Invalid event JSON", message);
+
+                         l.unlock();
+                         cv.notify_one();
+                     });
 
     handler.handle_event(event_str, {
             "T123",
@@ -177,6 +246,8 @@ TEST(http_event_client, non_event)
             "B123",
     });
 
+    std::unique_lock<std::mutex> l(m);
+    cv.wait(l, [&](){return received;});
     ASSERT_TRUE(received);
     ASSERT_EQ(event_str, whatwegot);
 }
@@ -187,18 +258,25 @@ TEST(http_event_client, non_json)
     [ { fdsjk 234 ]] "why no
     )";
 
-    slack::http_event_client handler{"WHYYES"};
+    slack::http_event_client handler{"WHYYES", slack::http_event_client::parameter::thread_timeout{10ms}};
 
     bool received = false;
     std::string whatwegot = "";
+    std::mutex m;
+    std::condition_variable cv;
 
     handler.on_error([&](std::string &&message,
                          const std::string received_json)
-                         {
-                             received = true;
-                             whatwegot = received_json;
-                             EXPECT_EQ("JSON parse error", message);
-                         });
+                     {
+                         std::unique_lock<std::mutex> l(m);
+
+                         received = true;
+                         whatwegot = received_json;
+                         EXPECT_EQ("JSON parse error", message);
+
+                         l.unlock();
+                         cv.notify_one();
+                     });
 
     handler.handle_event(event_str, {
             "T123",
@@ -208,6 +286,8 @@ TEST(http_event_client, non_json)
             "B123",
     });
 
+    std::unique_lock<std::mutex> l(m);
+    cv.wait(l, [&](){return received;});
     ASSERT_TRUE(received);
     ASSERT_EQ(event_str, whatwegot);
 }
@@ -222,7 +302,7 @@ TEST(http_event_client, url_verification)
     }
     )";
 
-    slack::http_event_client handler{"WHYYES"};
+    slack::http_event_client handler{"WHYYES", slack::http_event_client::parameter::thread_timeout{10ms}};
 
     auto response = handler.handle_event(event_str, {
             "T123",
@@ -252,17 +332,24 @@ TEST(http_event_client, token_match)
     }
     )";
 
-    slack::http_event_client handler{"WHYYES"};
+    slack::http_event_client handler{"WHYYES", slack::http_event_client::parameter::thread_timeout{10ms}};
 
     bool received = false;
+    std::mutex m;
+    std::condition_variable cv;
 
     handler.on<slack::event::hello>([&](std::shared_ptr<slack::event::hello> event,
                                         const slack::http_event_envelope &envelope)
-                                        {
-                                            EXPECT_TRUE(static_cast<bool>(event));
-                                            EXPECT_EQ("WHYYES", envelope.verification_token);
-                                            received = ("WHYYES" == envelope.verification_token);
-                                        });
+                                    {
+                                        std::unique_lock<std::mutex> l(m);
+
+                                        EXPECT_TRUE(static_cast<bool>(event));
+                                        EXPECT_EQ("WHYYES", envelope.verification_token);
+                                        received = ("WHYYES" == envelope.verification_token);
+
+                                        l.unlock();
+                                        cv.notify_one();
+                                    });
 
     handler.handle_event(event_str, {
             "T123",
@@ -272,6 +359,8 @@ TEST(http_event_client, token_match)
             "B123",
     });
 
+    std::unique_lock<std::mutex> l(m);
+    cv.wait(l, [&](){return received;});
     ASSERT_TRUE(received);
 }
 
@@ -292,21 +381,34 @@ TEST(http_event_client, token_mismatch)
     }
     )";
 
-    slack::http_event_client handler{"WHYYES"};
+    slack::http_event_client handler{"WHYYES", slack::http_event_client::parameter::thread_timeout{10ms}};
 
     bool received = false;
     bool handled = false;
+    std::mutex m;
+    std::condition_variable cv1;
+    std::condition_variable cv2;
 
     handler.on<slack::event::hello>([&](std::shared_ptr<slack::event::hello> event,
                                         const slack::http_event_envelope &envelope)
-                                        {
-                                            received = true;
-                                        });
+                                    {
+                                        std::unique_lock<std::mutex> l(m);
+
+                                        received = true;
+
+                                        l.unlock();
+                                        cv1.notify_one();
+                                    });
     handler.on_error([&](std::string &&message, const std::string received_json)
-                         {
-                             EXPECT_EQ("Invalid token on event", message);
-                             handled = true;
-                         });
+                     {
+                         std::unique_lock<std::mutex> l(m);
+
+                         EXPECT_EQ("Invalid token on event", message);
+                         handled = true;
+
+                         l.unlock();
+                         cv2.notify_one();
+                     });
 
 
     handler.handle_event(event_str, {
@@ -317,7 +419,10 @@ TEST(http_event_client, token_mismatch)
             "B123",
     });
 
+    std::unique_lock<std::mutex> l(m);
+    cv1.wait(l, [&](){return !received;});
     ASSERT_FALSE(received);
+    cv2.wait(l, [&](){return handled;});
     ASSERT_TRUE(handled);
 }
 
@@ -343,19 +448,32 @@ TEST(http_event_client, message_handle_success)
     }
     )";
 
-    slack::http_event_client handler{"WHYYES"};
+    slack::http_event_client handler{"WHYYES", slack::http_event_client::parameter::thread_timeout{10ms}};
 
     bool received = false;
     bool handled = false;
+    std::mutex m;
+    std::condition_variable cv1;
+    std::condition_variable cv2;
 
     handler.on<slack::event::message>([&](auto event, auto envelope)
-                                        {
-                                            received = true;
-                                        });
+                                      {
+                                          std::unique_lock<std::mutex> l(m);
+
+                                          received = true;
+
+                                          l.unlock();
+                                          cv1.notify_one();
+                                      });
     handler.hears("More!", [&](auto message)
-        {
-            handled = true;
-        });
+    {
+        std::unique_lock<std::mutex> l(m);
+
+        handled = true;
+
+        l.unlock();
+        cv2.notify_one();
+    });
 
 
     handler.handle_event(event_str, {
@@ -366,7 +484,10 @@ TEST(http_event_client, message_handle_success)
             "B123",
     });
 
+    std::unique_lock<std::mutex> l(m);
+    cv1.wait(l, [&](){return received;});
     ASSERT_TRUE(received);
+    cv2.wait(l, [&](){return handled;});
     ASSERT_TRUE(handled);
 }
 
@@ -395,18 +516,31 @@ TEST(http_event_client, bot_message_handle_success)
     }
     )";
 
-    slack::http_event_client handler{"WHYYES"};
+    slack::http_event_client handler{"WHYYES", slack::http_event_client::parameter::thread_timeout{10ms}};
 
     bool received = false;
     bool handled = false;
+    std::mutex m;
+    std::condition_variable cv1;
+    std::condition_variable cv2;
 
     handler.on<slack::event::message_bot_message>([&](auto event, auto envelope)
-                                      {
-                                          received = true;
-                                      });
+                                                  {
+                                                      std::unique_lock<std::mutex> l(m);
+
+                                                      received = true;
+
+                                                      l.unlock();
+                                                      cv1.notify_one();
+                                                  });
     handler.hears("More!", [&](auto message)
     {
+        std::unique_lock<std::mutex> l(m);
+
         handled = true;
+
+        l.unlock();
+        cv2.notify_one();
     });
 
 
@@ -418,6 +552,9 @@ TEST(http_event_client, bot_message_handle_success)
             "B123",
     });
 
+    std::unique_lock<std::mutex> l(m);
+    cv1.wait(l, [&](){return received;});
     ASSERT_TRUE(received);
+    cv2.wait(l, [&](){return handled;});
     ASSERT_TRUE(handled);
 }

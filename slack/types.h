@@ -50,7 +50,7 @@ private: \
     bool value; \
 }
 
-#define MAKE_LONG_LONG_LIKE(x) class x\
+#define SLACK_MAKE_LONG_LONG_LIKE(x) class x\
 { \
 public: \
     x() = default; \
@@ -59,7 +59,8 @@ public: \
     x &operator=(const x &rhs) = default; \
     x &operator=(x &&rhs) = default; \
     x(long long new_val) : value{new_val} {} \
-    x & operator=(long long && new_value) {value = new_value; return value;} \
+    x & operator=(long long && new_value) {std::swap(value, new_value); return *this;} \
+    x & operator=(const long long & new_value) {value = new_value; return *this;} \
     explicit operator long long() {return value;} \
 private: \
     long long value; \

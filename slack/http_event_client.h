@@ -8,11 +8,13 @@
 
 #include <slack/event/events.h>
 #include <slack/types.h>
+#include <slack/safe_queue.h>
 #include <typeindex>
 #include <string>
 #include <vector>
 #include <regex>
 #include <utility>
+#include <atomic>
 
 
 namespace slack
@@ -61,11 +63,41 @@ private:
 class http_event_client
 {
 public:
-    http_event_client(verification_token &&verification_token);
 
-    http_event_client(const verification_token &verification_token);
+    struct parameter
+    {
+        using thread_timeout = std::chrono::milliseconds;
 
-    virtual ~http_event_client() = default;
+        using thread_count = long;
+    };
+
+    template<class VERIFICATION_TOKEN, typename ...Os>
+    http_event_client(VERIFICATION_TOKEN &&verification_token) :
+            verification_token_{std::forward<VERIFICATION_TOKEN>(verification_token)}, thread_timeout_{500ms}, thread_count_{1}, running_{ATOMIC_FLAG_INIT}
+    {
+        initialize_();
+    }
+
+    template<class VERIFICATION_TOKEN, typename ...Os>
+    http_event_client(VERIFICATION_TOKEN &&verification_token, Os &&...os) :
+            verification_token_{std::forward<VERIFICATION_TOKEN>(verification_token)}, thread_timeout_{500ms}, thread_count_{1}, running_{ATOMIC_FLAG_INIT}
+    {
+        slack::set_option<http_event_client>(*this, std::forward<Os>(os)...);
+        initialize_();
+    }
+
+    virtual ~http_event_client();
+
+    void set_option(const parameter::thread_timeout &thread_timeout)
+    { thread_timeout_ = thread_timeout; }
+    void set_option(parameter::thread_timeout &&thread_timeout)
+    { thread_timeout_ = std::move(thread_timeout); }
+
+    void set_option(const parameter::thread_count &thread_count)
+    { thread_count_ = thread_count; }
+    void set_option(parameter::thread_count &&thread_count)
+    { thread_count_ = std::move(thread_count); }
+
 
     virtual std::string handle_event(const std::string &event, const token &token);
 
@@ -96,14 +128,24 @@ public:
 
 private:
     verification_token verification_token_;
+    parameter::thread_timeout thread_timeout_;
+    parameter::thread_count thread_count_;
+
     using handler_map = std::map<std::type_index, std::unique_ptr<http_event_handler_callback>>;
     handler_map handlers_;
     std::function<void(std::string message, std::string received)> error_handler_;
     //let's just brute force this for now
     std::vector<std::pair<std::regex, hears_cb>> callbacks_;
 
+    //background processing of event safe_queue
+    std::vector<std::thread> event_threads_;
+    safe_queue<std::pair<std::shared_ptr<base::event>, http_event_envelope>> event_queue_;
+    std::atomic_flag running_;
+
+    void initialize_();
     template <class Event>
     bool route_message_(const Event &message, const token &token);
+    void handle_event_(std::shared_ptr<base::event> event, const http_event_envelope &token);
 };
 
 

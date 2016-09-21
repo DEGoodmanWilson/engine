@@ -4,17 +4,18 @@ enable_testing()
 
 set(ENGINE_TEST_FILES
         main.cpp
-        types.cpp
-        api.cpp
-        auth.cpp
-        channels.cpp
-        chat.cpp
-        oauth.cpp
-        rtm.cpp
+#        types.cpp
+#        api.cpp
+#        auth.cpp
+#        channels.cpp
+#        chat.cpp
+#        oauth.cpp
+#        rtm.cpp
+#        users.cpp
         http_client.cpp
         rtm_client.cpp
         environment.h
-        users.cpp)
+        )
 
 add_executable(engine_tests ${ENGINE_TEST_FILES})
 

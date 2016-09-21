@@ -20,6 +20,11 @@ struct message : public base::event
 {
     static const std::string type;
 
+    virtual std::string str()
+    {
+        return type;
+    }
+
     //TODO how to deal with subtypes, _e.g_ message.channel_archive (which is not the same as channel_archive)
     // Would be nice to namespace them somehow! What's the right way to do this.
     // We can create a message namespace, but then how do we name the message class

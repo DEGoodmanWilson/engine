@@ -20,6 +20,11 @@ struct message_channel_archive : public base::event
 {
     static const std::string type;
 
+    virtual std::string str()
+    {
+        return type;
+    }
+
     message_channel_archive() = default;
 
     template<class json>
