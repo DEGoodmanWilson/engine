@@ -25,7 +25,7 @@ extern logger_cb logger_;
 void http_event_client::message::reply(std::string text) const
 {
     slack c{token.bot_token}; //TODO always the bot token? Maybe allow to pick?
-    c.chat.postMessage(channel_id, text);
+    c.chat.postMessage(channel_id, text, chat::postMessage::parameter::as_user{true});
 }
 
 http_event_client::~http_event_client()
