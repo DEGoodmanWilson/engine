@@ -3,7 +3,7 @@ from conans.tools import os_info
 
 class EngineConan(ConanFile):
     name = "engine"
-    version = "1.0-beta24"
+    version = "1.0-beta25"
     url = "https://github.com/DEGoodmanWilson/engine.git"
     license = "MIT"
     settings = "os", "compiler", "build_type", "arch"

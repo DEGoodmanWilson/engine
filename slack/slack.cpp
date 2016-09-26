@@ -8,7 +8,6 @@ namespace slack
 {
 
 
-
 std::string slack::uri_ = "https://slack.com/api/";
 
 slack::slack() : token_{""},
@@ -21,6 +20,7 @@ slack::slack() : token_{""},
                  rtm{this}
 {}
 
+template<>
 slack::slack(const std::string &token) : token_{token},
                                          api{this},
                                          auth{this},
@@ -29,8 +29,9 @@ slack::slack(const std::string &token) : token_{token},
                                          oauth{this},
                                          users{this},
                                          rtm{this}
-{ }
+{}
 
+template<>
 slack::slack(std::string &&token) : token_{std::move(token)},
                                     api{this},
                                     auth{this},
@@ -39,7 +40,29 @@ slack::slack(std::string &&token) : token_{std::move(token)},
                                     oauth{this},
                                     users{this},
                                     rtm{this}
-{ }
+{}
+
+template<>
+slack::slack(const access_token &token) : token_{token},
+                                          api{this},
+                                          auth{this},
+                                          channels{this},
+                                          chat{this},
+                                          oauth{this},
+                                          users{this},
+                                          rtm{this}
+{}
+
+template<>
+slack::slack(access_token &&token) : token_{std::move(token)},
+                                     api{this},
+                                     auth{this},
+                                     channels{this},
+                                     chat{this},
+                                     oauth{this},
+                                     users{this},
+                                     rtm{this}
+{}
 
 void slack::set_uri(const std::string &uri)
 {
@@ -56,12 +79,12 @@ std::string slack::token() const
     return token_;
 }
 
-void slack::reset_token(const std::string& token)
+void slack::reset_token(const std::string &token)
 {
     token_ = token;
 }
 
-void slack::reset_token(std::string&& token)
+void slack::reset_token(std::string &&token)
 {
     token_ = std::move(token);
 }
