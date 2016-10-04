@@ -21,7 +21,7 @@ install:
   - rm conan.deb
 
   # Automatic detection of your arch, compiler, etc
-  - if [ "$GENERATE_COVERAGE" == "ON" ]; then conan install -s compiler=$COMPILER -s compiler.libcxx=$LIBCXX --options build_engine_tests=True --options build_engine_coverage=True -s build_type=Debug --build=missing; else conan install -s compiler=$COMPILER -s compiler.libcxx=$LIBCXX --options build_engine_tests=True --build=missing; fi
+  - if [ "$GENERATE_COVERAGE" == "ON" ]; then conan install -s compiler=$COMPILER -s compiler.version=$VERSION -s compiler.libcxx=$LIBCXX --options build_engine_tests=True --options build_engine_coverage=True -s build_type=Debug --build=missing; else conan install -s compiler=$COMPILER -s compiler.libcxx=$LIBCXX -s compiler.version=$VERSION --options build_engine_tests=True --build=missing; fi
 
 
 after_success:
@@ -45,7 +45,7 @@ matrix:
             - libssl-dev
             - curl
             - libmicrohttpd-dev
-      env: GCC_VERSION=4.9
+      env: GCC_VERSION=4.9 VERSION=4.9
 
     - compiler: gcc
       addons:
@@ -58,7 +58,7 @@ matrix:
             - libssl-dev
             - curl
             - libmicrohttpd-dev
-      env: GCC_VERSION=5
+      env: GCC_VERSION=5 VERSION=5
 
     - compiler: clang
       addons:
@@ -66,12 +66,13 @@ matrix:
           sources:
             *sources
           packages:
+            - g++-4.9
             - clang-3.6
             - python-pip
             - libssl-dev
             - curl
             - libmicrohttpd-dev
-      env: COMPILER=clang++-3.6
+      env: VERSION=3.6
 
     - compiler: clang
       addons:
@@ -79,12 +80,13 @@ matrix:
           sources:
             *sources
           packages:
+            - g++-4.9
             - clang-3.7
             - python-pip
             - libssl-dev
             - curl
             - libmicrohttpd-dev
-      env: COMPILER=clang++-3.7
+      env: VERSION=3.7
 
     - compiler: clang
       addons:
@@ -92,12 +94,13 @@ matrix:
           sources:
             *sources
           packages:
+            - g++-4.9
             - clang-3.8
             - python-pip
             - libssl-dev
             - curl
             - libmicrohttpd-dev
-      env: COMPILER=clang++-3.8 RUN_TESTS=ON
+      env: VERSION=3.8
 
     - compiler: gcc
       addons:
@@ -110,5 +113,5 @@ matrix:
             - libssl-dev
             - curl
             - libmicrohttpd-dev
-      env: GCC_VERSION=5 GENERATE_COVERAGE=ON
+      env: GCC_VERSION=5 VERSION=5 GENERATE_COVERAGE=ON
 
