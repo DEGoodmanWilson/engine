@@ -37,7 +37,9 @@ env:
 
 install:
   - export CXX=$COMPILER CC=$CCOMPILER
-  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install cmake; fi
+
+  # Install cmake
+  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install cmake; else wget http://www.cmake.org/files/v2.8/cmake-2.8.12.1-Linux-i386.sh && sh cmake-2.8.12.1-Linux-i386.sh --skip-license --prefix=~/.local;fi
 
   # Download conan
   - pip install --user conan
