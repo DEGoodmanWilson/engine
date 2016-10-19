@@ -43,7 +43,7 @@ install:
   - pip install --user conan
 
   - cmake --version
-  - conan -- version
+  - conan --version
 
   # Automatic detection of your arch, compiler, etc
 #  - if [ "$GENERATE_COVERAGE" == "ON" ]; then conan install -s compiler=$COMPILER -s compiler.version=$VERSION -s compiler.libcxx=$LIBCXX -o build_engine_tests=True -o build_engine_coverage=True -s build_type=Debug --build=missing; else conan install -s compiler=$COMPILER -s compiler.libcxx=$LIBCXX -s compiler.version=$VERSION -o build_engine_tests=True --build=missing; fi
