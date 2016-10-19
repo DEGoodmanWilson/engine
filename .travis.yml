@@ -1,28 +1,53 @@
 language: cpp
-sudo: required
-dist: trusty
 
+sudo: false
+cache: ccache
+
+compiler: clang
+
+# gcc 4.9 default
 addons: &addons
   apt:
+    packages: &packages
+      - g++-4.9
+      - clang-format-3.7
+      - python-pip
     sources: &sources
-      # add PPAs with more up-to-date toolchains
       - ubuntu-toolchain-r-test
+      - llvm-toolchain-precise-3.5
       - llvm-toolchain-precise-3.6
       - llvm-toolchain-precise-3.7
       - llvm-toolchain-precise-3.8
+      - george-edison55-precise-backports # cmake 3.2.3 / doxygen 1.8.3
 
-before_install:
-  - if [ -n "$GCC_VERSION" ]; then export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}" COMPILER="gcc" LIBCXX="libstdc++11"; else export COMPILER="clang" LIBXX="libc++; fi
+env:
+#  global:
+#    - BUILD_CPR_TESTS=ON
+#    - GTEST_SHUFFLE=1
+#    - INSECURE_CURL=ON
+#    - USE_SYSTEM_CURL=ON
+  matrix:
+    - COMPILER=g++-4.9 CCOMPILER=gcc-4.9 RUN_TESTS=ON GENERATE_COVERAGE=ON
+
+
+#before_install:
+#  - if [ -n "$GCC_VERSION" ]; then export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}" COMPILER="gcc" LIBCXX="libstdc++11"; else export COMPILER="clang" LIBCXX="libstdc++11"; fi
 
 install:
+  - export CXX=$COMPILER CC=$CCOMPILER
+
+  # Install cmake
+  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install cmake libmicrohttpd; fi
+
   # Download conan
-  - wget http://downloads.conan.io/latest_debian -O conan.deb
-  - sudo dpkg -i conan.deb
-  - rm conan.deb
+  - pip install --user conan
+
+  - cmake --version
+  - conan --version
 
   # Automatic detection of your arch, compiler, etc
-  - if [ "$GENERATE_COVERAGE" == "ON" ]; then conan install -s compiler=$COMPILER -s compiler.libcxx=$LIBCXX --options build_engine_tests=True --options build_engine_coverage=True -s build_type=Debug --build=missing; else conan install -s compiler=$COMPILER -s compiler.libcxx=$LIBCXX --options build_engine_tests=True --build=missing; fi
-
+#  - if [ "$GENERATE_COVERAGE" == "ON" ]; then conan install -s compiler=$COMPILER -s compiler.version=$VERSION -s compiler.libcxx=$LIBCXX -o build_engine_tests=True -o build_engine_coverage=True -s build_type=Debug --build=missing; else conan install -s compiler=$COMPILER -s compiler.libcxx=$LIBCXX -s compiler.version=$VERSION -o build_engine_tests=True --build=missing; fi
+  - if [ "$GENERATE_COVERAGE" == "ON" ]; then conan install -o build_engine_tests=True -o build_engine_coverage=True -s build_type=Debug --build=missing; else conan install -o build_engine_tests=True --build=missing; fi
 
 after_success:
   - if [ "$GENERATE_COVERAGE" == "ON" ]; then ./bin/engine_tests; bash <(curl -s https://codecov.io/bash); fi
@@ -31,84 +56,65 @@ script:
   - conan build
   - if [ "$RUN_TESTS" == "ON" ]; then ./bin/engine_tests; fi
 
-
 matrix:
   include:
-    - compiler: gcc
+    # gcc 5
+    - env: COMPILER=g++-5 CCOMPILER=gcc-5
       addons:
         apt:
-          sources:
-            *sources
-          packages:
-            - g++-4.9
-            - python-pip
-            - libssl-dev
-            - curl
-            - libmicrohttpd-dev
-      env: GCC_VERSION=4.9
+          packages: g++-5
+          sources: *sources
 
-    - compiler: gcc
+    # Clang 3.6
+    - env: COMPILER=clang++-3.6 CCOMPILER=clang-3.6
       addons:
         apt:
-          sources:
-            *sources
-          packages:
-            - g++-5
-            - python-pip
-            - libssl-dev
-            - curl
-            - libmicrohttpd-dev
-      env: GCC_VERSION=5
-
-    - compiler: clang
-      addons:
-        apt:
-          sources:
-            *sources
           packages:
             - clang-3.6
-            - python-pip
             - libssl-dev
             - curl
             - libmicrohttpd-dev
-      env: COMPILER=clang++-3.6
+            - cmake
+            - cmake-data
+          sources: *sources
 
-    - compiler: clang
+    # Clang 3.7
+    - env: COMPILER=clang++-3.7 CCOMPILER=clang-3.7
       addons:
         apt:
-          sources:
-            *sources
           packages:
             - clang-3.7
-            - python-pip
             - libssl-dev
             - curl
             - libmicrohttpd-dev
-      env: COMPILER=clang++-3.7
+            - cmake
+            - cmake-data
+          sources: *sources
 
-    - compiler: clang
+    # Clang 3.8
+    - env: COMPILER=clang++-3.8 CCOMPILER=clang-3.8
       addons:
         apt:
-          sources:
-            *sources
           packages:
             - clang-3.8
-            - python-pip
             - libssl-dev
             - curl
             - libmicrohttpd-dev
-      env: COMPILER=clang++-3.8 RUN_TESTS=ON
+            - cmake
+            - cmake-data
+          sources: *sources
 
-    - compiler: gcc
-      addons:
-        apt:
-          sources:
-            *sources
-          packages:
-            - g++-5
-            - python-pip
-            - libssl-dev
-            - curl
-            - libmicrohttpd-dev
-      env: GCC_VERSION=5 GENERATE_COVERAGE=ON
+    # Xcode 6.4
+    - os: osx
+      env: COMPILER=clang++ CCOMPILER=clang
+      osx_image: xcode6.4
 
+    # Xcode 7
+    - os: osx
+      env: COMPILER=clang++ CCOMPILER=clang BREW_CMAKE=ON
+      osx_image: xcode7
+
+    # Xcode 8
+    - os: osx
+      env: COMPILER=clang++ CCOMPILER=clang BREW_CMAKE=ON
+      osx_image: xcode8
