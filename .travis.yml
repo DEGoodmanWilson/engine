@@ -37,7 +37,7 @@ install:
   - export CXX=$COMPILER CC=$CCOMPILER
 
   # Install cmake
-  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install cmake libmicrohttpd; fi
+  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install cmake; fi
 
   # Download conan
   - pip install --user conan
@@ -73,7 +73,6 @@ matrix:
             - clang-3.6
             - libssl-dev
             - curl
-            - libmicrohttpd-dev
             - cmake
             - cmake-data
           sources: *sources
@@ -86,7 +85,6 @@ matrix:
             - clang-3.7
             - libssl-dev
             - curl
-            - libmicrohttpd-dev
             - cmake
             - cmake-data
           sources: *sources
@@ -99,7 +97,6 @@ matrix:
             - clang-3.8
             - libssl-dev
             - curl
-            - libmicrohttpd-dev
             - cmake
             - cmake-data
           sources: *sources
