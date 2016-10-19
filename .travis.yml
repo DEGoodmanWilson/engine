@@ -12,11 +12,6 @@ addons: &addons
       - g++-4.9
       - clang-format-3.7
       - python-pip
-      - libssl-dev
-      - curl
-      - libmicrohttpd-dev
-      - cmake
-      - cmake-data
     sources: &sources
       - ubuntu-toolchain-r-test
       - llvm-toolchain-precise-3.5
@@ -42,7 +37,7 @@ install:
   - export CXX=$COMPILER CC=$CCOMPILER
 
   # Install cmake
-  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install cmake; fi
+  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install cmake libmicrohttpd; fi
 
   # Download conan
   - pip install --user conan
@@ -74,21 +69,39 @@ matrix:
     - env: COMPILER=clang++-3.6 CCOMPILER=clang-3.6
       addons:
         apt:
-          packages: clang-3.6
+          packages:
+            - clang-3.6
+            - libssl-dev
+            - curl
+            - libmicrohttpd-dev
+            - cmake
+            - cmake-data
           sources: *sources
 
     # Clang 3.7
     - env: COMPILER=clang++-3.7 CCOMPILER=clang-3.7
       addons:
         apt:
-          packages: clang-3.7
+          packages:
+            - clang-3.7
+            - libssl-dev
+            - curl
+            - libmicrohttpd-dev
+            - cmake
+            - cmake-data
           sources: *sources
 
     # Clang 3.8
     - env: COMPILER=clang++-3.8 CCOMPILER=clang-3.8
       addons:
         apt:
-          packages: clang-3.8
+          packages:
+            - clang-3.8
+            - libssl-dev
+            - curl
+            - libmicrohttpd-dev
+            - cmake
+            - cmake-data
           sources: *sources
 
     # Xcode 6.4
