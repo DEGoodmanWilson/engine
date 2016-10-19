@@ -22,7 +22,7 @@ class EngineConan(ConanFile):
         if self.options.build_engine_tests:
             self.requires.add("gtest/1.7.0@lasote/stable", private=False)
             self.options["gtest"].shared = False
-            self.requires.add("luna/2.1@DEGoodmanWilson/stable", private=False)
+            self.requires.add("luna/2.4.0@DEGoodmanWilson/stable", private=False)
         else:
             if "gtest" in self.requires:
                 del self.requires["gtest"]
