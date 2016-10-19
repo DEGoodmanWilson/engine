@@ -12,6 +12,10 @@ addons: &addons
       - g++-4.9
       - clang-format-3.7
       - python-pip
+      - libssl-dev
+      - curl
+      - cmake
+      - cmake-data
     sources: &sources
       - ubuntu-toolchain-r-test
       - llvm-toolchain-precise-3.5
@@ -62,7 +66,12 @@ matrix:
     - env: COMPILER=g++-5 CCOMPILER=gcc-5
       addons:
         apt:
-          packages: g++-5
+          packages:
+            -g++-5
+            - libssl-dev
+            - curl
+            - cmake
+            - cmake-data
           sources: *sources
 
     # Clang 3.6
