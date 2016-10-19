@@ -15,12 +15,15 @@ addons: &addons
       - libssl-dev
       - curl
       - libmicrohttpd-dev
+      - cmake
+      - cmake-data
     sources: &sources
       - ubuntu-toolchain-r-test
       - llvm-toolchain-precise-3.5
       - llvm-toolchain-precise-3.6
       - llvm-toolchain-precise-3.7
       - llvm-toolchain-precise-3.8
+      - george-edison55-precise-backports # cmake 3.2.3 / doxygen 1.8.3
 
 env:
 #  global:
@@ -39,7 +42,7 @@ install:
   - export CXX=$COMPILER CC=$CCOMPILER
 
   # Install cmake
-  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install cmake; else wget http://www.cmake.org/files/v2.8/cmake-2.8.12.1-Linux-i386.sh && sh cmake-2.8.12.1-Linux-i386.sh --skip-license --prefix=~/.local;fi
+  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install cmake; fi
 
   # Download conan
   - pip install --user conan
