@@ -1,6 +1,5 @@
 coverage:
   ignore:
     - examples/*
-    - jsoncpp/*
     - tests/*
     - slack/optional.hpp
