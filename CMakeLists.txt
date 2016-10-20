@@ -24,26 +24,12 @@ engine_option(BUILD_ENGINE_EXAMPLES "Build the examples" OFF)
 message(STATUS "=======================================================")
 
 if (BUILD_ENGINE_COVERAGE)
+    message(INFO "Will generate coverage information")
     set(BUILD_ENGINE_TESTS true) # need the tests if coverage is requested!
 
-    if(NOT (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-            AND (NOT "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang"))
-        message(FATAL_ERROR "Coveralls: Compiler ${CMAKE_C_COMPILER_ID} is not GNU gcc! Aborting... You can set this on the command line using CC=/usr/bin/gcc CXX=/usr/bin/g++ cmake <options> ..")
-    endif()
-
-    if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-        message(FATAL_ERROR "Coveralls: Code coverage results with an optimised (non-Debug) build may be misleading! Add -DCMAKE_BUILD_TYPE=Debug")
-    endif()
-
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -coverage")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -coverage")
 endif()
-
-##### JSONCPP
-#
-#set(JSONCPP_INCLUDE_DIR jsoncpp)
-#set(JSON_SOURCES jsoncpp/jsoncpp.cpp)
-#include_directories(SYSTEM ${JSONCPP_INCLUDE_DIR})
 
 ##### Engine
 
