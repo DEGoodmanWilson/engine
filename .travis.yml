@@ -41,7 +41,7 @@ install:
   - export CXX=$COMPILER CC=$CCOMPILER
 
   # Install cmake
-  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install cmake; fi
+  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install cmake python && pip install --upgrade pip; fi
 
   # Download conan
   - pip install --user conan
@@ -67,7 +67,7 @@ matrix:
       addons:
         apt:
           packages:
-            -g++-5
+            - g++-5
             - libssl-dev
             - curl
             - cmake
