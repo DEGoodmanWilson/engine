@@ -40,11 +40,8 @@ env:
 install:
   - export CXX=$COMPILER CC=$CCOMPILER
 
-  # Install cmake
-  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install cmake python && pip install --upgrade pip; fi
-
-  # Download conan
-  - pip install --user conan
+  # Install cmake and conan
+  - if [ "$BREW_CMAKE" == "ON" ]; then brew update && brew install conan; else pip install --user conan; fi
 
   - cmake --version
   - conan --version
