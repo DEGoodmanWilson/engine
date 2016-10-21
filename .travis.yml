@@ -119,5 +119,5 @@ matrix:
 
     # Xcode 8
     - os: osx
-      env: COMPILER=clang++ CCOMPILER=clang IS_APPLE=YES BREW_CMAKE=ON
+      env: COMPILER=clang++ CCOMPILER=clang IS_APPLE=YES
       osx_image: xcode8
