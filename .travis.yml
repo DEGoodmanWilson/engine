@@ -41,7 +41,7 @@ install:
   - export CXX=$COMPILER CC=$CCOMPILER
 
   # Install cmake and conan
-  - if [ "$IS_MAC" == "YES" ]; then brew update && brew install conan; else pip install --user conan; fi
+  - if [ "$IS_APPLE" == "YES" ]; then brew update && brew install conan; else pip install --user conan; fi
   - if [ "$BREW_CMAKE" == "ON" ]; then brew install cmake; fi
 
   - cmake --version
