@@ -119,5 +119,5 @@ matrix:
 
     # Xcode 8
     - os: osx
-      env: COMPILER=clang++ CCOMPILER=clang IS_APPLE=YES
+      env: COMPILER=clang++ CCOMPILER=clang IS_APPLE=YES GENERATE_COVERAGE=ON
       osx_image: xcode8
