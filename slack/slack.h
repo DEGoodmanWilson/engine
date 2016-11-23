@@ -26,8 +26,10 @@ class slack : slack_delegate
 {
 public:
     slack();
-    template<class T>
-    slack(T &&token);
+    slack(const std::string &token);
+    slack(std::string &&token);
+    slack(const access_token &token);
+    slack(access_token &&token);
 
     static void set_uri(const std::string &uri);
     static std::string get_uri();

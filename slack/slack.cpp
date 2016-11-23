@@ -20,7 +20,6 @@ slack::slack() : token_{""},
                  rtm{this}
 {}
 
-template<>
 slack::slack(const std::string &token) : token_{token},
                                          api{this},
                                          auth{this},
@@ -31,7 +30,6 @@ slack::slack(const std::string &token) : token_{token},
                                          rtm{this}
 {}
 
-template<>
 slack::slack(std::string &&token) : token_{std::move(token)},
                                     api{this},
                                     auth{this},
@@ -42,7 +40,6 @@ slack::slack(std::string &&token) : token_{std::move(token)},
                                     rtm{this}
 {}
 
-template<>
 slack::slack(const access_token &token) : token_{token},
                                           api{this},
                                           auth{this},
@@ -53,7 +50,6 @@ slack::slack(const access_token &token) : token_{token},
                                           rtm{this}
 {}
 
-template<>
 slack::slack(access_token &&token) : token_{std::move(token)},
                                      api{this},
                                      auth{this},
