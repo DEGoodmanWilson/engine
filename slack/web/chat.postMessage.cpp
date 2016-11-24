@@ -87,7 +87,7 @@ void postMessage::initialize_()
     }
 
     auto result_ob = slack_private::get(this, "chat.postMessage", params);
-    if (!this->error_message)
+    if(this->success())
     {
         if (result_ob["channel"].isString()) channel = slack::channel_id{result_ob["channel"].asString()};
         if (result_ob["ts"].isString()) ts = slack::ts{result_ob["ts"].asString()};

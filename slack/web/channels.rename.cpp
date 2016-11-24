@@ -30,7 +30,7 @@ void rename::initialize_()
 
     auto result_ob = slack_private::get(this, "channels.rename", params);
 
-    if (!this->error_message)
+    if(this->success())
     {
         if (result_ob["channel"].isObject()) channel = slack::channel{result_ob["channel"]};
     }

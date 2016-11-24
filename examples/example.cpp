@@ -1,20 +1,18 @@
 #include <iostream>
 #include <slack/slack.h>
 
-using namespace std;
-using namespace slack;
-
 int main()
 {
+    slack::web_client web_client{std::getenv("SLACK_TOKEN")};
 
-    ::slack::access_token token{std::getenv("SLACK_TOKEN")};
-    std::string channel{"#general"};
-    std::string text{"This is a test!"};
+    auto response = web_client.channels.list();
 
-    ::slack::slack s{token};
-    auto response = s.chat.postMessage(channel, text);
-
-    cout << response.message->text << endl;
-
-    return 0;
+    // First we test if the response is not an error response
+    if(response)
+    {
+        for (const auto &channel : response.channels)
+        {
+            std::cout << "Channel: " << channel.name << std::endl;
+        }
+    }
 }

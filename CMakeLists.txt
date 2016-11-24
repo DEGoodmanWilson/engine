@@ -45,9 +45,9 @@ include_directories(
         )
 
 set(ENGINE_FILES
-        slack/slack.h
-        slack/slack.cpp
-        slack/slack.h
+        slack/web_client.h
+        slack/web_client.cpp
+        slack/web_client.h
         slack/set_option.h
         slack/chat.h
         slack/users.h

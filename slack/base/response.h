@@ -42,11 +42,16 @@ struct response
     { }
 
     std::string raw_json;
-    std::experimental::optional<std::string> error_message;
+    std::string error_message;
+
+    bool success()
+    {
+        return error_message.empty(); //if error contains a value, return false
+    }
 
     operator bool()
     {
-        return !static_cast<bool>(error_message); //if error contains a value, return false
+        return success();
     }
 
     http::params default_params(http::params params) //TODO yes, we are making a copy. Let's optimize this later

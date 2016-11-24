@@ -5,7 +5,7 @@
 //
 
 #include "private.h"
-#include "slack.h"
+#include "web_client.h"
 #include <cpr/cpr.h>
 
 namespace slack_private
@@ -53,12 +53,12 @@ Json::Value get(slack::base::response *obj, const std::string &endpoint, const s
         p.AddParameter({kv.first, kv.second});
     }
 
-    auto response = cpr::Get(cpr::Url{slack::slack::get_uri() + endpoint}, p);
+    auto response = cpr::Get(cpr::Url{slack::web_client::get_uri() + endpoint}, p);
 
     if (response.status_code != 200)
     {
         //TODO do something!
-        obj->error_message = std::string{"TODO"};
+        obj->error_message = std::string{std::to_string(response.status_code)};
         return result_ob;
     }
 

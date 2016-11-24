@@ -13,7 +13,7 @@ TEST(api, api_test_basic)
     auto result = env->slack.api.test();
     ASSERT_TRUE(result);
     ASSERT_EQ(std::experimental::nullopt, result.args);
-    ASSERT_EQ(std::experimental::nullopt, result.error_message);
+    ASSERT_TRUE(result.success());
 }
 
 TEST(api, api_with_lvalue_parameters)
@@ -25,7 +25,7 @@ TEST(api, api_with_lvalue_parameters)
     ASSERT_FALSE(result);
     ASSERT_TRUE(static_cast<bool>(result.args));
     ASSERT_EQ("bar", result.args.value()["foo"]);
-    ASSERT_EQ("error", *result.error_message);
+    ASSERT_EQ("error", result.error_message);
 }
 
 TEST(api, api_with_rvalue_parameters)
@@ -33,5 +33,15 @@ TEST(api, api_with_rvalue_parameters)
     auto result = env->slack.api.test(slack::api::test::parameter::foo{"bar"}, slack::api::test::parameter::error{"error"});
     ASSERT_FALSE(result);
     ASSERT_EQ("bar", result.args.value()["foo"]);
-    ASSERT_EQ("error", *result.error_message);
+    ASSERT_EQ("error", result.error_message);
+}
+
+TEST(api, http_transport_failure)
+{
+    auto old_uri = env->slack.get_uri();
+    env->slack.set_uri("http://google.com/");
+    auto result = env->slack.api.test();
+    env->slack.set_uri(old_uri);
+    ASSERT_FALSE(result);
+    ASSERT_EQ("404", result.error_message);
 }

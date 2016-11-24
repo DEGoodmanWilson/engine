@@ -38,7 +38,7 @@ void start::initialize_()
 
     auto result_ob = slack_private::get(this, "rtm.start", params);
 
-    if (!this->error_message)
+    if(this->success())
     {
         if (result_ob["url"].isString()) url = result_ob["url"].asString();
 

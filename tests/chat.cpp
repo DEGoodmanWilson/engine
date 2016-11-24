@@ -15,7 +15,7 @@ public:
     {
         //we need a channel. I will use #general. YMMV.
         auto result = env->slack.channels.list();
-        for(const auto c : result.channels.value())
+        for(const auto &c : result.channels)
         {
             if(c.name == "general")
             {

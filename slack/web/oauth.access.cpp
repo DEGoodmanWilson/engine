@@ -32,7 +32,7 @@ void access::initialize_()
     }
 
     auto result_ob = slack_private::get(this, "oauth.access", params);
-    if (!this->error_message)
+    if(this->success())
     {
         if (result_ob["access_token"].isString()) access_token = {result_ob["access_token"].asString()};
         if (result_ob["scope"].isString())

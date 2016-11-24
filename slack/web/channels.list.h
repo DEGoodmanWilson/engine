@@ -50,7 +50,7 @@ public:
     };
 
     //response
-    std::experimental::optional<std::vector<channel>> channels;
+    std::vector<channel> channels;
 
     //parameter setters
     void set_option(const parameter::exclude_archived &exclude_archived)
