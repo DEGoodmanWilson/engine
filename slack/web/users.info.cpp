@@ -25,7 +25,7 @@ void info::initialize_()
 
     auto result_ob = slack_private::get(this, "users.info", params);
 
-    if (!this->error_message)
+    if(this->success())
     {
         if (result_ob["user"].isObject()) user = slack::user{result_ob["user"]};
     }

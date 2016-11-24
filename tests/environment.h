@@ -20,7 +20,7 @@ public:
     {
     }
 
-    slack::slack slack;
+    slack::web_client slack;
 };
 
 extern ::Environment* env;

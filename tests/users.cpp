@@ -32,7 +32,7 @@ TEST_F(users_info, users_info_fail)
 {
     auto result = env->slack.users.info("XYZ");
     ASSERT_FALSE(result);
-    ASSERT_EQ(slack::users::info::error::USER_NOT_FOUND, *(result.error_message));
+    ASSERT_EQ(slack::users::info::error::USER_NOT_FOUND, result.error_message);
 }
 
 TEST_F(users_info, users_info_basic)

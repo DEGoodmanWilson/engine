@@ -25,7 +25,7 @@ void create::initialize_()
     auto params = default_params({{"name", name_}});
 
     auto result_ob = slack_private::get(this, "channels.create", params);
-    if (!this->error_message)
+    if(this->success())
     {
         if (result_ob["channel"].isObject()) channel = slack::channel{result_ob["channel"]};
     }

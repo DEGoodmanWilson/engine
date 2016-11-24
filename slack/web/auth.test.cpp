@@ -20,7 +20,7 @@ void test::initialize_()
     auto params = default_params({ });
 
     auto result_ob = slack_private::get(this, "auth.test", params);
-    if (!this->error_message)
+    if(this->success())
     {
         if (result_ob["url"].isString()) url = result_ob["url"].asString();
         if (result_ob["team"].isString()) teamname = result_ob["team"].asString();

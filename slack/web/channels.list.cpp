@@ -25,14 +25,13 @@ void list::initialize_()
     }
 
     auto result_ob = slack_private::get(this, "channels.list", params);
-    if (!this->error_message)
+    if(this->success())
     {
         if (!result_ob["channels"].isNull() && result_ob["channels"].isArray())
         {
-            channels = std::vector<channel>{};
             for (const auto channel_obj : result_ob["channels"])
             {
-                channels->emplace_back(channel_obj);
+                channels.emplace_back(channel_obj);
             }
         }
     }

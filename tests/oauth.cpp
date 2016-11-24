@@ -42,11 +42,11 @@ TEST(oauth_access, oauth_access_success)
             )"};
         });
 
-    auto original_uri = slack::slack::get_uri();
-    slack::slack::set_uri("http://localhost:8080/");
+    auto original_uri = slack::web_client::get_uri();
+    slack::web_client::set_uri("http://localhost:8080/");
 
     auto result = env->slack.oauth.access("hahaha", "nope", "you've got to be kidding me", slack::oauth::access::parameter::redirect_uri{"http://example.com"});
     ASSERT_TRUE(result);
 
-    slack::slack::set_uri(original_uri);
+    slack::web_client::set_uri(original_uri);
 }

@@ -29,6 +29,7 @@
 
 # IntelliJ
 .idea
+cmake-build-debug/
 
 # Conan
 conanbuildinfo.cmake

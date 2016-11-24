@@ -15,7 +15,7 @@ TEST(channels, channels_list_basic)
 {
     auto result = env->slack.channels.list();
     ASSERT_TRUE(result);
-    ASSERT_LT(0, result.channels->size()); //in most cases it will be at least 2 (#general and #random)
+    ASSERT_LT(0, result.channels.size()); //in most cases it will be at least 2 (#general and #random)
 }
 
 TEST(channels, channels_create_basic)
