@@ -112,3 +112,7 @@ matrix:
     - os: osx
       env: COMPILER=clang++ CCOMPILER=clang IS_APPLE=YES GENERATE_COVERAGE=ON
       osx_image: xcode8
+
+  # at the moment, gcc5 is failing on libmagic :(
+  allow_failures:
+    - env: COMPILER=g++-5 CCOMPILER=gcc-5
