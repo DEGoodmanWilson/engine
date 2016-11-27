@@ -20,13 +20,13 @@ Once you have done that, you'll need to do two things with your project. The fir
  
 ## Setting up a webserver
 
-Your code will need to be able to handle incoming HTTP requests, in some fashion or other. Slack will send to your HTTP endpoint a JSON-encoded object that should be passed directly to Engine (more about this below). Whatever library you use to handling HTTP requests (naturally, we like [Luna](https://don.goodman-wilson.com/luna)), you will need to do some handling._
+Your code will need to be able to handle incoming HTTP requests, in some fashion or other.  Whatever library you use to handling HTTP requests (naturally, we like [Luna](https://don.goodman-wilson.com/luna)), you will need to do some handling, specifically, you will need to pass the data in the HTTP request directly to Engine.
 
-Whenever an event you have subscribed to occurs on any of the teams your app is installed on, Slack will call your HTTP endpoint. The body of this request will contain a JSON encoded object that you should pass directly to Engine without modification (more on how to do this below).
+Whenever an event you have subscribed to occurs on any of the teams your app is installed on, Slack will call your HTTP endpoint, passing along an event object describing what has occured in the request body. This object should passed directly to Engine without modification (more on how to do this below).
 
-In addition to this JSON object, Engine will require the access tokens associated with the team that generated this event. The event may, of course, have originated from any team that your app is installed on. When your app is installed using [OAuth2](https://api.slack.com/docs/oauth), you will have recieved an object containing one or more access tokens, as well as information on the user who installed your app. You should persist that data somewhere (securely!), and pass it in a `slack::token` object to Engine whenever you receive an event (more on how to do this below).
+In addition to events objects, Engine will require the access tokens associated with the team that generated this event. The event may, of course, have originated from any team that your app is installed on. When your app is installed using [OAuth2](https://api.slack.com/docs/oauth), you will have recieved an object containing one or more access tokens, as well as information on the user who installed your app. You should persist that data somewhere (securely!), and pass it in a `slack::token` object to Engine whenever you receive an event (more on how to do this below).
 
-Finally, one last consideration is that when you are first setting up your app to receive events over the Events API, Slack demands that it verify that you have a working HTTP endpoint. So it is necessary that your app be running somewhere that Slack can see it (using, perhaps, [ngrok](https://api.slack.com/tutorials/tunneling-with-ngrok)). Moreover, the payload that Slack sends in this case is somewhat different. Specically, Slack will pass an JSON object as a query parameter named `event` to your endpoint—all you need to do is to pass that JSON object directly to Engine. 
+Finally, one last consideration is that when you are first setting up your app to receive events over the Events API, Slack demands that it verify that you have a working HTTP endpoint. So it is necessary that your app be running somewhere that Slack can see it (using, perhaps, [ngrok](https://api.slack.com/tutorials/tunneling-with-ngrok)).
 
 ## Using `slack::http_event_client`
 
@@ -34,7 +34,7 @@ The `slack::http_event_client` class handles receiving, parsing, and emitting Sl
 
 The core of `slack::http_event_client` is the `handle_event()` method. Whenever you receive an event from Slack (see the previous section), you can call this method with the JSON-encoded string containing the event, and a `slack::token` object that contains the necessary access tokens Engine will need to perform actions in response to this event.
 
-If you are using Luna to handle HTTP requests, then your HTTP endpoint handler might look like this:
+If you are using Luna to handle HTTP requests, then your HTTP endpoint handler might look like this: (TODO, yes this is rather convoluted. Future iterations of Engine will make this much cleaner.)
 
 ```cpp
     luna::server server;
