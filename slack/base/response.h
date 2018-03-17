@@ -1,7 +1,7 @@
 //
 // engine
 //
-// Copyright © 2015–2016 D.E. Goodman-Wilson. All rights reserved.
+// Copyright © 2015–2017 D.E. Goodman-Wilson. All rights reserved.
 //
 
 #pragma once
@@ -28,6 +28,9 @@ struct error
     static const std::string UNKNOWN;
     static const std::string JSON_PARSE_FAILURE;
     static const std::string INVALID_RESPONSE;
+    static const std::string NOT_AUTHED;
+    static const std::string INVALID_AUTH;
+    static const std::string ACCOUNT_INACTIVE;
 };
 
 struct response

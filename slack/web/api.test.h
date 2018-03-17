@@ -1,7 +1,7 @@
 //
 // engine
 //
-// Copyright © 2015–2016 D.E. Goodman-Wilson. All rights reserved.
+// Copyright © 2017 D.E. Goodman-Wilson. All rights reserved.
 //
 
 #pragma once
@@ -9,24 +9,19 @@
 #include <slack/types.h>
 #include <slack/set_option.h>
 #include <slack/base/response.h>
-#include <map>
 #include <string>
+#include <vector>
 #include <slack/optional.hpp>
+
 
 namespace slack { namespace api
 {
 
-class test :
-        public slack::base::response
+class test : public slack::base::response
 {
 public:
-    //public interface
-    test(const test &other) = default;
-    test(test &&other) = default;
-    test(test &other)
-            : test(const_cast<const test &>(other))
-    { }
-
+                
+    
     template<typename ...Os>
     test()
     {
@@ -40,24 +35,23 @@ public:
         initialize_();
     }
 
-    //parameters
+    
+    // parameters
     struct parameter
     {
-        SLACK_MAKE_STRING_LIKE(error);
-
-        SLACK_MAKE_STRING_LIKE(foo);
+        SLACK_MAKE_STRING_LIKE(error);       //"" is an unknown type
+        SLACK_MAKE_STRING_LIKE(foo);       //"" is an unknown type
     };
 
-    //errors
-    struct error :
-            public slack::base::error
+    // errors
+    struct error : public slack::base::error
     {
     };
 
-    //response
-    std::experimental::optional<std::map<std::string, std::string>> args;
+    // response
+    std::map<std::string, std::string> args;
 
-    //parameter setters
+    // parameter setters
     void set_option(const parameter::error &error)
     { error_ = error; }
 
@@ -70,11 +64,13 @@ public:
     void set_option(parameter::foo &&foo)
     { foo_ = std::move(foo); }
 
+
 private:
     void initialize_();
+
 
     std::experimental::optional<parameter::error> error_;
     std::experimental::optional<parameter::foo> foo_;
 };
 
-}} //namespace api slack
+} } //namespace api slack

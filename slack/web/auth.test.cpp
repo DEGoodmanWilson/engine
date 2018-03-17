@@ -1,25 +1,28 @@
 //
 // engine
 //
-// Copyright © 2015–2016 D.E. Goodman-Wilson. All rights reserved.
+// Copyright © 2017 D.E. Goodman-Wilson. All rights reserved.
 //
 
 #include "slack/web/auth.test.h"
 #include "private.h"
 
+#include <iostream>
+
 namespace slack { namespace auth
 {
-
-const std::string test::error::NOT_AUTHED = std::string{"not_authed"};
-const std::string test::error::INVALID_AUTH = std::string{"invalid_auth"};
-const std::string test::error::ACCOUNT_INACTIVE = std::string{"account_inactive"};
 
 
 void test::initialize_()
 {
-    auto params = default_params({ });
+            
+    auto params = default_params({
+    });
+
+    //optional parameters
 
     auto result_ob = slack_private::get(this, "auth.test", params);
+
     if(this->success())
     {
         if (result_ob["url"].isString()) url = result_ob["url"].asString();

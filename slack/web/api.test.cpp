@@ -1,38 +1,44 @@
 //
 // engine
 //
-// Copyright © 2015–2016 D.E. Goodman-Wilson. All rights reserved.
+// Copyright © 2017 D.E. Goodman-Wilson. All rights reserved.
 //
 
 #include "slack/web/api.test.h"
 #include "private.h"
-#include <json/json.h>
+
+#include <iostream>
 
 namespace slack { namespace api
 {
 
+
 void test::initialize_()
 {
-    http::params params; //No need for auth tokens here.
+            
+    auto params = default_params({
+    });
 
-    if (error_)
+    //optional parameters
+    if(error_)
     {
         params.emplace("error", *error_);
     }
-    if (foo_)
+    if(foo_)
     {
         params.emplace("foo", *foo_);
     }
 
-    auto result_ob = slack_private::get(this, "api.test", params, false);
+    auto result_ob = slack_private::get(this, "api.test", params);
 
-    if (!result_ob["args"].isNull() && result_ob["args"].isObject())
+    if(this->success())
     {
-        args = std::map<std::string, std::string>{};
-
-        for (auto arg: result_ob["args"].getMemberNames())
+        if(result_ob["args"].isObject())
         {
-            args->emplace(arg, result_ob["args"][arg].asString());
+            for (auto arg: result_ob["args"].getMemberNames())
+            {
+                args.emplace(arg, result_ob["args"][arg].asString());
+            }
         }
     }
 }

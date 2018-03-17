@@ -127,7 +127,7 @@ set(ENGINE_FILES
         slack/web/users.list.h
         slack/event/message_channel_join.cpp
         slack/event/message_channel_join.h
-        slack/web/channels.info.cpp slack/web/channels.info.h slack/safe_queue.h)
+        slack/web/channels.info.cpp slack/web/channels.info.h slack/safe_queue.h slack/base/response.cpp)
 
 add_library(engine STATIC ${ENGINE_FILES})
 
